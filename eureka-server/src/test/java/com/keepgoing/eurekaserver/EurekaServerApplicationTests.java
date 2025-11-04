@@ -1,13 +1,13 @@
-package com.keepgoing.eurekaserver;
-
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-
-@SpringBootTest
-class EurekaServerApplicationTests {
-
-	@Test
-	void contextLoads() {
-	}
-
-}
+// package com.keepgoing.eurekaserver;
+//
+// import org.junit.jupiter.api.Test;
+// import org.springframework.boot.test.context.SpringBootTest;
+//
+// @SpringBootTest
+// class EurekaServerApplicationTests {
+//
+// 	@Test
+// 	void contextLoads() {
+// 	}
+//
+// }

@@ -49,51 +49,51 @@ services:
       - ./docker/db/redis_data:/data      # 데이터 영속화
     restart: unless-stopped
 
-  member-service:
-    container_name: member
-    build: ./member/.
-    restart: always # 컨테이너가 실패하면 항상 재시작
-    ports:
-      - "9090:8080"
-
-  vendor-service:
-    container_name: vendor
-    build: ./vendor/.
-    restart: always # 컨테이너가 실패하면 항상 재시작
-    ports:
-      - "8080:8080"
-
-  delivery-service:
-    container_name: delivery
-    build: ./delivery/.
-    restart: always # 컨테이너가 실패하면 항상 재시작
-    ports:
-      - "7070:8080"
-
-  hub-service:
-    container_name: hub
-    build: ./hub/.
-    restart: always
-    ports:
-      - "6060:8080"
-
-  order-service:
-    container_name: order
-    build: ./order/.
-    restart: always
-    ports:
-      - "5050:8080"
-
-  product-service:
-    container_name: product
-    build: ./product/.
-    restart: always
-    ports:
-      - "4040:8080"
-
-  notification-service:
-    container_name: notification
-    build: ./notification/.
-    restart: always
-    ports:
-      - "3030:8080"
+#  member-service:
+#    container_name: member
+#    build: ./member/.
+#    restart: always # 컨테이너가 실패하면 항상 재시작
+#    ports:
+#      - "9090:8080"
+#
+#  vendor-service:
+#    container_name: vendor
+#    build: ./vendor/.
+#    restart: always # 컨테이너가 실패하면 항상 재시작
+#    ports:
+#      - "8080:8080"
+#
+#  delivery-service:
+#    container_name: delivery
+#    build: ./delivery/.
+#    restart: always # 컨테이너가 실패하면 항상 재시작
+#    ports:
+#      - "7070:8080"
+#
+#  hub-service:
+#    container_name: hub
+#    build: ./hub/.
+#    restart: always
+#    ports:
+#      - "6060:8080"
+#
+#  order-service:
+#    container_name: order
+#    build: ./order/.
+#    restart: always
+#    ports:
+#      - "5050:8080"
+#
+#  product-service:
+#    container_name: product
+#    build: ./product/.
+#    restart: always
+#    ports:
+#      - "4040:8080"
+#
+#  notification-service:
+#    container_name: notification
+#    build: ./notification/.
+#    restart: always
+#    ports:
+#      - "3030:8080"

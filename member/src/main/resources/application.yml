@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: member-service
+  profiles:
+    active: local
+  config:
+    import: "optional:configserver:"
+  cloud:
+    config:
+      discovery:
+        enabled: true
+        service-id: config-server
+
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:18080/eureka/
+

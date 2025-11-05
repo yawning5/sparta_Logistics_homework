@@ -31,8 +31,8 @@ class AffiliationTest {
 
         assertAll(
             () -> assertTrue(a.isType(Type.COMPANY)),
-            () -> assertEquals(a.id(), id),
-            () -> assertEquals(a.name(), name)
+            () -> assertEquals(id, a.id()),
+            () -> assertEquals(name, a.name())
         );
     }
 }

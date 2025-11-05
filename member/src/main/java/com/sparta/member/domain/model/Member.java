@@ -40,7 +40,7 @@ public class Member {
         Role role
     ) {
         requireAllNonNull(name, password, email, slackId, affiliation, role);
-        return new  Member(name, password, email, slackId, affiliation, role);
+        return new Member(name, password, email, slackId, affiliation, role);
     }
 
     /**

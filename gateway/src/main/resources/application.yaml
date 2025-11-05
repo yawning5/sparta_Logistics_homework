@@ -17,6 +17,11 @@ spring:
           predicates:
             - Path=/v*/delivery-persons/**, /v*/deliveries/**
 
+        - id: order-service
+          uri: lb://order-service
+          predicates:
+            - Path=/v*/orders/**
+
 server:
   port: 17070
 

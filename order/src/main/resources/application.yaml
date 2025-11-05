@@ -1,0 +1,58 @@
+# docker compose에서 함께 사용하기 위한 yml 설정
+spring:
+  application:
+    name: order-service
+  profiles:
+    active: local
+  config:
+    import: "optional:configserver:"
+  cloud:
+    config:
+      discovery:
+        enabled: true
+        service-id: config-server
+
+server:
+  port: 5050
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka-server:18080/eureka/  # Eureka 서버 URL
+    register-with-eureka: true  # Eureka 서버에 등록
+    fetch-registry: true  # Eureka 서버로부터 레지스트리 정보 가져오기
+  instance:
+    hostname: order-service  # 클라이언트 호스트 이름
+    prefer-ip-address: true  # IP 주소 사용 선호
+    lease-renewal-interval-in-seconds: 30  # 리스 갱신 간격
+    lease-expiration-duration-in-seconds: 90  # 리스 만료 기간
+
+
+## docker에 띄우지 않고 사용하기 위한 yml 설정
+#spring:
+#  application:
+#    name: order-service
+#  profiles:
+#    active: local
+#  config:
+#    import: "optional:configserver:"
+#  cloud:
+#    config:
+#      discovery:
+#        enabled: true
+#        service-id: config-server
+#
+#server:
+#  port: 5050
+#
+#eureka:
+#  client:
+#    service-url:
+#      defaultZone: http://localhost:18080/eureka/  # Eureka 서버 URL
+#    register-with-eureka: true  # Eureka 서버에 등록
+#    fetch-registry: true  # Eureka 서버로부터 레지스트리 정보 가져오기
+#  instance:
+#    hostname: order-service  # 클라이언트 호스트 이름
+#    prefer-ip-address: true  # IP 주소 사용 선호
+#    lease-renewal-interval-in-seconds: 30  # 리스 갱신 간격
+#    lease-expiration-duration-in-seconds: 90  # 리스 만료 기간

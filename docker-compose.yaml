@@ -79,6 +79,23 @@ services:
       - "7070:7070"
     depends_on:
       config-server:
+        condition: service_completed_successfully
+      eureka-server:
+        condition: service_healthy
+      postgresql-server:
+        condition: service_healthy
+
+    networks:
+      - msa-network
+
+  order-service:
+    container_name: order
+    build: ./order/.
+    restart: always
+    ports:
+      - "5050:5050"
+    depends_on:
+      config-server:
         condition: service_healthy
       eureka-server:
         condition: service_healthy

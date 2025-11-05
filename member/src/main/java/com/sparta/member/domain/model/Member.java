@@ -1,5 +1,7 @@
 package com.sparta.member.domain.model;
 
+import static com.sparta.member.domain.support.ArgsValidator.requireAllNonNull;
+
 import com.sparta.member.domain.enums.Role;
 import com.sparta.member.domain.enums.Status;
 import com.sparta.member.domain.vo.Affiliation;
@@ -11,7 +13,7 @@ public class Member {
     private final String email;
     private final String slackId;
     private final Affiliation affiliation;
-    private final Status status;
+    private Status status;
     private final Role role;
 
     private Member(
@@ -49,6 +51,15 @@ public class Member {
         return new Member(name, password, email, slackId, affiliation, role);
     }
 
+    public void approveMember(
+    ) {
+        this.status = Status.APPROVED;
+    }
+
+    public void rejectMember() {
+        this.status = Status.REJECTED;
+    }
+
     /**
      * Spring Security에서 로그인 ID(username)로 사용하는 이메일을 반환합니다.
      * @return 이메일 주소 (Member.email) (String)
@@ -59,13 +70,5 @@ public class Member {
 
     public String getPassword() {
         return this.password;
-    }
-
-    private static void requireAllNonNull(Object... objects) {
-        for (Object o : objects) {
-            if (o == null) {
-                throw new IllegalArgumentException("affiliation must not be null");
-            }
-        }
     }
 }

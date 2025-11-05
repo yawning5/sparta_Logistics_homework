@@ -1,4 +1,4 @@
-package com.sparta.member.doamin.vo;
+package com.sparta.member.domain.vo;
 
 public enum Type {
     HUB,

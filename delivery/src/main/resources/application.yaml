@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: delivery-service
+  profiles:
+    active: local
+  config:
+    import: "optional:configserver:"
+  cloud:
+    config:
+      discovery:
+        enabled: true
+        service-id: config-server
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka:8080/eureka/
+    register-with-eureka: true
+    fetch-registry: true

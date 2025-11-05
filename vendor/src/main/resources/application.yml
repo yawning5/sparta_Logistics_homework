@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: vendor-service
+  config:
+    import: "optional:configserver:http://config-server:19090"  # Config Server URL ??
+  cloud:
+    config:
+      discovery:
+        enabled: false   # Eureka discovery ?? ? ? ?? false
+      retry:
+        max-attempts: 6
+        initial-interval: 2000
+        multiplier: 1.5
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka-server:18080/eureka/
+  instance:
+    hostname: vendor-service

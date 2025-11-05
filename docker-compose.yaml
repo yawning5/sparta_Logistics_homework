@@ -1,97 +1,93 @@
+version: '3.8'
+
 services:
 
   config-server:
     container_name: config
     build: ./config/.
-    restart: always # 컨테이너가 실패하면 항상 재시작
+    restart: always
     ports:
-      - "19090:8080"
+      - "19090:19090"
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:19090/actuator/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+    networks:
+      - msa-network
 
   eureka-server:
     container_name: eureka
     build: ./eureka-server/.
-    restart: always # 컨테이너가 실패하면 항상 재시작
+    restart: always
     ports:
-      - "18080:8080"
+      - "18080:18080"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:18080/actuator/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - msa-network
 
   gateway-server:
     container_name: gateway
     build: ./gateway/.
-    restart: always # 컨테이너가 실패하면 항상 재시작
+    restart: always
     ports:
-      - "17070:8080"
+      - "17070:17070"
+
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+
+    networks:
+      - msa-network
 
   postgresql-server:
     container_name: postgresql
     image: postgres:17.6
-    restart: always # 컨테이너가 실패하면 항상 재시작
+    restart: always
     environment:
-      POSTGRES_DB: default # 데이터베이스 이름
-      POSTGRES_USER: root # PostgreSQL 사용자 이름
-      POSTGRES_PASSWORD: root # PostgreSQL 비밀번호 (실제 사용 시 더 강력한 비밀번호 사용)
-    ports:
-      - "5432:5432" # 호스트의 5432 포트를 컨테이너의 5432 포트에 연결
+      POSTGRES_DB: default
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
     volumes:
-      - ./docker/db/postgresql:/var/lib/postgresql/data
-
-  redis-server:
-    container_name: redis-stack
-    image: redis/redis-stack:latest
+      - ./docker/db/postgresql:/var/lib/postgresql
     ports:
-      - "6379:6379"       # Redis 기본 포트
-      - "8001:8001"       # RedisInsight (웹 GUI) 기본 포트
-    environment: # default
-      - REDIS_PASSWORD=12345
-      # 추가 환경변수 필요하면 여기에
-    volumes:
-      - ./docker/db/redis_data:/data      # 데이터 영속화
-    restart: unless-stopped
+      - "5432:5432"
 
-#  member-service:
-#    container_name: member
-#    build: ./member/.
-#    restart: always # 컨테이너가 실패하면 항상 재시작
-#    ports:
-#      - "9090:8080"
-#
-#  vendor-service:
-#    container_name: vendor
-#    build: ./vendor/.
-#    restart: always # 컨테이너가 실패하면 항상 재시작
-#    ports:
-#      - "8080:8080"
-#
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "root", "-d", "default", "-h", "localhost" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+    networks:
+      - msa-network
+
   delivery-service:
     container_name: delivery
     build: ./delivery/.
-    restart: always # 컨테이너가 실패하면 항상 재시작
+    restart: always
     ports:
-      - "7070:8080"
-#
-#  hub-service:
-#    container_name: hub
-#    build: ./hub/.
-#    restart: always
-#    ports:
-#      - "6060:8080"
-#
-#  order-service:
-#    container_name: order
-#    build: ./order/.
-#    restart: always
-#    ports:
-#      - "5050:8080"
-#
-#  product-service:
-#    container_name: product
-#    build: ./product/.
-#    restart: always
-#    ports:
-#      - "4040:8080"
-#
-#  notification-service:
-#    container_name: notification
-#    build: ./notification/.
-#    restart: always
-#    ports:
-#      - "3030:8080"
+      - "7070:7070"
+    depends_on:
+      config-server:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+      postgresql-server:
+        condition: service_healthy
+
+    networks:
+      - msa-network
+
+networks:
+  msa-network:
+    driver: bridge

@@ -25,7 +25,7 @@ spring:
         - id: vendor-service
           uri: lb://vendor-service
           predicates:
-            - Path=/v*/stores/**
+            - Path=/v*/vendors/**
 
         - id: product-service
           uri: lb://product-service

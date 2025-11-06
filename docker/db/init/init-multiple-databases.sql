@@ -1,0 +1,2 @@
+CREATE DATABASE vendor;
+CREATE DATABASE product;

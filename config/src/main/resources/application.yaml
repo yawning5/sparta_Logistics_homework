@@ -1,13 +1,11 @@
 spring:
-  profiles:
-    active: native
   application:
     name: config-server
   cloud:
     config:
       server:
-        native:
-          search-locations: classpath:/config-repo
+        git:
+          uri: https://github.com/FocusCrew-4/sparta-logistics-config.git
 
 management:
   endpoints:

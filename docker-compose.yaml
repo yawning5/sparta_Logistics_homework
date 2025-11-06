@@ -122,6 +122,40 @@ services:
     networks:
       - msa-network
 
+  vendor-service:
+    container_name: vendor
+    build: ./vendor/.
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      config-server:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+      postgresql-server:
+        condition: service_healthy
+
+    networks:
+      - msa-network
+
+  product-service:
+    container_name: product
+    build: ./product/.
+    restart: always
+    ports:
+      - "4040:4040"
+    depends_on:
+      config-server:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+      postgresql-server:
+        condition: service_healthy
+
+    networks:
+      - msa-network
+
 networks:
   msa-network:
     driver: bridge

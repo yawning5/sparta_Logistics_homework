@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: product-service
+  config:
+    import: "optional:configserver:http://config-server:19090"  # Config Server URL 지정
+  cloud:
+    config:
+      discovery:
+        enabled: false   # Eureka discovery 사용 안 할 거면 false
+      retry:
+        max-attempts: 6
+        initial-interval: 2000
+        multiplier: 1.5
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka-server:18080/eureka/
+  instance:
+    hostname: product-service

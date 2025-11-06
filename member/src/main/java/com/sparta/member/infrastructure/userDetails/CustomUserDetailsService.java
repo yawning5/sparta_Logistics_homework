@@ -1,7 +1,7 @@
 package com.sparta.member.infrastructure.userDetails;
 
-import com.sparta.member.domain.model.Member;
 import com.sparta.member.domain.repository.MemberRepository;
+import com.sparta.member.infrastructure.persistence.jpa.entity.MemberJpa;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,9 +15,9 @@ public class CustomUserDetailsService implements UserDetailsService {
     private final MemberRepository memberRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Member m = memberRepository.findByEmail(username)
-            .orElseThrow(() -> new UsernameNotFoundException(username));
-        return null;
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        MemberJpa m = memberRepository.findByEmail(email)
+            .orElseThrow(() -> new UsernameNotFoundException(email));
+        return new CustomUserDetails(m);
     }
 }

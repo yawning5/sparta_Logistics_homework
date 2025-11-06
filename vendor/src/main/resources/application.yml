@@ -2,11 +2,12 @@ spring:
   application:
     name: vendor-service
   config:
-    import: "optional:configserver:http://config-server:19090"  # Config Server URL ??
+    import: "optional:configserver:"
   cloud:
     config:
       discovery:
-        enabled: false   # Eureka discovery ?? ? ? ?? false
+        enabled: true
+        service-id: configserver
       retry:
         max-attempts: 6
         initial-interval: 2000

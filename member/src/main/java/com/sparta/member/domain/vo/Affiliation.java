@@ -10,16 +10,13 @@ public record Affiliation(
     UUID id,
     String name
 ) {
-    public static Affiliation of(
-        Type type,
-        UUID id,
-        String name
-    ) {
+
+    public Affiliation {
         requireAllNonNull(
             "type", type,
             "id", id,
-            "name", name);
-        return new Affiliation(type, id, name);
+            "name", name
+        );
     }
 
     public boolean isType(Type type) {

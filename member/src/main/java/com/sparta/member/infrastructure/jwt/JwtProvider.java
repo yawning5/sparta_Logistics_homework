@@ -1,6 +1,8 @@
 package com.sparta.member.infrastructure.jwt;
 
 
+import com.sparta.member.infrastructure.userDetails.CustomUserDetails;
+
 public interface JwtProvider {
-    String generateAccessToken(String username, String authorities, String userId);
+    String generateAccessToken(CustomUserDetails user);
 }

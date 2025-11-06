@@ -1,6 +1,7 @@
 package com.sparta.member.infrastructure.jwt;
 
 
+import com.sparta.member.infrastructure.userDetails.CustomUserDetails;
 import java.time.Instant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.jwt.JwsHeader;
@@ -14,15 +15,15 @@ public class TokenProvider implements JwtProvider {
     private final JwtEncoder jwtEncoder;
 
     @Override
-    public String generateAccessToken(String username, String authorities, String userId) {
+    public String generateAccessToken(CustomUserDetails user) {
         Instant now = Instant.now();
 
         JwtClaimsSet claims = JwtClaimsSet.builder()
-            .subject(username)
+            .subject(user.getUsername())
             .issuedAt(now)
             .expiresAt(now.plusSeconds(1800))
-            .claim("role", authorities)
-            .claim("userId", userId)
+            .claim("role", user.getRole())
+            .claim("userId", user.getUserId())
             .build();
 
         JwsHeader header = JwsHeader.with(() -> "HS256").build();

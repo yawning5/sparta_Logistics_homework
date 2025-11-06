@@ -48,4 +48,28 @@ public class Vendor extends BaseEntity {
         @AttributeOverride(name = "id", column = @Column(name = "hub_id", nullable = false))
     })
     private HubId hubId;
+
+    private Vendor(String vendorName, VendorType vendorType, Address address, HubId hubId) {
+        this.vendorName = vendorName;
+        this.vendorType = vendorType;
+        this.address = address;
+        this.hubId = hubId;
+    }
+
+    public static Vendor create(String vendorName, VendorType vendorType, Address address, HubId hubId) {
+        if (vendorName == null || vendorName.isBlank()) {
+            throw new IllegalArgumentException("vendorName은 필수입니다.");
+        }
+        if (vendorType == null) {
+            throw new IllegalArgumentException("vendorType은 필수입니다.");
+        }
+        if (address == null) {
+            throw new IllegalArgumentException("address는 필수입니다.");
+        }
+        if (hubId == null) {
+            throw new IllegalArgumentException("hubId는 필수입니다.");
+        }
+
+        return new Vendor(vendorName, vendorType, address, hubId);
+    }
 }

@@ -1,8 +1,18 @@
 spring:
   application:
-    name: vendor-service
+    name: member-service
   config:
-    import: "optional:configserver:http://localhost:19090"
+    import: "optional:configserver:"
+  cloud:
+    config:
+      discovery:
+        enabled: true
+        service-id: config-server
+      fail-fast: true   # config 서버 접근 실패시 즉시 예외 발생
+      retry:
+        max-attempts: 6
+        initial-interval: 2000
+        multiplier: 1.5
 
 eureka:
   client:

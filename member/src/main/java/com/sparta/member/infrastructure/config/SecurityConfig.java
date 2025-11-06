@@ -19,8 +19,11 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     @Bean
-    SecurityFilterChain http(HttpSecurity http, JwtAuthenticationConverter jwtAuthConverter,
-        JwtDecoder jwtDecoder) throws Exception {
+    SecurityFilterChain http(
+        HttpSecurity http,
+        JwtAuthenticationConverter jwtAuthConverter,
+        JwtDecoder jwtDecoder
+    ) throws Exception {
         return http
             .headers(h ->
                 h.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
@@ -34,17 +37,16 @@ public class SecurityConfig {
             .sessionManagement(AbstractHttpConfigurer::disable)
 
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/v1/member/login", "/v1/member/signup").permitAll()
                 .requestMatchers("/h2-console/**").permitAll()
+                .requestMatchers("/v1/member/login", "/v1/member/signup", "/v1/member/login1").permitAll()
                 .anyRequest().authenticated()
             )
 
-            // TODO: 모든 요청에 jwt 검증우선으로 하여 활성화하면 오류 발생 해결필요
-//            .oauth2ResourceServer(oauth ->
-//                oauth.jwt(jwt -> jwt
-//                    .decoder(jwtDecoder)
-//                    .jwtAuthenticationConverter(jwtAuthConverter))
-//            )
+            .oauth2ResourceServer(oauth ->
+                oauth.jwt(jwt -> jwt
+                    .decoder(jwtDecoder)
+                    .jwtAuthenticationConverter(jwtAuthConverter))
+            )
             .build();
     }
 

@@ -1,5 +1,6 @@
 package com.sparta.member.interfaces.web;
 
+import com.sparta.member.application.dto.BaseResponseDto;
 import com.sparta.member.application.dto.LoginDto;
 import com.sparta.member.application.service.AuthService;
 import com.sparta.member.application.service.MemberService;
@@ -26,7 +27,7 @@ public class MemberController {
         String token = authService.login(loginDto);
         return ResponseEntity.ok()
             .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
-            .build();
+            .body(BaseResponseDto.success(null));
     }
 
 }

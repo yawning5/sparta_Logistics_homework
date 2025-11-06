@@ -8,15 +8,17 @@ import com.sparta.member.domain.vo.Affiliation;
 
 public class Member {
 
+    private final Long id;
     private final String name;
     private final String password;
     private final String email;
     private final String slackId;
     private final Affiliation affiliation;
-    private Status status;
     private final Role role;
+    private Status status;
 
     private Member(
+        Long Id,
         String name,
         String password,
         String email,
@@ -24,6 +26,7 @@ public class Member {
         Affiliation affiliation,
         Role role
     ) {
+        this.id = Id;
         this.name = name;
         this.password = password;
         this.email = email;
@@ -47,12 +50,34 @@ public class Member {
             "email", email,
             "slackId", slackId,
             "affiliation", affiliation,
-            "role", role);
-        return new Member(name, password, email, slackId, affiliation, role);
+            "role", role
+        );
+        return new Member(null, name, password, email, slackId, affiliation, role);
     }
 
-    public void approveMember(
+    public static Member from(
+        Long id,
+        String name,
+        String password,
+        String email,
+        String slackId,
+        Affiliation affiliation,
+        Role role
     ) {
+        requireAllNonNull(
+            "id", id,
+            "name", name,
+            "password", password,
+            "email", email,
+            "slackId", slackId,
+            "affiliation", affiliation,
+            "role", role
+        );
+
+        return new Member(id, name, password, email, slackId, affiliation, role);
+    }
+
+    public void approveMember() {
         this.status = Status.APPROVED;
     }
 
@@ -70,5 +95,13 @@ public class Member {
 
     public String getPassword() {
         return this.password;
+    }
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public boolean isSameMember(Member other) {
+        return this.id != null && this.id.equals(other.id);
     }
 }

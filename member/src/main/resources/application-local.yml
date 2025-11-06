@@ -1,13 +1,14 @@
 spring:
   application:
-    name: vendor-service
+    name: member-service
   config:
     import: "optional:configserver:"
   cloud:
     config:
       discovery:
         enabled: true
-        service-id: configserver
+        service-id: config-server
+      fail-fast: true   # config 서버 접근 실패시 즉시 예외 발생
       retry:
         max-attempts: 6
         initial-interval: 2000
@@ -16,6 +17,7 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: http://eureka-server:18080/eureka/
+      defaultZone: http://localhost:18080/eureka/
   instance:
-    hostname: vendor-service
+    prefer-ip-address: true
+    hostname: member-service

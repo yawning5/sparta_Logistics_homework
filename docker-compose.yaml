@@ -157,6 +157,15 @@ services:
     networks:
       - msa-network
 
+  zipkin:
+    image: openzipkin/zipkin
+    container_name: zipkin
+    restart: always
+    ports:
+      - "9411:9411"
+    networks:
+      - msa-network
+
 networks:
   msa-network:
     driver: bridge

@@ -37,6 +37,12 @@ dependencies {
 	// 인가만 할 수 있도록
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 
+	//zipkin
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'io.github.openfeign:feign-micrometer'
+	implementation 'io.micrometer:micrometer-tracing-bridge-brave'
+	implementation 'io.zipkin.reporter2:zipkin-reporter-brave'
+
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'org.postgresql:postgresql'
 	annotationProcessor 'org.projectlombok:lombok'

@@ -28,9 +28,9 @@ public class MemberTest {
             f.setAccessible(true);
             return f.get(target);
         }
-
+        
         @Nested
-        @DisplayName("RED")
+        @DisplayName("회원가입시 필수 사항 항목 검사")
         class Red {
             @Test
             @DisplayName("전달 인자중 null 이 포함")

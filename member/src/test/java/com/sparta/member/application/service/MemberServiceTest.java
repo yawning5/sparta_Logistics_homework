@@ -7,7 +7,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.sparta.member.application.dto.SignUpRequestDto;
 import com.sparta.member.application.mapper.ApplicationMapper;
 import com.sparta.member.domain.model.Member;
 import com.sparta.member.domain.repository.MemberRepository;
@@ -46,8 +45,6 @@ class MemberServiceTest {
             var s = SignUpRequestDtoFixture.normalRequest();
             var m = MemberFixture.memberWithId(SignUpRequestDtoFixture.NAME, SignUpRequestDtoFixture.PASSWORD);
             when(memberRepository.save(any(Member.class)))
-                .thenReturn(m);
-            when(mapper.signUpRequestDtoToMember(any(SignUpRequestDto.class)))
                 .thenReturn(m);
 
 

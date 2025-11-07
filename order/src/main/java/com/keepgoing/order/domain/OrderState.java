@@ -3,10 +3,16 @@ package com.keepgoing.order.domain;
 public enum OrderState {
 
     PENDING_VALIDATION("상품 검증 대기"),
-    PRODUCT_VERIFIED("상품 확인"),
-    STOCK_RESERVED("재고 예약"),
+    PRODUCT_VALIDATION_IN_PROGRESS("상품 확인 진행중"),
+    PRODUCT_VERIFIED("상품 검증 완료"),
+
+    STOCK_RESERVATION_IN_PROGRESS("재고 예약 진행중"),
     AWAITING_PAYMENT("결제 대기"),
+
+    PAYMENT_IN_PROGRESS("결제 진행중"),
     PAID("결제 완료"),
+
+    COMPLETION_IN_PROGRESS("주문 진행 중"),
     COMPLETED("주문 완료"),
 
     CANCEL_REQUESTED("주문 취소 요청"),

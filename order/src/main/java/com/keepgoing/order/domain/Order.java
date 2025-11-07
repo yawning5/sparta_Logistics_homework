@@ -193,6 +193,10 @@ public class Order{
         orderState = OrderState.COMPLETED;
     }
 
+    public void changeOrderState(OrderState orderState) {
+        this.orderState = orderState;
+    }
+
     public void registerHubId(UUID hubId) {
         this.hubId = hubId;
     }

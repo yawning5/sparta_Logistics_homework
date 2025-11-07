@@ -13,4 +13,14 @@ public interface OrderRepositoryCustom {
     Page<UUID> findPendingIds(Collection<OrderState> states, Pageable pageable);
 
     Optional<Order> findOrderForUpdate(UUID orderId);
+
+    int claim(UUID orderId, OrderState beforeState, OrderState afterState);
+
+    int updateOrderStateToProductVerifiedWithHub(UUID orderId, UUID hubId, Long version );
+
+    int updateOrderStateToAwaitingPayment(UUID orderId, Long version);
+
+    int updateOrderStateToPaid(UUID orderId, Long version);
+
+    int updateOrderStateToCompleted(UUID orderId, Long version);
 }

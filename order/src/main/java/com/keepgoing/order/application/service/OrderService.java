@@ -55,49 +55,24 @@ public class OrderService {
 
     @Transactional
     public void toProductVerified(UUID orderId, Long version, UUID hubId) {
-        // FIXME: 낙관적 락 적용되는지 확인 필요
-        Order order = orderRepository.findById(orderId).orElseThrow();
-
-        ensureVersion(order, version);
-
-        if (order.getOrderState() != OrderState.PENDING_VALIDATION) {
-            log.error("상품 유효성 검증 상태 전이 실패 {}", orderId);
-            return;
-        }
-
-        order.registerHubId(hubId);
-        order.changeOrderStateToProductVerified();
+        int u = orderRepository.updateOrderStateToProductVerifiedWithHub(orderId, hubId, version);
+        if (u == 0) throw new IllegalStateException("전이 실패(버전/상태 불일치): " + orderId);
     }
 
     @Transactional
     public void toAwaitingPayment(UUID orderId, Long version) {
-        // FIXME: 낙관적 락 적용되는지 확인 필요
-        Order order = orderRepository.findById(orderId).orElseThrow();
-
-        ensureVersion(order, version);
-
-        if (order.getOrderState() != OrderState.PRODUCT_VERIFIED) {
-            log.error("재고 예약 상태 전이 실패 {}", orderId);
-            return;
-        }
-
-        order.changeOrderStateToAwaitingPayment();
+        int u = orderRepository.updateOrderStateToAwaitingPayment(orderId, version);
+        if (u == 0) throw new IllegalStateException("전이 실패: " + orderId);
     }
 
     @Transactional
     public void toPaid(UUID orderId, Long version) {
-        Order order = orderRepository.findById(orderId).orElseThrow();
-
-        ensureVersion(order, version);
-
-        if (order.getOrderState() != OrderState.AWAITING_PAYMENT) {
-            log.error("결제 완료 상태 전이 실패 {}", orderId);
-            return;
-        }
+        // Outbox 페이로드가 필요하면, 전이 전/후에 필요한 필드만 projection으로 읽거나
+        // 기존 order를 읽어와도 됨(외부 I/O는 없음)
+        Order order = orderRepository.findById(orderId).orElseThrow(); // 읽기용
 
         String payloadForNotification = makePayloadForNotification(order);
-
-        OrderOutbox outboxForNotification = OrderOutbox.create(
+        orderOutboxRepository.save(OrderOutbox.create(
             UUID.randomUUID(),
             AggregateType.ORDER,
             order.getId().toString(),
@@ -105,27 +80,18 @@ public class OrderService {
             OutBoxState.NOTIFICATION_PENDING,
             payloadForNotification,
             LocalDateTime.now(clock)
-        );
+        ));
 
-        orderOutboxRepository.save(outboxForNotification);
-
-        order.changeOrderStateToPaid();
+        int u = orderRepository.updateOrderStateToPaid(orderId, version);
+        if (u == 0) throw new IllegalStateException("전이 실패: " + orderId);
     }
 
     @Transactional
     public void toCompleted(UUID orderId, Long version) {
-        Order order = orderRepository.findById(orderId).orElseThrow();
-
-        ensureVersion(order, version);
-
-        if (order.getOrderState() != OrderState.PAID) {
-            log.error("주문 완료 상태 전이 실패 {}", orderId);
-            return;
-        }
+        Order order = orderRepository.findById(orderId).orElseThrow(); // 읽기용
 
         String payloadForDelivery = makePayloadForDelivery(order);
-
-        OrderOutbox outboxForDelivery = OrderOutbox.create(
+        orderOutboxRepository.save(OrderOutbox.create(
             UUID.randomUUID(),
             AggregateType.ORDER,
             order.getId().toString(),
@@ -133,15 +99,14 @@ public class OrderService {
             OutBoxState.DELIVERY_PENDING,
             payloadForDelivery,
             LocalDateTime.now(clock)
-        );
+        ));
 
-        orderOutboxRepository.save(outboxForDelivery);
-        order.changeOrderStateToCompleted();
+        int u = orderRepository.updateOrderStateToCompleted(orderId, version);
+        if (u == 0) throw new IllegalStateException("전이 실패: " + orderId);
     }
 
     @Transactional
     public void toFail(UUID orderId, Long version) {
-        // FIXME: 낙관적 락 적용되는지 확인 필요
         Order order = orderRepository.findById(orderId)
             .orElseThrow();
         if (order.getOrderState() == OrderState.FAILED) return;
@@ -150,10 +115,9 @@ public class OrderService {
         // TODO: 실패 후 후속처리 필요 (Outbox 혹은 다른 방식 적용)
     }
 
-    private void ensureVersion(Order order, long expected) {
-        if (!order.getVersion().equals(expected)){
-            throw new IllegalStateException("낙관적 락 실패 : " + order.getId());
-        }
+    @Transactional
+    public int claim(UUID orderId, OrderState beforeState, OrderState afterState) {
+        return orderRepository.claim(orderId, beforeState, afterState);
     }
 
     private String makePayloadForNotification(Order order) {

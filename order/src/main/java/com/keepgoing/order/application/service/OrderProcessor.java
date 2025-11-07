@@ -1,20 +1,19 @@
 package com.keepgoing.order.application.service;
 
 import com.keepgoing.order.application.exception.InventoryReservationFailException;
+import com.keepgoing.order.application.exception.NotFoundOrderException;
 import com.keepgoing.order.application.exception.NotFoundProductException;
-import com.keepgoing.order.application.lock.StepLock;
 
 import com.keepgoing.order.domain.Order;
+import com.keepgoing.order.domain.OrderState;
 import com.keepgoing.order.presentation.HubClient;
 import com.keepgoing.order.presentation.ProductClient;
 import com.keepgoing.order.presentation.dto.request.ReservationInventoryRequest;
 import com.keepgoing.order.presentation.dto.response.ProductInfo;
 
-import java.time.Duration;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -27,15 +26,6 @@ public class OrderProcessor {
     private final OrderService orderService;
     private final ProductClient productClient;
     private final HubClient hubClient;
-    private final StepLock stepLock;
-
-    private static final String STEP_VALIDATE_PRODUCT = "VALIDATE_PRODUCT";
-    private static final String STEP_RESERVE_STOCK = "RESERVE_STOCK";
-    private static final String STEP_PAYMENT = "PAYMENT";
-    private static final String STEP_COMPLETE = "COMPLETE";
-
-    @Value("${lock.local.ttl-seconds}")
-    Long ttl;
 
     @Async("taskExecutor")
     public void processTask(UUID orderId) {
@@ -51,119 +41,129 @@ public class OrderProcessor {
                 case PENDING_VALIDATION :
                     log.info("상품 유효성 검증 수행 {}", orderId);
 
-                    UUID idForProductValidation = order.getId();
-                    String lockKeyForProductValidation = getLockKey(idForProductValidation, STEP_VALIDATE_PRODUCT);
+                    int updateResult1 = orderService.claim(
+                        orderId,
+                        OrderState.PENDING_VALIDATION,
+                        OrderState.PRODUCT_VALIDATION_IN_PROGRESS
+                    );
 
-                    if (!stepLock.tryAcquire(lockKeyForProductValidation, Duration.ofSeconds(ttl))) {
-                        log.debug("이미 처리 중인 작업: {}", lockKeyForProductValidation);
+                    if (updateResult1 == 0) {
+                        log.error("이미 작업을 진행 중이거나 상태 불일치 {}", orderId);
                         return;
                     }
 
+                    String productId = order.getProductId().toString();
+                    ProductInfo productInfo = null;
                     try {
-                        String productId = order.getProductId().toString();
-                        ProductInfo productInfo = productClient.getProduct(productId);
-
-                        if (productInfo == null || productInfo.getHubId() == null){
-                            orderService.toFail(orderId, order.getVersion());
-                            return;
-                        }
-
-                        UUID hubId = null;
-                        try {
-                            hubId = UUID.fromString(productInfo.getHubId());
-                        } catch (IllegalArgumentException ex) {
-                            orderService.toFail(orderId, order.getVersion());
-                            return;
-                        }
-
-                        orderService.toProductVerified(orderId, order.getVersion(), hubId);
-                    } finally {
-                        stepLock.release(lockKeyForProductValidation);
+                        productInfo = productClient.getProduct(productId);
+                    } catch (Exception e) {
+                        orderService.toFail(orderId, order.getVersion());
+                        return;
                     }
 
+                    if (productInfo == null || productInfo.getHubId() == null){
+                        orderService.toFail(orderId, order.getVersion());
+                        return;
+                    }
+
+                    UUID hubId = null;
+                    try {
+                        hubId = UUID.fromString(productInfo.getHubId());
+                    } catch (IllegalArgumentException ex) {
+                        orderService.toFail(orderId, order.getVersion());
+                        return;
+                    }
+
+                    orderService.toProductVerified(orderId, order.getVersion(), hubId);
                     break;
 
                 case PRODUCT_VERIFIED :
                     log.info("재고 예약 수행 {}", orderId);
 
-                    UUID idForStockReservation = order.getId();
-                    String lockKeyForStockReservation = getLockKey(idForStockReservation, STEP_RESERVE_STOCK);
+                    int updateResult2 = orderService.claim(
+                        orderId,
+                        OrderState.PRODUCT_VERIFIED,
+                        OrderState.STOCK_RESERVATION_IN_PROGRESS
+                    );
 
-                    if (!stepLock.tryAcquire(lockKeyForStockReservation, Duration.ofSeconds(ttl))) {
-                        log.debug("이미 처리 중인 작업: {}", lockKeyForStockReservation);
+                    if (updateResult2 == 0) {
+                        log.error("이미 작업을 진행 중이거나 상태 불일치 {}", orderId);
                         return;
                     }
 
-                    try {
-                        String productIdForInventory = String.valueOf(order.getProductId());
-                        String hubIdForInventory = order.getHubId().toString();
-                        Integer quantity = order.getQuantity();
-                        String idempotencyKey = order.getIdempotencyKey().toString();
+                    String productIdForInventory = String.valueOf(order.getProductId());
+                    String hubIdForInventory = order.getHubId().toString();
+                    Integer quantity = order.getQuantity();
+                    String idempotencyKey = order.getIdempotencyKey().toString();
 
-                        boolean result = hubClient.reservationInventoryForProduct(
+                    boolean apiResult = false;
+                    try {
+                        apiResult = hubClient.reservationInventoryForProduct(
                             ReservationInventoryRequest.create(productIdForInventory, hubIdForInventory, quantity, idempotencyKey)
                         );
-
-                        if (result == false) {
-                            orderService.toFail(orderId, order.getVersion());
-                            return;
-                        }
-
-                        orderService.toAwaitingPayment(orderId, order.getVersion());
-                    } finally {
-                        stepLock.release(lockKeyForStockReservation);
+                    } catch (Exception e) {
+                        orderService.toFail(orderId, order.getVersion());
+                        return;
                     }
+
+                    if (apiResult == false) {
+                        orderService.toFail(orderId, order.getVersion());
+                        return;
+                    }
+
+                    orderService.toAwaitingPayment(orderId, order.getVersion());
+
                     break;
                 case AWAITING_PAYMENT :
                     log.info("결제 요청 수행 {}", orderId);
 
-                    UUID idForPayment = order.getId();
-                    String lockKeyForPayment = getLockKey(idForPayment, STEP_PAYMENT);
+                    int updateResult3 = orderService.claim(
+                        orderId,
+                        OrderState.AWAITING_PAYMENT,
+                        OrderState.PAYMENT_IN_PROGRESS
+                    );
 
-                    if (!stepLock.tryAcquire(lockKeyForPayment, Duration.ofSeconds(ttl))) {
-                        log.debug("이미 처리 중인 작업: {}", lockKeyForPayment);
+                    if (updateResult3 == 0) {
+                        log.error("이미 작업을 진행 중이거나 상태 불일치 {}", orderId);
                         return;
                     }
 
                     try {
                         // TODO: 결제 시스템을 도입한다면 결제 API 호출 필요 - 결제는 무조건 실행된다고 본다.
 
-                        orderService.toPaid(orderId, order.getVersion());
-                    } finally {
-                        stepLock.release(lockKeyForPayment);
+
+                    } catch (Exception e) {
+                        orderService.toFail(orderId, order.getVersion());
+                        return;
                     }
+
+                    orderService.toPaid(orderId, order.getVersion());
                     break;
 
                 case PAID :
                     log.info("배송을 위한 Outbox에 데이터 등록 {}", orderId);
 
-                    UUID idForOrderCompleted = order.getId();
-                    String lockKeyForOrderCompleted = getLockKey(idForOrderCompleted, STEP_COMPLETE);
+                    int updateResult4 = orderService.claim(
+                        orderId,
+                        OrderState.PAID,
+                        OrderState.COMPLETION_IN_PROGRESS
+                    );
 
-                    if (!stepLock.tryAcquire(lockKeyForOrderCompleted, Duration.ofSeconds(ttl))) {
-                        log.debug("이미 처리 중인 작업: {}", lockKeyForOrderCompleted);
+                    if (updateResult4 == 0) {
+                        log.error("이미 작업을 진행 중이거나 상태 불일치 {}", orderId);
                         return;
                     }
 
-                    try {
-                        orderService.toCompleted(orderId, order.getVersion());
-                    } finally {
-                        stepLock.release(lockKeyForOrderCompleted);
-                    }
-
+                    orderService.toCompleted(orderId, order.getVersion());
                     break;
             }
 
-        } catch (NotFoundProductException | InventoryReservationFailException orderFailException) {
+        } catch (NotFoundProductException | NotFoundOrderException | InventoryReservationFailException orderFailException) {
             log.error("주문을 처리하는 도중 문제 발생 {}", orderId, orderFailException);
 
         } catch (Exception e) {
             log.error("주문을 처리 실패 {}", orderId, e);
         }
-    }
-
-    private static String getLockKey(UUID orderId, String step) {
-        return ("lock:order:" + orderId + ":" + step).toLowerCase();
     }
 
 }

@@ -71,15 +71,14 @@ public class OrderRepositoryCustomImpl implements OrderRepositoryCustom{
     }
 
     @Override
-    public int updateOrderStateToProductVerifiedWithHub(UUID orderId, UUID hubId, Long version) {
+    public int updateOrderStateToProductVerifiedWithHub(UUID orderId, UUID hubId) {
         long updated = queryFactory
             .update(order)
             .set(order.orderState, OrderState.PRODUCT_VERIFIED)
             .set(order.hubId, hubId)
             .where(
                 order.id.eq(orderId),
-                order.orderState.eq(OrderState.PRODUCT_VALIDATION_IN_PROGRESS),
-                order.version.eq(version)
+                order.orderState.eq(OrderState.PRODUCT_VALIDATION_IN_PROGRESS)
             )
             .execute();
         em.flush(); em.clear();
@@ -89,14 +88,13 @@ public class OrderRepositoryCustomImpl implements OrderRepositoryCustom{
     }
 
     @Override
-    public int updateOrderStateToAwaitingPayment(UUID orderId, Long version) {
+    public int updateOrderStateToAwaitingPayment(UUID orderId) {
         long updated = queryFactory
             .update(order)
             .set(order.orderState, OrderState.AWAITING_PAYMENT)
             .where(
                 order.id.eq(orderId),
-                order.orderState.eq(OrderState.STOCK_RESERVATION_IN_PROGRESS),
-                order.version.eq(version)
+                order.orderState.eq(OrderState.STOCK_RESERVATION_IN_PROGRESS)
             )
             .execute();
         em.flush(); em.clear();
@@ -105,14 +103,13 @@ public class OrderRepositoryCustomImpl implements OrderRepositoryCustom{
     }
 
     @Override
-    public int updateOrderStateToPaid(UUID orderId, Long version) {
+    public int updateOrderStateToPaid(UUID orderId) {
         long updated = queryFactory
             .update(order)
             .set(order.orderState, OrderState.PAID)
             .where(
                 order.id.eq(orderId),
-                order.orderState.eq(OrderState.PAYMENT_IN_PROGRESS),
-                order.version.eq(version)
+                order.orderState.eq(OrderState.PAYMENT_IN_PROGRESS)
             )
             .execute();
         em.flush(); em.clear();
@@ -121,14 +118,13 @@ public class OrderRepositoryCustomImpl implements OrderRepositoryCustom{
     }
 
     @Override
-    public int updateOrderStateToCompleted(UUID orderId, Long version) {
+    public int updateOrderStateToCompleted(UUID orderId) {
         long updated = queryFactory
             .update(order)
             .set(order.orderState, OrderState.COMPLETED)
             .where(
                 order.id.eq(orderId),
-                order.orderState.eq(OrderState.COMPLETION_IN_PROGRESS),
-                order.version.eq(version)
+                order.orderState.eq(OrderState.COMPLETION_IN_PROGRESS)
             )
             .execute();
         em.flush(); em.clear();

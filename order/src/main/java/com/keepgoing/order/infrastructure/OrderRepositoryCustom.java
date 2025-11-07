@@ -16,11 +16,11 @@ public interface OrderRepositoryCustom {
 
     int claim(UUID orderId, OrderState beforeState, OrderState afterState);
 
-    int updateOrderStateToProductVerifiedWithHub(UUID orderId, UUID hubId, Long version );
+    int updateOrderStateToProductVerifiedWithHub(UUID orderId, UUID hubId);
 
-    int updateOrderStateToAwaitingPayment(UUID orderId, Long version);
+    int updateOrderStateToAwaitingPayment(UUID orderId);
 
-    int updateOrderStateToPaid(UUID orderId, Long version);
+    int updateOrderStateToPaid(UUID orderId);
 
-    int updateOrderStateToCompleted(UUID orderId, Long version);
+    int updateOrderStateToCompleted(UUID orderId);
 }

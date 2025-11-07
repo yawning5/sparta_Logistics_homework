@@ -57,12 +57,12 @@ public class OrderProcessor {
                     try {
                         productInfo = productClient.getProduct(productId);
                     } catch (Exception e) {
-                        orderService.toFail(orderId, order.getVersion());
+                        orderService.toFail(orderId);
                         return;
                     }
 
                     if (productInfo == null || productInfo.getHubId() == null){
-                        orderService.toFail(orderId, order.getVersion());
+                        orderService.toFail(orderId);
                         return;
                     }
 
@@ -70,11 +70,11 @@ public class OrderProcessor {
                     try {
                         hubId = UUID.fromString(productInfo.getHubId());
                     } catch (IllegalArgumentException ex) {
-                        orderService.toFail(orderId, order.getVersion());
+                        orderService.toFail(orderId);
                         return;
                     }
 
-                    orderService.toProductVerified(orderId, order.getVersion(), hubId);
+                    orderService.toProductVerified(orderId, hubId);
                     break;
 
                 case PRODUCT_VERIFIED :
@@ -102,16 +102,16 @@ public class OrderProcessor {
                             ReservationInventoryRequest.create(productIdForInventory, hubIdForInventory, quantity, idempotencyKey)
                         );
                     } catch (Exception e) {
-                        orderService.toFail(orderId, order.getVersion());
+                        orderService.toFail(orderId);
                         return;
                     }
 
                     if (apiResult == false) {
-                        orderService.toFail(orderId, order.getVersion());
+                        orderService.toFail(orderId);
                         return;
                     }
 
-                    orderService.toAwaitingPayment(orderId, order.getVersion());
+                    orderService.toAwaitingPayment(orderId);
 
                     break;
                 case AWAITING_PAYMENT :
@@ -133,11 +133,11 @@ public class OrderProcessor {
 
 
                     } catch (Exception e) {
-                        orderService.toFail(orderId, order.getVersion());
+                        orderService.toFail(orderId);
                         return;
                     }
 
-                    orderService.toPaid(orderId, order.getVersion());
+                    orderService.toPaid(orderId);
                     break;
 
                 case PAID :
@@ -154,7 +154,7 @@ public class OrderProcessor {
                         return;
                     }
 
-                    orderService.toCompleted(orderId, order.getVersion());
+                    orderService.toCompleted(orderId);
                     break;
             }
 

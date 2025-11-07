@@ -54,19 +54,19 @@ public class OrderService {
     }
 
     @Transactional
-    public void toProductVerified(UUID orderId, Long version, UUID hubId) {
-        int u = orderRepository.updateOrderStateToProductVerifiedWithHub(orderId, hubId, version);
+    public void toProductVerified(UUID orderId, UUID hubId) {
+        int u = orderRepository.updateOrderStateToProductVerifiedWithHub(orderId, hubId);
         if (u == 0) throw new IllegalStateException("전이 실패(버전/상태 불일치): " + orderId);
     }
 
     @Transactional
-    public void toAwaitingPayment(UUID orderId, Long version) {
-        int u = orderRepository.updateOrderStateToAwaitingPayment(orderId, version);
+    public void toAwaitingPayment(UUID orderId) {
+        int u = orderRepository.updateOrderStateToAwaitingPayment(orderId);
         if (u == 0) throw new IllegalStateException("전이 실패: " + orderId);
     }
 
     @Transactional
-    public void toPaid(UUID orderId, Long version) {
+    public void toPaid(UUID orderId) {
         // Outbox 페이로드가 필요하면, 전이 전/후에 필요한 필드만 projection으로 읽거나
         // 기존 order를 읽어와도 됨(외부 I/O는 없음)
         Order order = orderRepository.findById(orderId).orElseThrow(); // 읽기용
@@ -82,12 +82,12 @@ public class OrderService {
             LocalDateTime.now(clock)
         ));
 
-        int u = orderRepository.updateOrderStateToPaid(orderId, version);
+        int u = orderRepository.updateOrderStateToPaid(orderId);
         if (u == 0) throw new IllegalStateException("전이 실패: " + orderId);
     }
 
     @Transactional
-    public void toCompleted(UUID orderId, Long version) {
+    public void toCompleted(UUID orderId) {
         Order order = orderRepository.findById(orderId).orElseThrow(); // 읽기용
 
         String payloadForDelivery = makePayloadForDelivery(order);
@@ -101,12 +101,12 @@ public class OrderService {
             LocalDateTime.now(clock)
         ));
 
-        int u = orderRepository.updateOrderStateToCompleted(orderId, version);
+        int u = orderRepository.updateOrderStateToCompleted(orderId);
         if (u == 0) throw new IllegalStateException("전이 실패: " + orderId);
     }
 
     @Transactional
-    public void toFail(UUID orderId, Long version) {
+    public void toFail(UUID orderId) {
         Order order = orderRepository.findById(orderId)
             .orElseThrow();
         if (order.getOrderState() == OrderState.FAILED) return;

@@ -30,7 +30,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String tokenHeader = request.getHeader("Authorization");
 
-        // ✅ Authorization 헤더가 없거나 잘못된 경우
         if (tokenHeader == null || !tokenHeader.startsWith("Bearer ")) {
             log.warn("잘못된 Authorization 헤더 형식: {}", tokenHeader);
             sendErrorResponse(response, 1,
@@ -66,6 +65,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         filterChain.doFilter(request, response);
+    }
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        String path = request.getRequestURI();
+        return path.startsWith("/v1/vendors/health-check") || path.startsWith("/actuator/health");
     }
 
     private void sendErrorResponse(HttpServletResponse response, int code, String message)

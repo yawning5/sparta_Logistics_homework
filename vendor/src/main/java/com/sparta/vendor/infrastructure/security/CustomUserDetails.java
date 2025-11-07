@@ -17,7 +17,7 @@ public class CustomUserDetails implements UserDetails {
     public CustomUserDetails(String userId, String role, String affiliationId) {
         this.userId = Long.parseLong(userId);
         this.role = UserRole.valueOf(role);
-        this.affiliationId = UUID.fromString(affiliationId);
+        this.affiliationId = affiliationId == null ? null : UUID.fromString(affiliationId);
     }
 
     public Long getUserId() {

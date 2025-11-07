@@ -1,5 +1,6 @@
 package com.sparta.vendor.domain.entity;
 
+import com.sparta.vendor.application.command.UpdateVendorCommand;
 import com.sparta.vendor.domain.vo.Address;
 import com.sparta.vendor.domain.vo.HubId;
 import com.sparta.vendor.domain.vo.VendorType;
@@ -76,5 +77,31 @@ public class Vendor extends BaseEntity {
         }
 
         return new Vendor(vendorName, vendorType, address, hubId);
+    }
+
+    public void updateVendor(UpdateVendorCommand command) {
+        // vendorName 업데이트
+        if (command.vendorName() != null) {
+            this.vendorName = command.vendorName();
+        }
+
+        // vendorType 업데이트
+        if (command.vendorType() != null) {
+            this.vendorType = command.vendorType();
+        }
+
+        // address 업데이트 (city, street, zipcode)
+        if (command.city() != null || command.street() != null || command.zipcode() != null) {
+            this.address = Address.of(
+                command.city() != null ? command.city() : this.address.getCity(),
+                command.street() != null ? command.street() : this.address.getStreet(),
+                command.zipcode() != null ? command.zipcode() : this.address.getZipCode()
+            );
+        }
+
+        // hubId 업데이트 (MASTER만 사용, 서비스에서 권한 검증 후 호출)
+        if (command.hubId() != null) {
+            this.hubId = HubId.of(command.hubId());
+        }
     }
 }

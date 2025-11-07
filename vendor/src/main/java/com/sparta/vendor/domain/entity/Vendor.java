@@ -104,4 +104,8 @@ public class Vendor extends BaseEntity {
             this.hubId = HubId.of(command.hubId());
         }
     }
+
+    public void deleteVendor(Long userId) {
+        this.delete(userId);
+    }
 }

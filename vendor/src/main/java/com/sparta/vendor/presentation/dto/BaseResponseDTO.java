@@ -12,9 +12,16 @@ public record BaseResponseDTO<T>(
 ) {
 
     // ⚡ Error record
-    public record Error(String code, String message) {}
+    public record Error(String code, String message) {
 
-    // ✅ 성공 응답 생성
+    }
+
+    // ✅ 성공 응답 생성 (데이터 없는 경우)
+    public static <T> BaseResponseDTO<T> ok() {
+        return new BaseResponseDTO<>(true, null, null);
+    }
+
+    // ✅ 성공 응답 생성 (데이터 있는 경우)
     public static <T> BaseResponseDTO<T> success(T data) {
         return new BaseResponseDTO<>(true, data, null);
     }
@@ -36,5 +43,4 @@ public record BaseResponseDTO<T>(
             new Error(code, message)
         );
     }
-
 }

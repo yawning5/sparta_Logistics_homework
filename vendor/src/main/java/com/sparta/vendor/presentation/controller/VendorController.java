@@ -1,6 +1,7 @@
 package com.sparta.vendor.presentation.controller;
 
 import com.sparta.vendor.application.command.CreateVendorCommand;
+import com.sparta.vendor.application.command.DeleteVendorCommand;
 import com.sparta.vendor.application.command.UpdateVendorCommand;
 import com.sparta.vendor.application.dto.VendorResult;
 import com.sparta.vendor.application.service.VendorService;
@@ -14,11 +15,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -61,10 +62,21 @@ public class VendorController {
         @AuthenticationPrincipal CustomUserDetails user,
         @RequestBody UpdateVendorRequestDTO request) {
 
-        UpdateVendorCommand command = UpdateVendorCommand.of(user, request);
+        UpdateVendorCommand command = UpdateVendorCommand.of(id, user, request);
 
-        VendorResult vendorResult = vendorService.updateVendor(command, id);
+        VendorResult vendorResult = vendorService.updateVendor(command);
         VendorResponseDTO vendorResponseDTO = VendorResponseDTO.from(vendorResult);
         return ResponseEntity.ok(BaseResponseDTO.success(vendorResponseDTO));
+    }
+
+    @DeleteMapping("/v1/vendors/{id}")
+    @PreAuthorize("hasAnyRole('MASTER', 'HUB')")
+    public ResponseEntity<?> deleteVendor(@PathVariable UUID id,
+        @AuthenticationPrincipal CustomUserDetails user
+    ) {
+        DeleteVendorCommand command = DeleteVendorCommand.of(id, user);
+
+        vendorService.deleteVendor(command);
+        return ResponseEntity.ok(BaseResponseDTO.ok());
     }
 }

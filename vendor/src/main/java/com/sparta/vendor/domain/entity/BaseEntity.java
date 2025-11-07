@@ -28,5 +28,11 @@ public class BaseEntity {
     private LocalDateTime updatedAt;
 
     private Long deletedBy;
+
     private LocalDateTime deletedAt;
+
+    public void delete(Long id) {
+        this.deletedBy = id;
+        this.deletedAt = LocalDateTime.now();
+    }
 }

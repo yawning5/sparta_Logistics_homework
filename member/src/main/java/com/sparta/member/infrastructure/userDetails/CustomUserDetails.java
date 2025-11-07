@@ -3,6 +3,7 @@ package com.sparta.member.infrastructure.userDetails;
 import com.sparta.member.infrastructure.persistence.jpa.entity.MemberJpa;
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,6 +28,10 @@ public class CustomUserDetails implements UserDetails {
 
     public Long getUserId() {
         return member.getId();
+    }
+
+    public UUID getAffiliationId() {
+        return member.getAffiliationId();
     }
 
     public String getRole() {

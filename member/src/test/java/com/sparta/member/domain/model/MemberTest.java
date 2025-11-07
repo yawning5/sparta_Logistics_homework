@@ -9,6 +9,7 @@ import com.sparta.member.domain.enums.Role;
 import com.sparta.member.domain.enums.Status;
 import com.sparta.member.domain.vo.Affiliation;
 import com.sparta.member.domain.vo.Type;
+import com.sparta.member.fixture.MemberFixture;
 import java.lang.reflect.Field;
 import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
@@ -115,6 +116,22 @@ public class MemberTest {
                 () -> assertEquals(Status.PENDING, get(member, "status")),
                 () -> assertEquals(username, get(member.accountInfo(), "name"))
             );
+        }
+
+        @Test
+        @DisplayName("회원가입 요청 상태 APPROVE 변경")
+        void member_signUpRequest_StatusApprove() {
+            var m = MemberFixture.memberWithId(null, null);
+            m.approveMember();
+            assertEquals(Status.APPROVED, m.status());
+        }
+
+        @Test
+        @DisplayName("회원가입 요청 상태 REJECTED 변경")
+        void member_signUpRequest_StatusRejected() {
+            var m =  MemberFixture.memberWithId(null, null);
+            m.rejectMember();
+            assertEquals(Status.REJECTED, m.status());
         }
     }
 

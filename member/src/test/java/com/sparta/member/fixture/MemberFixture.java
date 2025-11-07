@@ -37,10 +37,10 @@ public final class MemberFixture {
     /**
      * 신규 가입 요청 (id = null, Status.PENDING)
      */
-    public static Member member() {
+    public static Member member(String name, String password) {
         return Member.requestSignUp(
-            NAME,
-            PASSWORD,
+            name == null ? NAME : name,
+            password == null ? PASSWORD : password,
             EMAIL,
             SLACK_ID,
             affiliation(),
@@ -51,11 +51,11 @@ public final class MemberFixture {
     /**
      * ID가 포함된 Member (Status.PENDING)
      */
-    public static Member memberWithId() {
+    public static Member memberWithId(String name, String password) {
         return Member.from(
             ID,
-            NAME,
-            PASSWORD,
+            name == null ? NAME : name,
+            password == null ? PASSWORD : password,
             EMAIL,
             SLACK_ID,
             affiliation(),
@@ -67,7 +67,7 @@ public final class MemberFixture {
      * 승인된 Member
      */
     public static Member approvedMember() {
-        Member member = memberWithId();
+        Member member = memberWithId(null, null);
         member.approveMember();
         return member;
     }
@@ -76,7 +76,7 @@ public final class MemberFixture {
      * 거절된 Member
      */
     public static Member rejectedMember() {
-        Member member = memberWithId();
+        Member member = memberWithId(null, null);
         member.rejectMember();
         return member;
     }

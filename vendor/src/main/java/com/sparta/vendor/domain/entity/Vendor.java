@@ -49,6 +49,10 @@ public class Vendor extends BaseEntity {
     })
     private HubId hubId;
 
+    public boolean isDeleted() {
+        return getDeletedBy() != null && getDeletedAt() != null;
+    }
+
     private Vendor(String vendorName, VendorType vendorType, Address address, HubId hubId) {
         this.vendorName = vendorName;
         this.vendorType = vendorType;
@@ -56,7 +60,8 @@ public class Vendor extends BaseEntity {
         this.hubId = hubId;
     }
 
-    public static Vendor create(String vendorName, VendorType vendorType, Address address, HubId hubId) {
+    public static Vendor create(String vendorName, VendorType vendorType, Address address,
+        HubId hubId) {
         if (vendorName == null || vendorName.isBlank()) {
             throw new IllegalArgumentException("vendorName은 필수입니다.");
         }

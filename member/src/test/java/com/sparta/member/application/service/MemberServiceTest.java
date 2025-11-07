@@ -9,13 +9,11 @@ import static org.mockito.Mockito.when;
 
 import com.sparta.member.application.dto.SignUpRequestDto;
 import com.sparta.member.application.mapper.ApplicationMapper;
-import com.sparta.member.global.CustomException;
-import com.sparta.member.global.ErrorCode;
 import com.sparta.member.domain.model.Member;
 import com.sparta.member.domain.repository.MemberRepository;
 import com.sparta.member.fixture.MemberFixture;
 import com.sparta.member.fixture.SignUpRequestDtoFixture;
-import java.util.Optional;
+import com.sparta.member.global.CustomException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

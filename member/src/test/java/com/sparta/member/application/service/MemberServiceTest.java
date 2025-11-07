@@ -7,12 +7,15 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.sparta.member.application.dto.SignUpRequestDto;
+import com.sparta.member.application.mapper.ApplicationMapper;
 import com.sparta.member.global.CustomException;
 import com.sparta.member.global.ErrorCode;
 import com.sparta.member.domain.model.Member;
 import com.sparta.member.domain.repository.MemberRepository;
 import com.sparta.member.fixture.MemberFixture;
 import com.sparta.member.fixture.SignUpRequestDtoFixture;
+import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -24,9 +27,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class) // JUnit5 에서 Mockito 활성화
 class MemberServiceTest {
 
-    // 다른 주입받는 Repo
+    // 주입 받는 class
     @Mock
     MemberRepository memberRepository;
+    @Mock
+    ApplicationMapper mapper;
+
 
     // 실제 테스트 대상
     @InjectMocks
@@ -41,9 +47,11 @@ class MemberServiceTest {
             //given
             var s = SignUpRequestDtoFixture.normalRequest();
             var m = MemberFixture.memberWithId(SignUpRequestDtoFixture.NAME, SignUpRequestDtoFixture.PASSWORD);
-
             when(memberRepository.save(any(Member.class)))
                 .thenReturn(m);
+            when(mapper.signUpRequestDtoToMember(any(SignUpRequestDto.class)))
+                .thenReturn(m);
+
 
             //when
             Long id = memberService.requestSignUp(s);
@@ -61,18 +69,17 @@ class MemberServiceTest {
             // given
             var s = SignUpRequestDtoFixture.normalRequest();
             var m = MemberFixture.memberWithId(SignUpRequestDtoFixture.NAME, SignUpRequestDtoFixture.PASSWORD);
-            when( memberRepository.save(any(Member.class)))
-                .thenThrow(new CustomException(ErrorCode.DUPLICATE_EMAIL));
-
+            when(memberRepository.findByEmail(s.email()))
+                .thenReturn(m);
             // when
-            var exception = assertThrows(RuntimeException.class, () -> {
+            var exception = assertThrows(CustomException.class, () -> {
                 memberService.requestSignUp(s);
             });
 
             // then
             assertAll(
-                () -> verify(memberRepository).save(any(Member.class)),
-                () -> assertEquals("이미 존재하는 이메일 입니다.", exception.getMessage())
+                () -> verify(memberRepository).findByEmail(any(String.class)),
+                () -> assertEquals("이미 존재하는 이메일입니다.", exception.getMessage())
             );
         }
     }

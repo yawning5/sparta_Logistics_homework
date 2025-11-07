@@ -56,21 +56,18 @@ public class OrderRepositoryCustomImpl implements OrderRepositoryCustom{
 
     @Override
     public int claim(UUID orderId, OrderState beforeState, OrderState afterState) {
-        Order findOrder = queryFactory
-            .selectFrom(order)
+        long updated = queryFactory
+            .update(order)
+            .set(order.orderState, afterState)
             .where(
                 order.id.eq(orderId),
                 order.orderState.eq(beforeState)
-                )
-            .setLockMode(LockModeType.PESSIMISTIC_WRITE)
-            .setHint("jakarta.persistence.lock.timeout", "0")
-            .fetchOne();
+            )
+            .execute();
 
-        if (findOrder == null) return 0;
+        em.flush(); em.clear();
 
-        findOrder.changeOrderState(afterState);
-
-        return 1;
+        return (int) updated;
     }
 
     @Override

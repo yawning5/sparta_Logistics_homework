@@ -1,13 +1,14 @@
 spring:
-  application:
-    name: vendor-service
-  config:
-    import: "optional:configserver:http://localhost:19090"
+  sql:
+    init:
+      mode: always
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/vendor
+    username: root
+    password: root
+    driver-class-name: org.postgresql.Driver
 
 eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:18080/eureka/
   instance:
     prefer-ip-address: true
-    hostname: vendor-service

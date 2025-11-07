@@ -4,15 +4,13 @@ import static com.sparta.member.domain.support.ArgsValidator.requireAllNonNull;
 
 import com.sparta.member.domain.enums.Role;
 import com.sparta.member.domain.enums.Status;
+import com.sparta.member.domain.vo.AccountInfo;
 import com.sparta.member.domain.vo.Affiliation;
 
 public class Member {
 
     private final Long id;
-    private final String name;
-    private final String password;
-    private final String email;
-    private final String slackId;
+    private final AccountInfo accountInfo;
     private final Affiliation affiliation;
     private final Role role;
     private Status status;
@@ -27,10 +25,12 @@ public class Member {
         Role role
     ) {
         this.id = Id;
-        this.name = name;
-        this.password = password;
-        this.email = email;
-        this.slackId = slackId;
+        this.accountInfo = new AccountInfo(
+            name,
+            password,
+            email,
+            slackId
+        );
         this.affiliation = affiliation;
         this.role = role;
         this.status = Status.PENDING;
@@ -46,9 +46,9 @@ public class Member {
     ) {
         requireAllNonNull(
             "name", name,
-            "password", password,
-            "email", email,
-            "slackId", slackId,
+            "accountInfo", new AccountInfo(
+                name, password, email, slackId
+            ),
             "affiliation", affiliation,
             "role", role
         );
@@ -85,23 +85,23 @@ public class Member {
         this.status = Status.REJECTED;
     }
 
-    /**
-     * Spring Security에서 로그인 ID(username)로 사용하는 이메일을 반환합니다.
-     * @return 이메일 주소 (Member.email) (String)
-     */
-    public String getUsername() {
-        return this.email;
-    }
-
-    public String getPassword() {
-        return this.password;
-    }
-
-    public Long getId() {
-        return this.id;
-    }
-
     public boolean isSameMember(Member other) {
         return this.id != null && this.id.equals(other.id);
+    }
+
+    public Long id() {
+        return id;
+    }
+    public AccountInfo accountInfo() {
+        return accountInfo;
+    }
+    public Affiliation affiliation() {
+        return affiliation;
+    }
+    public Role role() {
+        return role;
+    }
+    public Status status() {
+        return status;
     }
 }

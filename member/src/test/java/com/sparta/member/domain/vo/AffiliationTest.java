@@ -16,7 +16,7 @@ class AffiliationTest {
         String name = null;
 
         assertThrows(IllegalArgumentException.class, () ->
-            Affiliation.of(t, id, name)
+            new Affiliation(t, id, name)
         );
     }
 
@@ -27,7 +27,7 @@ class AffiliationTest {
         UUID id = UUID.randomUUID();
         String name = "회사이름";
 
-        Affiliation a = Affiliation.of(t, id, name);
+        Affiliation a = new Affiliation(t, id, name);
 
         assertAll(
             () -> assertTrue(a.isType(Type.COMPANY)),

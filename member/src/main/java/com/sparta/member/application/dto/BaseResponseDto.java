@@ -1,6 +1,7 @@
 package com.sparta.member.application.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.sparta.member.global.ErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,16 +32,16 @@ public class BaseResponseDto<T> {
             .build();
     }
 
-//    // ✅ 실패 응답 (ErrorCode 사용)
-//    public static <T> BaseResponseDto<T> error(ErrorCode errorCode) {
-//        return BaseResponseDto.<T>builder()
-//            .success(false)
-//            .error(Error.builder()
-//                .code(errorCode.getCode())
-//                .message(errorCode.getMessage())
-//                .build())
-//            .build();
-//    }
+    // ✅ 실패 응답 (ErrorCode 사용)
+    public static <T> BaseResponseDto<T> error(ErrorCode errorCode) {
+        return BaseResponseDto.<T>builder()
+            .success(false)
+            .error(Error.builder()
+                .code(errorCode.getCode())
+                .message(errorCode.getMessage())
+                .build())
+            .build();
+    }
 
     // ✅ 실패 응답 (커스텀 메시지)
     public static <T> BaseResponseDto<T> error(String code, String message) {

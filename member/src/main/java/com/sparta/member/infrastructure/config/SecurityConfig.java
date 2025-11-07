@@ -19,6 +19,11 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     @Bean
+    AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
+    }
+
+    @Bean
     SecurityFilterChain http(
         HttpSecurity http,
         JwtAuthenticationConverter jwtAuthConverter,
@@ -45,7 +50,8 @@ public class SecurityConfig {
             .oauth2ResourceServer(oauth ->
                 oauth.jwt(jwt -> jwt
                     .decoder(jwtDecoder)
-                    .jwtAuthenticationConverter(jwtAuthConverter))
+                    .jwtAuthenticationConverter(jwtAuthConverter)
+                )
             )
             .build();
     }
@@ -53,11 +59,6 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
-        return config.getAuthenticationManager();
     }
 
 

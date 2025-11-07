@@ -38,3 +38,7 @@ eureka:
       defaultZone: http://${EUREKA-HOST}:18080/eureka/
   instance:
     hostname: vendor-service
+
+
+jwt:
+  secret: dfkldfdfdfdfdfdfdfdfdfdfdfdfdfdfd

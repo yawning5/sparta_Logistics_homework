@@ -3,6 +3,8 @@ package com.keepgoing.order.application.service.outbox;
 import com.keepgoing.order.domain.outbox.OrderOutbox;
 import com.keepgoing.order.domain.outbox.OutBoxState;
 import com.keepgoing.order.infrastructure.outbox.OrderOutboxRepository;
+import java.time.Clock;
+import java.time.LocalDateTime;
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +19,7 @@ public class OrderNotificationProcessor {
 
     private final OrderOutboxRepository orderOutboxRepository;
     private final KafkaTemplate<String, String> kafkaTemplate;
+    private final Clock clock;
 
     @Async("outboxTaskExecutor")
     public void processOutboxTask(Long outboxId) {
@@ -33,7 +36,8 @@ public class OrderNotificationProcessor {
                     int updated1 = orderOutboxRepository.claim(
                         outboxId,
                         OutBoxState.NOTIFICATION_PENDING,
-                        OutBoxState.NOTIFICATION_COMPLETION_IN_PROGRESS
+                        OutBoxState.NOTIFICATION_COMPLETION_IN_PROGRESS,
+                        LocalDateTime.now(clock)
                     );
 
                     if (updated1 == 0) {
@@ -46,12 +50,12 @@ public class OrderNotificationProcessor {
                             String.valueOf(outbox.getAggregateId()), outbox.getPayload())
                             .get(3, TimeUnit.SECONDS);
                     } catch (Exception e) {
-                        orderOutboxRepository.updateOrderStateToFailedForNotification(outboxId);
+                        orderOutboxRepository.updateOrderStateToFailedForNotification(outboxId, LocalDateTime.now(clock));
                         log.error("카프카 전송 실패(알림) id={}", outboxId, e);
                         return;
                     }
 
-                    int done = orderOutboxRepository.updateStateToCompletedForNotification(outboxId);
+                    int done = orderOutboxRepository.updateStateToCompletedForNotification(outboxId, LocalDateTime.now(clock));
                     if (done != 1) {
                         log.warn("outbox 완료 상태 전이 실패(경쟁/상태 불일치) {}", outboxId);
                         return;
@@ -63,7 +67,8 @@ public class OrderNotificationProcessor {
                     int updated2 = orderOutboxRepository.claim(
                         outboxId,
                         OutBoxState.DELIVERY_PENDING,
-                        OutBoxState.DELIVERY_COMPLETION_IN_PROGRESS
+                        OutBoxState.DELIVERY_COMPLETION_IN_PROGRESS,
+                        LocalDateTime.now(clock)
                     );
 
                     if (updated2 == 0) {
@@ -77,12 +82,12 @@ public class OrderNotificationProcessor {
                                 outbox.getPayload())
                             .get(3, TimeUnit.SECONDS);
                     } catch (Exception e) {
-                        orderOutboxRepository.updateOrderStateToFailedForDelivery(outboxId);
+                        orderOutboxRepository.updateOrderStateToFailedForDelivery(outboxId, LocalDateTime.now(clock));
                         log.error("카프카 전송 실패(알림) id={}", outboxId, e);
                         return;
                     }
 
-                    int done2 = orderOutboxRepository.updateStateToCompletedForDelivery(outboxId);
+                    int done2 = orderOutboxRepository.updateStateToCompletedForDelivery(outboxId, LocalDateTime.now(clock));
                     if (done2 != 1) {
                         log.warn("outbox 완료 상태 전이 실패(경쟁/상태 불일치) {}", outboxId);
                         return;

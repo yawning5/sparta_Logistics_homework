@@ -4,10 +4,19 @@ import com.keepgoing.order.application.service.order.OrderService;
 import com.keepgoing.order.presentation.dto.request.CreateOrderRequest;
 import com.keepgoing.order.presentation.dto.response.BaseResponseDto;
 import com.keepgoing.order.presentation.dto.response.CreateOrderResponse;
+import com.keepgoing.order.presentation.dto.response.OrderInfo;
 import jakarta.validation.Valid;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.SortDefault;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -21,5 +30,34 @@ public class OrderControllerV1 implements OrderController{
     public BaseResponseDto<CreateOrderResponse> create(@Valid @RequestBody CreateOrderRequest request) {
         CreateOrderResponse response = orderService.create(request.toCommand());
         return BaseResponseDto.success(response);
+    }
+
+    @Override
+    @GetMapping("/v1/orders")
+    public BaseResponseDto<Page<OrderInfo>> getOrderInfoList(
+        @SortDefault.SortDefaults({
+            @SortDefault(sort = "createdAt", direction = Sort.Direction.DESC),
+            @SortDefault(sort = "updatedAt", direction = Sort.Direction.DESC)
+        })
+        Pageable pageable
+    ) {
+
+        validate(pageable);
+
+        Page<OrderInfo> searchOrderPage = orderService.getSearchOrder(pageable);
+        return BaseResponseDto.success(searchOrderPage);
+    }
+
+    private void validate(Pageable pageable) {
+        int page = pageable.getPageNumber();
+        int size = pageable.getPageSize();
+
+        if (page < 0) {
+            throw new IllegalArgumentException("page는 0 이상이어야 합니다.");
+        }
+
+        if (size <= 0 || size > 100) {
+            throw new IllegalArgumentException("size는 1 ~ 100 사이여야 합니다.");
+        }
     }
 }

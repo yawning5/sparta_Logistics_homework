@@ -13,13 +13,17 @@ import com.keepgoing.order.domain.order.OrderState;
 import com.keepgoing.order.domain.outbox.OutBoxState;
 import com.keepgoing.order.infrastructure.outbox.OrderOutboxRepository;
 import com.keepgoing.order.infrastructure.order.OrderRepository;
+import com.keepgoing.order.presentation.dto.response.BaseResponseDto;
 import com.keepgoing.order.presentation.dto.response.CreateOrderResponse;
+import com.keepgoing.order.presentation.dto.response.OrderInfo;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,13 +59,13 @@ public class OrderService {
 
     @Transactional
     public void toProductVerified(UUID orderId, UUID hubId) {
-        int u = orderRepository.updateOrderStateToProductVerifiedWithHub(orderId, hubId);
+        int u = orderRepository.updateOrderStateToProductVerifiedWithHub(orderId, hubId, LocalDateTime.now(clock));
         if (u == 0) throw new IllegalStateException("전이 실패(버전/상태 불일치): " + orderId);
     }
 
     @Transactional
     public void toAwaitingPayment(UUID orderId) {
-        int u = orderRepository.updateOrderStateToAwaitingPayment(orderId);
+        int u = orderRepository.updateOrderStateToAwaitingPayment(orderId, LocalDateTime.now(clock));
         if (u == 0) throw new IllegalStateException("전이 실패: " + orderId);
     }
 
@@ -82,7 +86,7 @@ public class OrderService {
             LocalDateTime.now(clock)
         ));
 
-        int u = orderRepository.updateOrderStateToPaid(orderId);
+        int u = orderRepository.updateOrderStateToPaid(orderId, LocalDateTime.now(clock));
         if (u == 0) throw new IllegalStateException("전이 실패: " + orderId);
     }
 
@@ -101,7 +105,7 @@ public class OrderService {
             LocalDateTime.now(clock)
         ));
 
-        int u = orderRepository.updateOrderStateToCompleted(orderId);
+        int u = orderRepository.updateOrderStateToCompleted(orderId, LocalDateTime.now(clock));
         if (u == 0) throw new IllegalStateException("전이 실패: " + orderId);
     }
 
@@ -117,7 +121,7 @@ public class OrderService {
 
     @Transactional
     public int claim(UUID orderId, OrderState beforeState, OrderState afterState) {
-        return orderRepository.claim(orderId, beforeState, afterState);
+        return orderRepository.claim(orderId, beforeState, afterState, LocalDateTime.now(clock));
     }
 
     private String makePayloadForNotification(Order order) {
@@ -152,5 +156,9 @@ public class OrderService {
         } catch (JsonProcessingException e) {
             throw new RuntimeException("JSON으로 변환하지 못했습니다.");
         }
+    }
+
+    public Page<OrderInfo> getSearchOrder(Pageable pageable) {
+        return orderRepository.searchOrderPage(pageable).map(OrderInfo::from);
     }
 }

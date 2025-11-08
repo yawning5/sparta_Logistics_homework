@@ -7,6 +7,7 @@ import com.keepgoing.order.domain.outbox.OutBoxState;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
@@ -43,11 +44,12 @@ public class OrderOutboxRepositoryCustomImpl implements OrderOutboxRepositoryCus
 
     @Override
     @Transactional
-    public int updateStateToCompletedForDelivery(Long outboxId) {
+    public int updateStateToCompletedForDelivery(Long outboxId, LocalDateTime now) {
 
         long updated = queryFactory
             .update(orderOutbox)
             .set(orderOutbox.state, OutBoxState.DELIVERY_COMPLETED)
+            .set(orderOutbox.updatedAt, now)
             .where(
                 orderOutbox.id.eq(outboxId),
                 orderOutbox.state.eq(OutBoxState.DELIVERY_COMPLETION_IN_PROGRESS)
@@ -61,11 +63,12 @@ public class OrderOutboxRepositoryCustomImpl implements OrderOutboxRepositoryCus
 
     @Override
     @Transactional
-    public int updateStateToCompletedForNotification(Long outboxId) {
+    public int updateStateToCompletedForNotification(Long outboxId, LocalDateTime now) {
 
         long updated = queryFactory
             .update(orderOutbox)
             .set(orderOutbox.state, OutBoxState.NOTIFICATION_COMPLETED)
+            .set(orderOutbox.updatedAt, now)
             .where(
                 orderOutbox.id.eq(outboxId),
                 orderOutbox.state.eq(OutBoxState.NOTIFICATION_COMPLETION_IN_PROGRESS)
@@ -79,10 +82,11 @@ public class OrderOutboxRepositoryCustomImpl implements OrderOutboxRepositoryCus
 
     @Override
     @Transactional
-    public int updateOrderStateToFailedForDelivery(Long outboxId) {
+    public int updateOrderStateToFailedForDelivery(Long outboxId, LocalDateTime now) {
         long updated = queryFactory
             .update(orderOutbox)
             .set(orderOutbox.state, OutBoxState.DELIVERY_FAILED)
+            .set(orderOutbox.updatedAt, now)
             .where(
                 orderOutbox.id.eq(outboxId),
                 orderOutbox.state.eq(OutBoxState.DELIVERY_COMPLETION_IN_PROGRESS)
@@ -95,10 +99,11 @@ public class OrderOutboxRepositoryCustomImpl implements OrderOutboxRepositoryCus
 
     @Override
     @Transactional
-    public int updateOrderStateToFailedForNotification(Long outboxId) {
+    public int updateOrderStateToFailedForNotification(Long outboxId, LocalDateTime now) {
         long updated = queryFactory
             .update(orderOutbox)
             .set(orderOutbox.state, OutBoxState.NOTIFICATION_FAILED)
+            .set(orderOutbox.updatedAt, now)
             .where(
                 orderOutbox.id.eq(outboxId),
                 orderOutbox.state.eq(OutBoxState.NOTIFICATION_COMPLETION_IN_PROGRESS)
@@ -111,11 +116,12 @@ public class OrderOutboxRepositoryCustomImpl implements OrderOutboxRepositoryCus
 
     @Override
     @Transactional
-    public int claim(Long outboxId, OutBoxState beforeState, OutBoxState afterState) {
+    public int claim(Long outboxId, OutBoxState beforeState, OutBoxState afterState, LocalDateTime now) {
 
         long updated = queryFactory
             .update(orderOutbox)
             .set(orderOutbox.state, afterState)
+            .set(orderOutbox.updatedAt, now)
             .where(
                 orderOutbox.id.eq(outboxId),
                 orderOutbox.state.eq(beforeState)

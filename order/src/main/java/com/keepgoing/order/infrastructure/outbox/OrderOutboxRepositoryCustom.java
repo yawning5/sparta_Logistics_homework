@@ -1,6 +1,7 @@
 package com.keepgoing.order.infrastructure.outbox;
 
 import com.keepgoing.order.domain.outbox.OutBoxState;
+import java.time.LocalDateTime;
 import java.util.Set;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,14 +12,14 @@ public interface OrderOutboxRepositoryCustom {
 
     Page<Long> findPendingOutboxIds(Set<OutBoxState> states, Pageable pageable);
 
-    int updateStateToCompletedForDelivery(Long outboxId);
+    int updateStateToCompletedForDelivery(Long outboxId, LocalDateTime now);
 
-    int updateStateToCompletedForNotification(Long outboxId);
+    int updateStateToCompletedForNotification(Long outboxId, LocalDateTime now);
 
-    int updateOrderStateToFailedForDelivery(Long outboxId);
+    int updateOrderStateToFailedForDelivery(Long outboxId, LocalDateTime now);
 
-    int updateOrderStateToFailedForNotification(Long outboxId);
+    int updateOrderStateToFailedForNotification(Long outboxId, LocalDateTime now);
 
-    int claim(Long outboxId, OutBoxState beforeState, OutBoxState afterState);
+    int claim(Long outboxId, OutBoxState beforeState, OutBoxState afterState, LocalDateTime now);
 
 }

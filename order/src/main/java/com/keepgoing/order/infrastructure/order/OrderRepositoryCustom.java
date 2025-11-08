@@ -1,5 +1,6 @@
 package com.keepgoing.order.infrastructure.order;
 
+import com.keepgoing.order.domain.order.Order;
 import com.keepgoing.order.domain.order.OrderState;
 import java.util.Collection;
 
@@ -19,4 +20,6 @@ public interface OrderRepositoryCustom {
     int updateOrderStateToPaid(UUID orderId);
 
     int updateOrderStateToCompleted(UUID orderId);
+
+    Page<Order> searchOrderPage(Pageable pageable);
 }

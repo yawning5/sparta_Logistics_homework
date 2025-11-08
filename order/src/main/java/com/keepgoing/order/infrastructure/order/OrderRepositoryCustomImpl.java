@@ -4,16 +4,24 @@ package com.keepgoing.order.infrastructure.order;
 
 import static com.keepgoing.order.domain.order.QOrder.*;
 
+import com.keepgoing.order.domain.order.Order;
 import com.keepgoing.order.domain.order.OrderState;
+import com.keepgoing.order.domain.order.QOrder;
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.ComparableEntityPath;
+import com.querydsl.core.types.dsl.ComparableExpression;
+import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.support.PageableExecutionUtils;
 
 @RequiredArgsConstructor
@@ -118,4 +126,48 @@ public class OrderRepositoryCustomImpl implements OrderRepositoryCustom{
 
         return (int) updated;
     }
+
+    @Override
+    public Page<Order> searchOrderPage(Pageable pageable) {
+
+        List<OrderSpecifier> orderSpecifiers = getOrderSpecifiers(pageable);
+
+        List<Order> content = queryFactory
+            .select(order)
+            .from(order)
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
+            .orderBy(orderSpecifiers.toArray(new OrderSpecifier[0]))
+            .fetch();
+
+        JPAQuery<Long> countQuery = queryFactory
+            .select(order.count())
+            .from(order);
+
+        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
+    }
+
+    // 동적 정렬을 위한 메서드
+    private static List<OrderSpecifier> getOrderSpecifiers(Pageable pageable) {
+        List<OrderSpecifier> orderSpecifiers = new ArrayList<>();
+
+        for (Sort.Order o : pageable.getSort()) {
+
+            // isAscending는 오름차순이면 true, 내림차순이면 false 반환
+            com.querydsl.core.types.Order direction = o.isAscending() ?
+                com.querydsl.core.types.Order.ASC : com.querydsl.core.types.Order.DESC;
+
+            String property = o.getProperty();
+
+            PathBuilder<?> path = new PathBuilder<>(Order.class, order.getMetadata());
+
+            ComparableExpression<?> expr =
+                path.getComparable(o.getProperty(), Comparable.class);
+
+            orderSpecifiers.add(new OrderSpecifier(direction, expr));
+        }
+        return orderSpecifiers;
+    }
+
+
 }

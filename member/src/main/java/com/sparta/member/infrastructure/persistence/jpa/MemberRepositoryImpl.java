@@ -63,4 +63,9 @@ public class MemberRepositoryImpl implements MemberRepository {
         return mapper.toMembers(memberJpaRepository.saveAll(mapper.toMembersJpa(members)));
     }
 
+    @Override
+    public boolean existsByEmail(String email) {
+        return memberJpaRepository.findByEmail(email).isPresent();
+    }
+
 }

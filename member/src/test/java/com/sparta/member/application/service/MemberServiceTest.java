@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -20,6 +21,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @ExtendWith(MockitoExtension.class) // JUnit5 에서 Mockito 활성화
 class MemberServiceTest {
@@ -29,6 +32,8 @@ class MemberServiceTest {
     MemberRepository memberRepository;
     @Mock
     ApplicationMapper mapper;
+    @Mock
+    PasswordEncoder passwordEncoder;
 
 
     // 실제 테스트 대상
@@ -44,8 +49,12 @@ class MemberServiceTest {
             //given
             var s = SignUpRequestDtoFixture.normalRequest();
             var m = MemberFixture.memberWithId(SignUpRequestDtoFixture.NAME, SignUpRequestDtoFixture.PASSWORD);
+            when(memberRepository.existsByEmail(anyString()))
+                .thenReturn(Boolean.FALSE);
             when(memberRepository.save(any(Member.class)))
                 .thenReturn(m);
+            when(passwordEncoder.encode(any()))
+                .thenReturn("123");
 
 
             //when
@@ -64,8 +73,8 @@ class MemberServiceTest {
             // given
             var s = SignUpRequestDtoFixture.normalRequest();
             var m = MemberFixture.memberWithId(SignUpRequestDtoFixture.NAME, SignUpRequestDtoFixture.PASSWORD);
-            when(memberRepository.findByEmail(s.email()))
-                .thenReturn(m);
+            when( memberRepository.existsByEmail(anyString()))
+                .thenReturn(Boolean.TRUE);
             // when
             var exception = assertThrows(CustomException.class, () -> {
                 memberService.requestSignUp(s);
@@ -73,7 +82,7 @@ class MemberServiceTest {
 
             // then
             assertAll(
-                () -> verify(memberRepository).findByEmail(any(String.class)),
+                () -> verify(memberRepository).existsByEmail(any(String.class)),
                 () -> assertEquals("이미 존재하는 이메일입니다.", exception.getMessage())
             );
         }

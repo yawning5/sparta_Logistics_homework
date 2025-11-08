@@ -2,17 +2,19 @@ package com.sparta.member.interfaces.dto;
 
 import com.sparta.member.domain.enums.Role;
 import com.sparta.member.domain.vo.Type;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.util.UUID;
 
 public record SignUpRequestDto(
-    String name,
-    String password,
-    String email,
-    String slackId,
-    Type affiliation_Type,
-    UUID affiliation_Id,
-    String affiliation_name,
-    Role role
+    @NotBlank String name,
+    @NotBlank String password,
+    @NotBlank String email,
+    @NotBlank String slackId,
+    @NotNull Type affiliation_Type,
+    @NotNull UUID affiliation_Id,
+    @NotBlank String affiliation_name,
+    @NotNull Role role
 ) {
 
 }

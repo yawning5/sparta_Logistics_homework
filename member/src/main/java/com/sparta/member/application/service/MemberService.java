@@ -1,5 +1,6 @@
 package com.sparta.member.application.service;
 
+import com.sparta.member.domain.enums.Status;
 import com.sparta.member.domain.vo.Affiliation;
 import com.sparta.member.interfaces.dto.SignUpRequestDto;
 import com.sparta.member.application.mapper.ApplicationMapper;
@@ -7,7 +8,10 @@ import com.sparta.member.domain.model.Member;
 import com.sparta.member.domain.repository.MemberRepository;
 import com.sparta.member.global.CustomException;
 import com.sparta.member.global.ErrorCode;
+import com.sparta.member.interfaces.dto.StatusChangeRequestDto;
+import com.sparta.member.interfaces.dto.StatusUpdateResponseDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,12 +20,15 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final ApplicationMapper mapper;
+    private final PasswordEncoder passwordEncoder;
 
     public Long requestSignUp(SignUpRequestDto requestDto) {
-        checkMember(requestDto);
+        if (memberRepository.existsByEmail(requestDto.email())) {
+            throw new CustomException(ErrorCode.DUPLICATE_EMAIL);
+        }
         Member newMember = Member.requestSignUp(
             requestDto.name(),
-            requestDto.password(),
+            passwordEncoder.encode(requestDto.password()),
             requestDto.email(),
             requestDto.slackId(),
             new Affiliation(
@@ -35,10 +42,13 @@ public class MemberService {
         return savedMember.id();
     }
 
-    private void checkMember(SignUpRequestDto requestDto) {
-        if (memberRepository.findByEmail(requestDto.email()) != null) {
-            throw new CustomException(ErrorCode.DUPLICATE_EMAIL);
+    public StatusUpdateResponseDto updateStatus(StatusChangeRequestDto requestDto) {
+        Member targetMember = memberRepository.findByEmail(requestDto.email());
+        switch(requestDto.status()) {
+            case APPROVED -> targetMember.approve();
+            case REJECTED -> targetMember.reject();
         }
+        Member savedMember = memberRepository.save(targetMember);
+        return mapper.toStatusUpdateResponseDto(savedMember);
     }
-
 }

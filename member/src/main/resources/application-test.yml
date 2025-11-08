@@ -20,6 +20,12 @@ spring:
     config:
       enabled: false
 
+springdoc:
+  swagger-ui:
+    path: /swagger-ui
+    operations-sorter: method
+    tags-sorter: alpha
+
 eureka:
   client:
     enabled: false

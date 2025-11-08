@@ -3,7 +3,6 @@ package com.sparta.member.infrastructure.persistence.mapper;
 import com.sparta.member.domain.model.Member;
 import com.sparta.member.domain.vo.Affiliation;
 import com.sparta.member.infrastructure.persistence.jpa.entity.MemberJpa;
-import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.stereotype.Component;
 

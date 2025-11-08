@@ -52,7 +52,14 @@ public class OrderProcessor {
                         return;
                     }
 
-                    String productId = order.getProductId().toString();
+                    Order orderForProductValidation = orderService.findById(orderId);
+
+                    if (orderForProductValidation == null) {
+                        orderService.toFail(orderId);
+                        return;
+                    }
+
+                    String productId = orderForProductValidation.getProductId().toString();
                     ProductInfo productInfo = null;
                     try {
                         productInfo = productClient.getProduct(productId);
@@ -91,10 +98,17 @@ public class OrderProcessor {
                         return;
                     }
 
-                    String productIdForInventory = String.valueOf(order.getProductId());
-                    String hubIdForInventory = order.getHubId().toString();
-                    Integer quantity = order.getQuantity();
-                    String idempotencyKey = order.getIdempotencyKey().toString();
+                    Order orderForInventoryReservation = orderService.findById(orderId);
+
+                    if (orderForInventoryReservation == null) {
+                        orderService.toFail(orderId);
+                        return;
+                    }
+
+                    String productIdForInventory = String.valueOf(orderForInventoryReservation.getProductId());
+                    String hubIdForInventory = orderForInventoryReservation.getHubId().toString();
+                    Integer quantity = orderForInventoryReservation.getQuantity();
+                    String idempotencyKey = orderForInventoryReservation.getIdempotencyKey().toString();
 
                     boolean apiResult = false;
                     try {
@@ -114,32 +128,6 @@ public class OrderProcessor {
                     orderService.toAwaitingPayment(orderId);
 
                     break;
-                case AWAITING_PAYMENT :
-                    log.info("결제 요청 수행 {}", orderId);
-
-                    int updateResult3 = orderService.claim(
-                        orderId,
-                        OrderState.AWAITING_PAYMENT,
-                        OrderState.PAYMENT_IN_PROGRESS
-                    );
-
-                    if (updateResult3 == 0) {
-                        log.error("이미 작업을 진행 중이거나 상태 불일치 {}", orderId);
-                        return;
-                    }
-
-                    try {
-                        // TODO: 결제 시스템을 도입한다면 결제 API 호출 필요 - 결제는 무조건 실행된다고 본다.
-
-
-                    } catch (Exception e) {
-                        orderService.toFail(orderId);
-                        return;
-                    }
-
-                    orderService.toPaid(orderId);
-                    break;
-
                 case PAID :
                     log.info("배송을 위한 Outbox에 데이터 등록 {}", orderId);
 

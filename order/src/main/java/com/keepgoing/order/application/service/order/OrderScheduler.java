@@ -22,7 +22,6 @@ public class OrderScheduler {
     private static final Set<OrderState> PROCESSING_STATES = Set.of(
         OrderState.PENDING_VALIDATION,
         OrderState.PRODUCT_VERIFIED,
-        OrderState.AWAITING_PAYMENT,
         OrderState.PAID
     );
 

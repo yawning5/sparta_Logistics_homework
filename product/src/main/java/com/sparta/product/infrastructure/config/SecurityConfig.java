@@ -28,7 +28,8 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/v1/products/health-check").permitAll()
                 .requestMatchers("/actuator/health").permitAll()
-                .requestMatchers("/v1/vendors/**").authenticated()
+                .requestMatchers("/v1/products/**").authenticated()
+                .requestMatchers("/v1/internal/products/**").authenticated()
                 .anyRequest().permitAll()
             )
             .exceptionHandling((exceptions) -> {

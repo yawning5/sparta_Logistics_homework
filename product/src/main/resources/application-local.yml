@@ -1,13 +1,23 @@
 spring:
-  application:
-    name: product-service
-  config:
-    import: "optional:configserver:http://localhost:19090"
+  sql:
+    init:
+      mode: always
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/product
+    username: root
+    password: root
+    driver-class-name: org.postgresql.Driver
 
 eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:18080/eureka/
   instance:
     prefer-ip-address: true
-    hostname: product-service
+
+management:
+  zipkin:
+    tracing:
+      endpoint: "http://localhost:9411/api/v2/spans"
+  tracing:
+    enabled: true
+    sampling:
+      probability: 1.0

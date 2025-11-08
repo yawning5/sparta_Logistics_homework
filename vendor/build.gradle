@@ -6,7 +6,7 @@ plugins {
 
 group = 'com.sparta'
 version = '0.0.1-SNAPSHOT'
-description = 'member'
+description = 'vendor'
 
 java {
 	toolchain {

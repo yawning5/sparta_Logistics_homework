@@ -4,4 +4,4 @@ WORKDIR /app
 
 COPY build/libs/*.jar product.jar
 
-ENTRYPOINT ["java", "-jar", "/app/product.jar"]
+ENTRYPOINT ["java", "-jar","-DEUREKA-HOST=eureka-server", "/app/product.jar"]

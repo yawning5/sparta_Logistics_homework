@@ -1,8 +1,9 @@
-package com.sparta.vendor.infrastructure.config;
+package com.sparta.product.infrastructure.config;
 
-import com.sparta.vendor.infrastructure.provider.JwtTokenProvider;
-import com.sparta.vendor.infrastructure.security.CustomAccessDeniedHandler;
-import com.sparta.vendor.infrastructure.security.JwtAuthenticationFilter;
+
+import com.sparta.product.infrastructure.provider.JwtTokenProvider;
+import com.sparta.product.infrastructure.security.CustomAccessDeniedHandler;
+import com.sparta.product.infrastructure.security.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,10 +26,9 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/v1/vendors/health-check").permitAll()
+                .requestMatchers("/v1/products/health-check").permitAll()
                 .requestMatchers("/actuator/health").permitAll()
                 .requestMatchers("/v1/vendors/**").authenticated()
-                .requestMatchers("/v1/internal/vendors/**").authenticated()
                 .anyRequest().permitAll()
             )
             .exceptionHandling((exceptions) -> {

@@ -28,6 +28,7 @@ public class SecurityConfig {
                 .requestMatchers("/v1/vendors/health-check").permitAll()
                 .requestMatchers("/actuator/health").permitAll()
                 .requestMatchers("/v1/vendors/**").authenticated()
+                .requestMatchers("/v1/internal/vendors/**").authenticated()
                 .anyRequest().permitAll()
             )
             .exceptionHandling((exceptions) -> {

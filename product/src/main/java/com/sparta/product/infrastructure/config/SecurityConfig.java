@@ -26,7 +26,7 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/v1/vendors/health-check").permitAll()
+                .requestMatchers("/v1/products/health-check").permitAll()
                 .requestMatchers("/actuator/health").permitAll()
                 .requestMatchers("/v1/vendors/**").authenticated()
                 .anyRequest().permitAll()

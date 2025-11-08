@@ -1,4 +1,4 @@
-package com.keepgoing.order.config;
+package com.keepgoing.order.config.inner;
 
 import java.util.concurrent.Executor;
 import org.springframework.context.annotation.Bean;

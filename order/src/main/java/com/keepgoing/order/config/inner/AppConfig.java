@@ -1,4 +1,4 @@
-package com.keepgoing.order.config;
+package com.keepgoing.order.config.inner;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.Bean;

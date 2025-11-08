@@ -1,18 +1,18 @@
-package com.keepgoing.order.application.service;
+package com.keepgoing.order.application.service.order;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.keepgoing.order.application.dto.CreateOrderCommand;
 import com.keepgoing.order.application.dto.CreateOrderPayloadForDelivery;
 import com.keepgoing.order.application.dto.CreateOrderPayloadForNotification;
-import com.keepgoing.order.domain.AggregateType;
-import com.keepgoing.order.domain.EventType;
-import com.keepgoing.order.domain.Order;
-import com.keepgoing.order.domain.OrderOutbox;
-import com.keepgoing.order.domain.OrderState;
-import com.keepgoing.order.domain.OutBoxState;
-import com.keepgoing.order.infrastructure.OrderOutboxRepository;
-import com.keepgoing.order.infrastructure.OrderRepository;
+import com.keepgoing.order.domain.outbox.AggregateType;
+import com.keepgoing.order.domain.outbox.EventType;
+import com.keepgoing.order.domain.order.Order;
+import com.keepgoing.order.domain.outbox.OrderOutbox;
+import com.keepgoing.order.domain.order.OrderState;
+import com.keepgoing.order.domain.outbox.OutBoxState;
+import com.keepgoing.order.infrastructure.outbox.OrderOutboxRepository;
+import com.keepgoing.order.infrastructure.order.OrderRepository;
 import com.keepgoing.order.presentation.dto.response.CreateOrderResponse;
 import java.time.Clock;
 import java.time.LocalDateTime;

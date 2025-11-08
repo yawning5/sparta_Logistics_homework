@@ -1,8 +1,8 @@
-package com.keepgoing.order.application.service;
+package com.keepgoing.order.application.service.outbox;
 
-import com.keepgoing.order.domain.OrderOutbox;
-import com.keepgoing.order.domain.OutBoxState;
-import com.keepgoing.order.infrastructure.OrderOutboxRepository;
+import com.keepgoing.order.domain.outbox.OrderOutbox;
+import com.keepgoing.order.domain.outbox.OutBoxState;
+import com.keepgoing.order.infrastructure.outbox.OrderOutboxRepository;
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

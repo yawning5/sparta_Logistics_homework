@@ -1,6 +1,6 @@
-package com.keepgoing.order.infrastructure;
+package com.keepgoing.order.infrastructure.order;
 
-import com.keepgoing.order.domain.Order;
+import com.keepgoing.order.domain.order.Order;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 

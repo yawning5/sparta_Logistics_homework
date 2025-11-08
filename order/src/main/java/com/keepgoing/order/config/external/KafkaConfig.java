@@ -1,4 +1,4 @@
-package com.keepgoing.order.config;
+package com.keepgoing.order.config.external;
 
 import org.apache.kafka.clients.admin.NewTopic;
 import org.springframework.context.annotation.Bean;

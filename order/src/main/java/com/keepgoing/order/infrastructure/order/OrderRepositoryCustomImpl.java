@@ -1,8 +1,10 @@
-package com.keepgoing.order.infrastructure;
+package com.keepgoing.order.infrastructure.order;
 
-import static com.keepgoing.order.domain.QOrder.*;
 
-import com.keepgoing.order.domain.OrderState;
+
+import static com.keepgoing.order.domain.order.QOrder.*;
+
+import com.keepgoing.order.domain.order.OrderState;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;

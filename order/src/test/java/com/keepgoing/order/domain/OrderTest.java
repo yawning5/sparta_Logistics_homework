@@ -1,7 +1,6 @@
 package com.keepgoing.order.domain;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+import com.keepgoing.order.domain.order.Order;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import org.assertj.core.api.Assertions;

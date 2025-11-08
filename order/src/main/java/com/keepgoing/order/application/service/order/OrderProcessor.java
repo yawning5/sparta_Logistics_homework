@@ -1,13 +1,13 @@
-package com.keepgoing.order.application.service;
+package com.keepgoing.order.application.service.order;
 
 import com.keepgoing.order.application.exception.InventoryReservationFailException;
 import com.keepgoing.order.application.exception.NotFoundOrderException;
 import com.keepgoing.order.application.exception.NotFoundProductException;
 
-import com.keepgoing.order.domain.Order;
-import com.keepgoing.order.domain.OrderState;
-import com.keepgoing.order.presentation.HubClient;
-import com.keepgoing.order.presentation.ProductClient;
+import com.keepgoing.order.domain.order.Order;
+import com.keepgoing.order.domain.order.OrderState;
+import com.keepgoing.order.presentation.client.HubClient;
+import com.keepgoing.order.presentation.client.ProductClient;
 import com.keepgoing.order.presentation.dto.request.ReservationInventoryRequest;
 import com.keepgoing.order.presentation.dto.response.ProductInfo;
 

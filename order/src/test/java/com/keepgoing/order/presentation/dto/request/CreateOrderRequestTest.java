@@ -1,10 +1,8 @@
 package com.keepgoing.order.presentation.dto.request;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.keepgoing.order.application.service.OrderService;
-import com.keepgoing.order.presentation.OrderControllerV1;
+import com.keepgoing.order.application.service.order.OrderService;
+import com.keepgoing.order.presentation.api.OrderControllerV1;
 import com.keepgoing.order.presentation.dto.response.CreateOrderResponse;
 import java.time.LocalDateTime;
 import java.util.UUID;

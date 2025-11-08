@@ -1,4 +1,4 @@
-package com.keepgoing.order.domain;
+package com.keepgoing.order.domain.order;
 
 public enum OrderState {
 

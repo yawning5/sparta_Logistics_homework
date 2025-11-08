@@ -1,4 +1,4 @@
-package com.keepgoing.order.config;
+package com.keepgoing.order.config.external;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;

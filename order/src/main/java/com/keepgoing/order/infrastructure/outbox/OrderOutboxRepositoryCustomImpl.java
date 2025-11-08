@@ -1,8 +1,8 @@
-package com.keepgoing.order.infrastructure;
+package com.keepgoing.order.infrastructure.outbox;
 
-import static com.keepgoing.order.domain.QOrderOutbox.*;
+import static com.keepgoing.order.domain.outbox.QOrderOutbox.*;
 
-import com.keepgoing.order.domain.OutBoxState;
+import com.keepgoing.order.domain.outbox.OutBoxState;
 
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;

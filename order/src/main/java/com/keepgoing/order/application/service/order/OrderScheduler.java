@@ -1,7 +1,7 @@
-package com.keepgoing.order.application.service;
+package com.keepgoing.order.application.service.order;
 
-import com.keepgoing.order.domain.OrderState;
-import com.keepgoing.order.infrastructure.OrderRepository;
+import com.keepgoing.order.domain.order.OrderState;
+import com.keepgoing.order.infrastructure.order.OrderRepository;
 import java.util.Set;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;

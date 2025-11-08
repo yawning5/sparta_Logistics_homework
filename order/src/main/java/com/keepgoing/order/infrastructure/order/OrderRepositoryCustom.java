@@ -1,6 +1,6 @@
-package com.keepgoing.order.infrastructure;
+package com.keepgoing.order.infrastructure.order;
 
-import com.keepgoing.order.domain.OrderState;
+import com.keepgoing.order.domain.order.OrderState;
 import java.util.Collection;
 
 import java.util.UUID;

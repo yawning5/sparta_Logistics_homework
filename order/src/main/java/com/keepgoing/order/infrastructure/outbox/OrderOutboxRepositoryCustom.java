@@ -1,6 +1,6 @@
-package com.keepgoing.order.infrastructure;
+package com.keepgoing.order.infrastructure.outbox;
 
-import com.keepgoing.order.domain.OutBoxState;
+import com.keepgoing.order.domain.outbox.OutBoxState;
 import java.util.Set;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

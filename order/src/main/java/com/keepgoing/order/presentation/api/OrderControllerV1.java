@@ -1,6 +1,6 @@
-package com.keepgoing.order.presentation;
+package com.keepgoing.order.presentation.api;
 
-import com.keepgoing.order.application.service.OrderService;
+import com.keepgoing.order.application.service.order.OrderService;
 import com.keepgoing.order.presentation.dto.request.CreateOrderRequest;
 import com.keepgoing.order.presentation.dto.response.BaseResponseDto;
 import com.keepgoing.order.presentation.dto.response.CreateOrderResponse;

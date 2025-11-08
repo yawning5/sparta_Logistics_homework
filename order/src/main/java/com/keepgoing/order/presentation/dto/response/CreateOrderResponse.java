@@ -2,7 +2,7 @@ package com.keepgoing.order.presentation.dto.response;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.keepgoing.order.domain.OrderState;
+import com.keepgoing.order.domain.order.OrderState;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import lombok.AccessLevel;

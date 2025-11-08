@@ -1,4 +1,4 @@
-package com.keepgoing.order.presentation;
+package com.keepgoing.order.presentation.client;
 
 import com.keepgoing.order.presentation.dto.request.ReservationInventoryRequest;
 import org.springframework.cloud.openfeign.FeignClient;

@@ -1,6 +1,6 @@
 package com.keepgoing.order.application.dto;
 
-import com.keepgoing.order.domain.Order;
+import com.keepgoing.order.domain.order.Order;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import lombok.Builder;

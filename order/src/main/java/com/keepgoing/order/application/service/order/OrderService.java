@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.keepgoing.order.application.dto.CreateOrderCommand;
 import com.keepgoing.order.application.dto.CreateOrderPayloadForDelivery;
 import com.keepgoing.order.application.dto.CreateOrderPayloadForNotification;
+import com.keepgoing.order.application.exception.NotFoundOrderException;
 import com.keepgoing.order.domain.outbox.AggregateType;
 import com.keepgoing.order.domain.outbox.EventType;
 import com.keepgoing.order.domain.order.Order;
@@ -160,5 +161,13 @@ public class OrderService {
 
     public Page<OrderInfo> getSearchOrder(Pageable pageable) {
         return orderRepository.searchOrderPage(pageable).map(OrderInfo::from);
+    }
+
+    public OrderInfo searchOrderOne(UUID orderId) {
+        Order order = orderRepository.findById(orderId).orElseThrow(
+            () -> new NotFoundOrderException("주문을 찾을 수 없습니다.")
+        );
+
+        return OrderInfo.from(order);
     }
 }

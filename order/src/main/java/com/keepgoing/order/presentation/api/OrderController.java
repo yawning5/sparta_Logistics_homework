@@ -14,4 +14,6 @@ public interface OrderController {
     BaseResponseDto<CreateOrderResponse> create(CreateOrderRequest request);
 
     BaseResponseDto<Page<OrderInfo>> getOrderInfoList(Pageable pageable);
+
+    BaseResponseDto<OrderInfo> getOrderInfoList(UUID orderId);
 }

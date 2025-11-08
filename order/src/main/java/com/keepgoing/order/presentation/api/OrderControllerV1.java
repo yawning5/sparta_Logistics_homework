@@ -6,6 +6,7 @@ import com.keepgoing.order.presentation.dto.response.BaseResponseDto;
 import com.keepgoing.order.presentation.dto.response.CreateOrderResponse;
 import com.keepgoing.order.presentation.dto.response.OrderInfo;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.SortDefault;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -46,6 +48,12 @@ public class OrderControllerV1 implements OrderController{
 
         Page<OrderInfo> searchOrderPage = orderService.getSearchOrder(pageable);
         return BaseResponseDto.success(searchOrderPage);
+    }
+
+    @Override
+    @GetMapping("/v1/orders/{orderId}")
+    public BaseResponseDto<OrderInfo> getOrderInfoList(@PathVariable @NotNull UUID orderId) {
+        return BaseResponseDto.success(orderService.searchOrderOne(orderId));
     }
 
     private void validate(Pageable pageable) {

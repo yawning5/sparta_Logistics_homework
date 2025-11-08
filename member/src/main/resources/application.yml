@@ -1,8 +1,6 @@
 spring:
   application:
     name: member-service
-  profiles:
-    active: local
   config:
     import: "optional:configserver:"
   cloud:
@@ -10,7 +8,7 @@ spring:
       discovery:
         enabled: true
         service-id: config-server
-      fail-fast: true   # config 서버 접근 실패 **로 예외 발생
+      fail-fast: true   # config 서버 접근 실패시 즉시 예외 발생
       retry:
         max-attempts: 6
         initial-interval: 2000

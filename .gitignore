@@ -44,4 +44,4 @@ bin/
 
 /.idea/
 .idea
-/docker/
+/docker/db/postgresql

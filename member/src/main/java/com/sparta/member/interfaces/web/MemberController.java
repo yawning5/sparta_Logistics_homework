@@ -4,13 +4,14 @@ import com.sparta.member.application.dto.BaseResponseDto;
 import com.sparta.member.application.dto.LoginDto;
 import com.sparta.member.application.service.AuthService;
 import com.sparta.member.application.service.MemberService;
-import com.sparta.member.interfaces.dto.RegisterRequestDto;
+import com.sparta.member.interfaces.dto.SignUpRequestDto;
 import com.sparta.member.interfaces.dto.StatusChangeRequestDto;
-import jakarta.ws.rs.PATCH;
+import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,10 +39,14 @@ public class MemberController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(
-        @RequestBody RegisterRequestDto requestDto
+        @RequestBody @Validated SignUpRequestDto requestDto
     ) {
+        Long id = memberService.requestSignUp(requestDto);
 
-        return null;
+        URI uri = URI.create("/v1/member/" + id);
+
+        return ResponseEntity.created(uri)
+            .body(BaseResponseDto.success(null));
     }
 
     @PreAuthorize("hasRole('MASTER')")

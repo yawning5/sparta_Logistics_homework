@@ -9,18 +9,24 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.member.application.service.AuthService;
 import com.sparta.member.application.service.MemberService;
+import com.sparta.member.config.TestSecurityConfig;
 import com.sparta.member.interfaces.dto.SignUpRequestDto;
 import org.instancio.Instancio;
+import org.instancio.Select;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(MemberController.class)
+@ActiveProfiles("test")
+@Import(TestSecurityConfig.class)
 class MemberControllerTest {
 
     // DispatcherServlet 을 실제로 동작시키지만
@@ -45,6 +51,7 @@ class MemberControllerTest {
         void NullArgsException() throws Exception {
             // given
             var reqDto = Instancio.of(SignUpRequestDto.class)
+                .set(Select.field(SignUpRequestDto.class, "email"), null)
                 .create();
 
             // when, then

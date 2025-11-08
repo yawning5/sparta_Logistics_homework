@@ -17,6 +17,7 @@ import com.keepgoing.order.infrastructure.order.OrderRepository;
 import com.keepgoing.order.presentation.dto.response.BaseResponseDto;
 import com.keepgoing.order.presentation.dto.response.CreateOrderResponse;
 import com.keepgoing.order.presentation.dto.response.OrderInfo;
+import com.keepgoing.order.presentation.dto.response.OrderStateInfo;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -169,5 +170,14 @@ public class OrderService {
         );
 
         return OrderInfo.from(order);
+    }
+
+    public OrderStateInfo findOrderState(UUID orderId) {
+        OrderState state = orderRepository.findOrderStateById(orderId)
+            .orElseThrow(
+                () -> new NotFoundOrderException("해당 주문을 찾을 수 없습니다.")
+            );
+
+        return OrderStateInfo.create(orderId, state);
     }
 }

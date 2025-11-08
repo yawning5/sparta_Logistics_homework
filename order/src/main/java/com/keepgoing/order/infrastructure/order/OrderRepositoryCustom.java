@@ -5,6 +5,7 @@ import com.keepgoing.order.domain.order.OrderState;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
+import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,4 +24,6 @@ public interface OrderRepositoryCustom {
     int updateOrderStateToCompleted(UUID orderId, LocalDateTime now);
 
     Page<Order> searchOrderPage(Pageable pageable);
+
+    Optional<OrderState> findOrderStateById(UUID orderId);
 }

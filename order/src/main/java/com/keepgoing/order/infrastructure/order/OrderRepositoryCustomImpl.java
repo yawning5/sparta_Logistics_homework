@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -173,5 +174,14 @@ public class OrderRepositoryCustomImpl implements OrderRepositoryCustom{
         return orderSpecifiers;
     }
 
+    @Override
+    public Optional<OrderState> findOrderStateById(UUID orderId) {
+        OrderState orderState = queryFactory
+            .select(order.orderState)
+            .from(order)
+            .where(order.id.eq(orderId))
+            .fetchOne();
 
+        return Optional.ofNullable(orderState);
+    }
 }

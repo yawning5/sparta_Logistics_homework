@@ -5,6 +5,7 @@ import com.keepgoing.order.presentation.dto.request.CreateOrderRequest;
 import com.keepgoing.order.presentation.dto.response.BaseResponseDto;
 import com.keepgoing.order.presentation.dto.response.CreateOrderResponse;
 import com.keepgoing.order.presentation.dto.response.OrderInfo;
+import com.keepgoing.order.presentation.dto.response.OrderStateInfo;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.util.UUID;
@@ -67,5 +68,12 @@ public class OrderControllerV1 implements OrderController{
         if (size <= 0 || size > 100) {
             throw new IllegalArgumentException("size는 1 ~ 100 사이여야 합니다.");
         }
+    }
+
+    @Override
+    @GetMapping("/v1/orders/{orderId}/status")
+    public BaseResponseDto<OrderStateInfo> getOrderState(@PathVariable @NotNull UUID orderId) {
+        OrderStateInfo orderStateInfo = orderService.findOrderState(orderId);
+        return BaseResponseDto.success(orderStateInfo);
     }
 }

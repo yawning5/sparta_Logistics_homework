@@ -4,6 +4,7 @@ import com.keepgoing.order.presentation.dto.response.OrderInfo;
 import com.keepgoing.order.presentation.dto.request.CreateOrderRequest;
 import com.keepgoing.order.presentation.dto.response.BaseResponseDto;
 import com.keepgoing.order.presentation.dto.response.CreateOrderResponse;
+import com.keepgoing.order.presentation.dto.response.OrderStateInfo;
 import java.awt.PageAttributes;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
@@ -16,4 +17,6 @@ public interface OrderController {
     BaseResponseDto<Page<OrderInfo>> getOrderInfoList(Pageable pageable);
 
     BaseResponseDto<OrderInfo> getOrderInfoList(UUID orderId);
+
+    BaseResponseDto<OrderStateInfo> getOrderState(UUID orderId);
 }

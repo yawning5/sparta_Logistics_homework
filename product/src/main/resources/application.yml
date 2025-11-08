@@ -51,9 +51,3 @@ management:
 
 jwt:
   secret: dfkldfdfdfdfdfdfdfdfdfdfdfdfdfdfd
-
-openfeign:
-  client:
-    config:
-      vendor:
-        url: "http://vendor-service:8080"

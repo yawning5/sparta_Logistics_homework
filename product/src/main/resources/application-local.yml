@@ -21,9 +21,3 @@ management:
     enabled: true
     sampling:
       probability: 1.0
-
-openfeign:
-  client:
-    config:
-      vendor:
-        url: "http://localhost:8080"

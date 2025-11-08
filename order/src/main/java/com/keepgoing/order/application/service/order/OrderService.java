@@ -59,13 +59,13 @@ public class OrderService {
 
     @Transactional
     public void toProductVerified(UUID orderId, UUID hubId) {
-        int u = orderRepository.updateOrderStateToProductVerifiedWithHub(orderId, hubId);
+        int u = orderRepository.updateOrderStateToProductVerifiedWithHub(orderId, hubId, LocalDateTime.now(clock));
         if (u == 0) throw new IllegalStateException("전이 실패(버전/상태 불일치): " + orderId);
     }
 
     @Transactional
     public void toAwaitingPayment(UUID orderId) {
-        int u = orderRepository.updateOrderStateToAwaitingPayment(orderId);
+        int u = orderRepository.updateOrderStateToAwaitingPayment(orderId, LocalDateTime.now(clock));
         if (u == 0) throw new IllegalStateException("전이 실패: " + orderId);
     }
 
@@ -86,7 +86,7 @@ public class OrderService {
             LocalDateTime.now(clock)
         ));
 
-        int u = orderRepository.updateOrderStateToPaid(orderId);
+        int u = orderRepository.updateOrderStateToPaid(orderId, LocalDateTime.now(clock));
         if (u == 0) throw new IllegalStateException("전이 실패: " + orderId);
     }
 
@@ -105,7 +105,7 @@ public class OrderService {
             LocalDateTime.now(clock)
         ));
 
-        int u = orderRepository.updateOrderStateToCompleted(orderId);
+        int u = orderRepository.updateOrderStateToCompleted(orderId, LocalDateTime.now(clock));
         if (u == 0) throw new IllegalStateException("전이 실패: " + orderId);
     }
 
@@ -121,7 +121,7 @@ public class OrderService {
 
     @Transactional
     public int claim(UUID orderId, OrderState beforeState, OrderState afterState) {
-        return orderRepository.claim(orderId, beforeState, afterState);
+        return orderRepository.claim(orderId, beforeState, afterState, LocalDateTime.now(clock));
     }
 
     private String makePayloadForNotification(Order order) {

@@ -6,14 +6,13 @@ import static com.keepgoing.order.domain.order.QOrder.*;
 
 import com.keepgoing.order.domain.order.Order;
 import com.keepgoing.order.domain.order.OrderState;
-import com.keepgoing.order.domain.order.QOrder;
 import com.querydsl.core.types.OrderSpecifier;
-import com.querydsl.core.types.dsl.ComparableEntityPath;
 import com.querydsl.core.types.dsl.ComparableExpression;
 import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -50,10 +49,11 @@ public class OrderRepositoryCustomImpl implements OrderRepositoryCustom{
     }
 
     @Override
-    public int claim(UUID orderId, OrderState beforeState, OrderState afterState) {
+    public int claim(UUID orderId, OrderState beforeState, OrderState afterState, LocalDateTime now) {
         long updated = queryFactory
             .update(order)
             .set(order.orderState, afterState)
+            .set(order.updatedAt, now)
             .where(
                 order.id.eq(orderId),
                 order.orderState.eq(beforeState)
@@ -66,11 +66,12 @@ public class OrderRepositoryCustomImpl implements OrderRepositoryCustom{
     }
 
     @Override
-    public int updateOrderStateToProductVerifiedWithHub(UUID orderId, UUID hubId) {
+    public int updateOrderStateToProductVerifiedWithHub(UUID orderId, UUID hubId, LocalDateTime now) {
         long updated = queryFactory
             .update(order)
             .set(order.orderState, OrderState.PRODUCT_VERIFIED)
             .set(order.hubId, hubId)
+            .set(order.updatedAt, now)
             .where(
                 order.id.eq(orderId),
                 order.orderState.eq(OrderState.PRODUCT_VALIDATION_IN_PROGRESS)
@@ -83,10 +84,11 @@ public class OrderRepositoryCustomImpl implements OrderRepositoryCustom{
     }
 
     @Override
-    public int updateOrderStateToAwaitingPayment(UUID orderId) {
+    public int updateOrderStateToAwaitingPayment(UUID orderId, LocalDateTime now) {
         long updated = queryFactory
             .update(order)
             .set(order.orderState, OrderState.AWAITING_PAYMENT)
+            .set(order.updatedAt, now)
             .where(
                 order.id.eq(orderId),
                 order.orderState.eq(OrderState.STOCK_RESERVATION_IN_PROGRESS)
@@ -98,10 +100,11 @@ public class OrderRepositoryCustomImpl implements OrderRepositoryCustom{
     }
 
     @Override
-    public int updateOrderStateToPaid(UUID orderId) {
+    public int updateOrderStateToPaid(UUID orderId, LocalDateTime now) {
         long updated = queryFactory
             .update(order)
             .set(order.orderState, OrderState.PAID)
+            .set(order.updatedAt, now)
             .where(
                 order.id.eq(orderId),
                 order.orderState.eq(OrderState.PAYMENT_IN_PROGRESS)
@@ -113,10 +116,11 @@ public class OrderRepositoryCustomImpl implements OrderRepositoryCustom{
     }
 
     @Override
-    public int updateOrderStateToCompleted(UUID orderId) {
+    public int updateOrderStateToCompleted(UUID orderId, LocalDateTime now) {
         long updated = queryFactory
             .update(order)
             .set(order.orderState, OrderState.COMPLETED)
+            .set(order.updatedAt, now)
             .where(
                 order.id.eq(orderId),
                 order.orderState.eq(OrderState.COMPLETION_IN_PROGRESS)

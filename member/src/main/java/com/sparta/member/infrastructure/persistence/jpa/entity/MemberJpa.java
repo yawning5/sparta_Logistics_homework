@@ -10,8 +10,10 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import java.time.LocalDateTime;
 import java.util.UUID;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,6 +24,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class MemberJpa {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -41,29 +45,10 @@ public class MemberJpa {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @Builder
-    public MemberJpa(
-        String name,
-        String password,
-        String email,
-        String slackId,
-        Type affiliationType,
-        UUID affiliationId,
-        String affiliationName,
-        Role role,
-        Status status
-    ) {
-        this.name = name;
-        this.password = password;
-        this.email = email;
-        this.slackId = slackId;
-        this.affiliationType = affiliationType;
-        this.affiliationId = affiliationId;
-        this.affiliationName = affiliationName;
-        this.role = role;
-        this.status = status;
-    }
-
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private LocalDateTime deletedAt;
+    private Long deleteBy;
 
     @Override
     public boolean equals(Object obj) {

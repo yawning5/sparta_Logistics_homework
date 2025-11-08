@@ -19,12 +19,12 @@ import org.springframework.stereotype.Repository;
 @Slf4j
 public class MemberRepositoryImpl implements MemberRepository {
 
-    private final SpringDataMemberJpaRepository MemberJpaRepository;
+    private final SpringDataMemberJpaRepository memberJpaRepository;
     private final MemberJpaMapper mapper;
 
     @Override
     public MemberJpa findByEmailUseInfra(String email) {
-        return MemberJpaRepository.findByEmail(email)
+        return memberJpaRepository.findByEmail(email)
             .orElseThrow(() ->
                 new CustomException(ErrorCode.MEMBER_NOT_FOUND)
             );
@@ -32,13 +32,13 @@ public class MemberRepositoryImpl implements MemberRepository {
 
     @Override
     public Member save(Member member) {
-        return mapper.toMember(MemberJpaRepository.save(mapper.toMemberJpa(member)));
+        return mapper.toMember(memberJpaRepository.save(mapper.toMemberJpa(member)));
     }
 
     @Override
     public Member findByEmail(String email) {
         return mapper.toMember(
-            MemberJpaRepository.findByEmail(email)
+            memberJpaRepository.findByEmail(email)
                 .orElseThrow(() ->
                     new CustomException(ErrorCode.MEMBER_NOT_FOUND)
                 )
@@ -52,12 +52,15 @@ public class MemberRepositoryImpl implements MemberRepository {
         String affiliationType,
         String affiliationName,
         String email) {
-        return null;
+
+        Page<MemberJpa> MembersJpa = memberJpaRepository.findBySearchOption(pageable, slackId, affiliationType, affiliationName, email);
+
+        return MembersJpa.map(mapper::toMember);
     }
 
     @Override
     public List<Member> saveAll(List<Member> members) {
-        return mapper.toMembers(MemberJpaRepository.saveAll(mapper.toMembersJpa(members)));
+        return mapper.toMembers(memberJpaRepository.saveAll(mapper.toMembersJpa(members)));
     }
 
 }

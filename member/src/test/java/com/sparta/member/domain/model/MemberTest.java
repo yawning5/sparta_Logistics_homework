@@ -122,7 +122,7 @@ public class MemberTest {
         @DisplayName("회원가입 요청 상태 APPROVE 변경")
         void member_signUpRequest_StatusApprove() {
             var m = MemberFixture.memberWithId(null, null);
-            m.approveMember();
+            m.approve();
             assertEquals(Status.APPROVED, m.status());
         }
 
@@ -130,7 +130,7 @@ public class MemberTest {
         @DisplayName("회원가입 요청 상태 REJECTED 변경")
         void member_signUpRequest_StatusRejected() {
             var m =  MemberFixture.memberWithId(null, null);
-            m.rejectMember();
+            m.reject();
             assertEquals(Status.REJECTED, m.status());
         }
     }

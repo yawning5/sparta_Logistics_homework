@@ -4,6 +4,7 @@ import com.sparta.member.domain.enums.Role;
 import com.sparta.member.domain.model.Member;
 import com.sparta.member.domain.vo.Affiliation;
 import com.sparta.member.domain.vo.Type;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 /**
@@ -59,7 +60,11 @@ public final class MemberFixture {
             EMAIL,
             SLACK_ID,
             affiliation(),
-            ROLE
+            ROLE,
+            LocalDateTime.now(),
+            LocalDateTime.now(),
+            null,
+            null
         );
     }
 
@@ -68,7 +73,7 @@ public final class MemberFixture {
      */
     public static Member approvedMember() {
         Member member = memberWithId(null, null);
-        member.approveMember();
+        member.approve();
         return member;
     }
 
@@ -77,7 +82,7 @@ public final class MemberFixture {
      */
     public static Member rejectedMember() {
         Member member = memberWithId(null, null);
-        member.rejectMember();
+        member.reject();
         return member;
     }
 }

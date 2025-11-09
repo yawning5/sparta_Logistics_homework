@@ -23,6 +23,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.support.PageableExecutionUtils;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 public class OrderRepositoryCustomImpl implements OrderRepositoryCustom{
@@ -183,5 +184,26 @@ public class OrderRepositoryCustomImpl implements OrderRepositoryCustom{
             .fetchOne();
 
         return Optional.ofNullable(orderState);
+    }
+
+    @Override
+    public int deleteOrder(UUID orderId, Long memberId, LocalDateTime now, Long version) {
+
+        long deleted = queryFactory
+            .update(order)
+            .set(order.deletedBy, memberId)
+            .set(order.deletedAt, now)
+            .set(order.version, version + 1)
+            .where(
+                order.id.eq(orderId),
+                order.orderState.eq(OrderState.ORDER_CONFIRMED),
+                order.deletedAt.isNull(),
+                order.version.eq(version)
+            )
+            .execute();
+
+        em.flush(); em.clear();
+
+        return (int) deleted;
     }
 }

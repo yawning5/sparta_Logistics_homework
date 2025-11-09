@@ -26,4 +26,6 @@ public interface OrderRepositoryCustom {
     Page<Order> searchOrderPage(Pageable pageable);
 
     Optional<OrderState> findOrderStateById(UUID orderId);
+
+    int deleteOrder(UUID orderId, Long memberId, LocalDateTime now, Long version);
 }

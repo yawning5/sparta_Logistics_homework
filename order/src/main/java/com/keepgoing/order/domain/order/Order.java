@@ -2,6 +2,7 @@ package com.keepgoing.order.domain.order;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
@@ -17,10 +18,22 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Getter
 @Entity
 @Table(name = "p_order")
+@FilterDef(
+    name = "softDeleteFilter",
+    defaultCondition = "deleted_at IS NULL",
+    autoEnabled = true, // 항상 기본적으로 필터를 켜는 옵션
+    applyToLoadByKey = true // PK 기반 단건 조회에도 필더 적용
+)
+@Filter(name = "softDeleteFilter")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Order{
 

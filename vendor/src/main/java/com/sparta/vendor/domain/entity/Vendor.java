@@ -1,6 +1,8 @@
 package com.sparta.vendor.domain.entity;
 
 import com.sparta.vendor.application.command.UpdateVendorCommand;
+import com.sparta.vendor.application.exception.ErrorCode;
+import com.sparta.vendor.application.exception.ForbiddenOperationException;
 import com.sparta.vendor.domain.vo.Address;
 import com.sparta.vendor.domain.vo.HubId;
 import com.sparta.vendor.domain.vo.VendorType;
@@ -50,8 +52,14 @@ public class Vendor extends BaseEntity {
     })
     private HubId hubId;
 
-    public boolean isDeleted() {
+    private boolean isDeleted() {
         return getDeletedBy() != null && getDeletedAt() != null;
+    }
+
+    public void checkDeleted() {
+        if (isDeleted()) {
+            throw new ForbiddenOperationException(ErrorCode.VENDOR_DELETED);
+        }
     }
 
     private Vendor(String vendorName, VendorType vendorType, Address address, HubId hubId) {
@@ -103,9 +111,5 @@ public class Vendor extends BaseEntity {
         if (command.hubId() != null) {
             this.hubId = HubId.of(command.hubId());
         }
-    }
-
-    public void deleteVendor(Long userId) {
-        this.delete(userId);
     }
 }

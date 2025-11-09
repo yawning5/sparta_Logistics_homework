@@ -15,6 +15,9 @@ public record OrderInfo(
     @JsonProperty("order_id")
     UUID orderId,
 
+    @JsonProperty("member_id")
+    Long memberId,
+
     @JsonProperty("supplier_id")
     UUID supplierId,
 
@@ -72,6 +75,11 @@ public record OrderInfo(
     @Override
     public UUID orderId() {
         return orderId;
+    }
+
+    @Override
+    public Long memberId() {
+        return memberId;
     }
 
     @Override
@@ -161,6 +169,7 @@ public record OrderInfo(
 
     @Builder
     private static OrderInfo create(
+        Long memberId,
         UUID orderId, UUID supplierId, String supplierName, UUID receiverId,
         String receiverName, UUID productId, String productName, UUID deliveryId, Integer quantity,
         Integer totalPrice, OrderState state, LocalDateTime orderedAt, LocalDateTime confirmedAt,
@@ -169,6 +178,7 @@ public record OrderInfo(
 
         return OrderInfo.builder()
             .orderId(orderId)
+            .memberId(memberId)
             .supplierId(supplierId)
             .supplierName(supplierName)
             .receiverId(receiverId)
@@ -192,6 +202,7 @@ public record OrderInfo(
     public static OrderInfo from(Order order) {
         return OrderInfo.builder()
             .orderId(order.getId())
+            .memberId(order.getMemberId())
             .supplierId(order.getSupplierId())
             .supplierName(order.getSupplierName())
             .receiverId(order.getReceiverId())

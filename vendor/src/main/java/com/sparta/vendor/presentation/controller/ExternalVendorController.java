@@ -43,7 +43,7 @@ public class ExternalVendorController {
 
         CreateVendorCommand command = CreateVendorCommand.of(user, request);
 
-        VendorResult vendorResult = vendorService.vendorCreate(command);
+        VendorResult vendorResult = vendorService.createVendor(command);
 
         VendorResponseDTO vendorResponseDTO = VendorResponseDTO.from(vendorResult);
 

@@ -2,6 +2,7 @@ package com.sparta.product.presentation.controller;
 
 
 import com.sparta.product.application.command.CreateProductCommand;
+import com.sparta.product.application.command.DeleteProductCommand;
 import com.sparta.product.application.command.GetProductCommand;
 import com.sparta.product.application.command.UpdateProductCommand;
 import com.sparta.product.application.dto.ProductResult;
@@ -16,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -67,5 +69,14 @@ public class ExternalProductController {
         UpdateProductCommand command = UpdateProductCommand.of(id, user, request);
         ProductResult result = productService.updateProduct(command);
         return ResponseEntity.ok(BaseResponseDTO.success(result));
+    }
+
+    @DeleteMapping("{id}")
+    @PreAuthorize("hasAnyRole('MASTER', 'HUB')")
+    public ResponseEntity<?> deleteProduct(@AuthenticationPrincipal CustomUserDetails user,
+        @PathVariable UUID id) {
+        DeleteProductCommand command = DeleteProductCommand.of(id, user);
+        productService.deleteProduct(command);
+        return ResponseEntity.ok(BaseResponseDTO.ok());
     }
 }

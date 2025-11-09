@@ -7,6 +7,7 @@ import com.sparta.product.domain.vo.UserRole;
 import lombok.experimental.UtilityClass;
 
 import java.util.UUID;
+import org.aspectj.bridge.ICommand;
 
 @UtilityClass
 public class ProductDomainValidator {
@@ -54,4 +55,9 @@ public class ProductDomainValidator {
         }
     }
 
+    public void validateDeletePermission(UserRole role, UUID affiliationId, UUID hubId) {
+        if(role == UserRole.HUB && !affiliationId.equals(hubId)) {
+            throw new ForbiddenOperationException(ErrorCode.FORBIDDEN_DELETE_HUB);
+        }
+    }
 }

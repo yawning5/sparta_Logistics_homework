@@ -1,6 +1,7 @@
 package com.sparta.product.application.service;
 
 import com.sparta.product.application.command.CreateProductCommand;
+import com.sparta.product.application.command.DeleteProductCommand;
 import com.sparta.product.application.command.GetProductCommand;
 import com.sparta.product.application.command.UpdateProductCommand;
 import com.sparta.product.application.dto.ProductResult;
@@ -70,5 +71,16 @@ public class ProductService {
         if (newId != null && !newId.equals(currentId)) {
             validationCall.run();
         }
+    }
+
+    // ---------------- 삭제 ----------------
+    public void deleteProduct(DeleteProductCommand command) {
+        Product product = productPersistenceService.findById(command.productId());
+        product.checkDeleted();
+
+        ProductDomainValidator.validateDeletePermission(command.role(), command.affiliationId(),
+            product.getHubId().getId());
+
+        productPersistenceService.deleteProduct(command);
     }
 }

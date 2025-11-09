@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.keepgoing.order.application.dto.CreateOrderCommand;
 import com.keepgoing.order.application.dto.CreateOrderPayloadForDelivery;
 import com.keepgoing.order.application.dto.CreateOrderPayloadForNotification;
+import com.keepgoing.order.application.exception.DeleteOrderFailException;
 import com.keepgoing.order.application.exception.InvalidOrderStateException;
 import com.keepgoing.order.application.exception.NotFoundOrderException;
 import com.keepgoing.order.application.exception.StateUpdateFailedException;
@@ -18,6 +19,7 @@ import com.keepgoing.order.infrastructure.outbox.OrderOutboxRepository;
 import com.keepgoing.order.infrastructure.order.OrderRepository;
 import com.keepgoing.order.presentation.dto.response.BaseResponseDto;
 import com.keepgoing.order.presentation.dto.response.CreateOrderResponse;
+import com.keepgoing.order.presentation.dto.response.DeleteOrderInfo;
 import com.keepgoing.order.presentation.dto.response.OrderInfo;
 import com.keepgoing.order.presentation.dto.response.OrderStateInfo;
 import com.keepgoing.order.presentation.dto.response.UpdateOrderStateInfo;
@@ -216,6 +218,31 @@ public class OrderService {
             orderId,
             previousState,
             OrderState.PAID,
+            now
+        );
+    }
+
+    @Transactional
+    public DeleteOrderInfo deleteOrder(UUID orderId, Long memberId) {
+        Order order = orderRepository.findById(orderId).orElseThrow(
+            () -> new NotFoundOrderException("주문을 찾을 수 없습니다. : 주문 삭제 이전")
+        );
+
+        if (order.getOrderState() != OrderState.ORDER_CONFIRMED) {
+            throw new InvalidOrderStateException("주문 확정 상태에서만 주문을 삭제할 수 있습니다.");
+        }
+
+        LocalDateTime now = LocalDateTime.now(clock);
+
+        int deleted = orderRepository.deleteOrder(orderId, memberId, now, order.getVersion());
+
+        if (deleted == 0) {
+            throw new DeleteOrderFailException("주문 삭제에 실패했습니다.");
+        }
+
+        return DeleteOrderInfo.create(
+            orderId,
+            memberId,
             now
         );
     }

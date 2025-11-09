@@ -1,6 +1,7 @@
 package com.sparta.product.application.service;
 
 import com.sparta.product.application.command.CreateProductCommand;
+import com.sparta.product.application.command.DeleteProductCommand;
 import com.sparta.product.application.command.UpdateProductCommand;
 import com.sparta.product.application.dto.ProductResult;
 import com.sparta.product.application.exception.ErrorCode;
@@ -47,5 +48,11 @@ public class ProductPersistenceService {
         Product product = findById(command.productId());
         product.updateProduct(command);
         return ProductResult.from(product);
+    }
+
+    @Transactional
+    public void deleteProduct(DeleteProductCommand command) {
+        Product product = findById(command.productId());
+        product.delete(command.userId());
     }
 }

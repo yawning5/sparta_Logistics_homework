@@ -1,8 +1,8 @@
 package com.keepgoing.order.application.exception;
 
-public class StateUpdateFailedException extends RuntimeException{
+public class InvalidOrderStateException extends RuntimeException{
 
-    public StateUpdateFailedException(String message) {
+    public InvalidOrderStateException(String message) {
         super(message);
     }
 }

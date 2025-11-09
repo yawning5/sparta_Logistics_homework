@@ -1,8 +1,8 @@
 package com.keepgoing.order.application.exception;
 
-public class InventoryReservationFailException extends RuntimeException{
+public class StateUpdateFailedException extends RuntimeException{
 
-    public InventoryReservationFailException(String message) {
+    public StateUpdateFailedException(String message) {
         super(message);
     }
 }

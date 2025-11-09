@@ -5,7 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.keepgoing.order.application.dto.CreateOrderCommand;
 import com.keepgoing.order.application.dto.CreateOrderPayloadForDelivery;
 import com.keepgoing.order.application.dto.CreateOrderPayloadForNotification;
+import com.keepgoing.order.application.exception.InvalidOrderStateException;
 import com.keepgoing.order.application.exception.NotFoundOrderException;
+import com.keepgoing.order.application.exception.StateUpdateFailedException;
 import com.keepgoing.order.domain.outbox.AggregateType;
 import com.keepgoing.order.domain.outbox.EventType;
 import com.keepgoing.order.domain.order.Order;
@@ -18,6 +20,7 @@ import com.keepgoing.order.presentation.dto.response.BaseResponseDto;
 import com.keepgoing.order.presentation.dto.response.CreateOrderResponse;
 import com.keepgoing.order.presentation.dto.response.OrderInfo;
 import com.keepgoing.order.presentation.dto.response.OrderStateInfo;
+import com.keepgoing.order.presentation.dto.response.UpdateOrderStateInfo;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -75,7 +78,9 @@ public class OrderService {
     public void toPaid(UUID orderId) {
         // Outbox 페이로드가 필요하면, 전이 전/후에 필요한 필드만 projection으로 읽거나
         // 기존 order를 읽어와도 됨(외부 I/O는 없음)
-        Order order = orderRepository.findById(orderId).orElseThrow(); // 읽기용
+        Order order = orderRepository.findById(orderId).orElseThrow(
+            () -> new NotFoundOrderException("해당 주문을 찾을 수 없습니다.")
+        ); // 읽기용
 
         String payloadForNotification = makePayloadForNotification(order);
         orderOutboxRepository.save(OrderOutbox.create(
@@ -179,5 +184,38 @@ public class OrderService {
             );
 
         return OrderStateInfo.create(orderId, state);
+    }
+
+    @Transactional
+    public UpdateOrderStateInfo updateStateToPaid(UUID orderId) {
+        Order order = orderRepository.findById(orderId).orElseThrow(
+            () -> new NotFoundOrderException("주문을 찾을 수 없습니다. : 상태 변경 이전(결제)")
+        );
+
+        OrderState previousState = order.getOrderState();
+
+        if (previousState != OrderState.AWAITING_PAYMENT) {
+            throw new InvalidOrderStateException("주문 상태가 유효하지 않습니다. : 상태 변경 이전(결제)");
+        }
+
+        LocalDateTime now = LocalDateTime.now(clock);
+        int updated = orderRepository.updateOrderStateToPaidForPayment(
+            orderId,
+            OrderState.AWAITING_PAYMENT,
+            OrderState.PAID,
+            order.getVersion(),
+            now
+        );
+
+        if (updated == 0) {
+            throw new StateUpdateFailedException("주문 상태를 변경하는 것에 실패했습니다.");
+        }
+
+        return UpdateOrderStateInfo.create(
+            orderId,
+            previousState,
+            OrderState.PAID,
+            now
+        );
     }
 }

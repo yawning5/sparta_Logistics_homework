@@ -1,11 +1,13 @@
 package com.keepgoing.order.presentation.api;
 
 import com.keepgoing.order.application.service.order.OrderService;
+import com.keepgoing.order.domain.order.OrderState;
 import com.keepgoing.order.presentation.dto.request.CreateOrderRequest;
 import com.keepgoing.order.presentation.dto.response.BaseResponseDto;
 import com.keepgoing.order.presentation.dto.response.CreateOrderResponse;
 import com.keepgoing.order.presentation.dto.response.OrderInfo;
 import com.keepgoing.order.presentation.dto.response.OrderStateInfo;
+import com.keepgoing.order.presentation.dto.response.UpdateOrderStateInfo;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.util.UUID;
@@ -16,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.SortDefault;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -74,6 +77,13 @@ public class OrderControllerV1 implements OrderController{
     @GetMapping("/v1/orders/{orderId}/status")
     public BaseResponseDto<OrderStateInfo> getOrderState(@PathVariable @NotNull UUID orderId) {
         OrderStateInfo orderStateInfo = orderService.findOrderState(orderId);
+        return BaseResponseDto.success(orderStateInfo);
+    }
+
+    @Override
+    @PatchMapping("/v1/orders/{orderId}/confirm-payment")
+    public BaseResponseDto<UpdateOrderStateInfo> updateStateToPaid(@PathVariable @NotNull UUID orderId) {
+        UpdateOrderStateInfo orderStateInfo = orderService.updateStateToPaid(orderId);
         return BaseResponseDto.success(orderStateInfo);
     }
 }

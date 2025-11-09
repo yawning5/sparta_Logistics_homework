@@ -36,6 +36,7 @@ dependencies {
 
 	// 인가만 할 수 있도록
 	implementation 'org.springframework.boot:spring-boot-starter-security'
+	testImplementation 'org.springframework.security:spring-security-test'
 
 	//zipkin
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'

@@ -3,6 +3,7 @@ package com.sparta.vendor.application.dto;
 import com.sparta.vendor.domain.entity.Vendor;
 import com.sparta.vendor.domain.vo.VendorType;
 import java.util.UUID;
+import lombok.Builder;
 
 
 public record VendorResult(
@@ -25,5 +26,18 @@ public record VendorResult(
             vendor.getAddress().getZipCode(),
             vendor.getHubId().getId()
         );
+    }
+
+    @Builder
+    public static VendorResult of(
+        UUID id,
+        String vendorName,
+        VendorType vendorType,
+        String city,
+        String street,
+        String zipCode,
+        UUID hubId
+    ) {
+        return new VendorResult(id, vendorName, vendorType, city, street, zipCode, hubId);
     }
 }

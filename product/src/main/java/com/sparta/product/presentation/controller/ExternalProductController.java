@@ -3,11 +3,13 @@ package com.sparta.product.presentation.controller;
 
 import com.sparta.product.application.command.CreateProductCommand;
 import com.sparta.product.application.command.GetProductCommand;
+import com.sparta.product.application.command.UpdateProductCommand;
 import com.sparta.product.application.dto.ProductResult;
 import com.sparta.product.application.service.ProductService;
 import com.sparta.product.infrastructure.security.CustomUserDetails;
 import com.sparta.product.presentation.dto.BaseResponseDTO;
 import com.sparta.product.presentation.dto.reqeust.CreateProductRequestDTO;
+import com.sparta.product.presentation.dto.reqeust.UpdateRequestProductDTO;
 import com.sparta.product.presentation.dto.response.ProductResponseDTO;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -56,4 +59,13 @@ public class ExternalProductController {
         return ResponseEntity.ok(BaseResponseDTO.success(result));
     }
 
+    @PatchMapping("{id}")
+    @PreAuthorize("hasAnyRole('MASTER', 'HUB', 'COMPANY')")
+    public ResponseEntity<?> updateProduct(@AuthenticationPrincipal CustomUserDetails user,
+        @PathVariable UUID id,
+        @RequestBody UpdateRequestProductDTO request) {
+        UpdateProductCommand command = UpdateProductCommand.of(id, user, request);
+        ProductResult result = productService.updateProduct(command);
+        return ResponseEntity.ok(BaseResponseDTO.success(result));
+    }
 }

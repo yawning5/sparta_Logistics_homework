@@ -2,105 +2,73 @@ package com.sparta.product.application.service;
 
 import com.sparta.product.application.command.CreateProductCommand;
 import com.sparta.product.application.command.GetProductCommand;
+import com.sparta.product.application.command.UpdateProductCommand;
 import com.sparta.product.application.dto.ProductResult;
-import com.sparta.product.application.exception.ErrorCode;
-import com.sparta.product.application.exception.ForbiddenOperationException;
-import com.sparta.product.application.exception.ProductDeletedException;
-import com.sparta.product.application.exception.ProductNotFoundException;
-import com.sparta.product.application.exception.VendorClientException;
 import com.sparta.product.domain.entity.Product;
-import com.sparta.product.domain.repository.ProductRepository;
+import com.sparta.product.domain.service.ProductDomainValidator;
 import com.sparta.product.domain.vo.HubId;
-import com.sparta.product.domain.vo.UserRole;
 import com.sparta.product.domain.vo.VendorId;
-import com.sparta.product.infrastructure.external.client.VendorClient;
-import com.sparta.product.infrastructure.external.dto.VendorResponseDTO;
-import com.sparta.product.presentation.dto.BaseResponseDTO;
-import jakarta.transaction.Transactional;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class ProductService {
 
-    private final ProductRepository productRepository;
-    private final VendorClient vendorClient;
+    private final ProductPersistenceService productPersistenceService;
+    private final VendorClientService vendorClientService;
 
-    //---------------------------조회--------------------------------
-    private Product findById(UUID id) {
-        return productRepository.findById(id)
-            .orElseThrow(() -> new ProductNotFoundException(ErrorCode.PRODUCT_NOT_FOUND));
-    }
-
-    private void checkDeleted(Product product) {
-        if (product.isDeleted()) {
-            throw new ProductDeletedException(ErrorCode.PRODUCT_DELETED);
-        }
-    }
-
-    private void validateHubGetPermission(GetProductCommand command, Product product) {
-        if (command.role() == UserRole.HUB && !command.affiliationId()
-            .equals(product.getHubId().getId())) {
-            throw new ForbiddenOperationException(ErrorCode.FORBIDDEN_HUB_GET_OPERATION);
-        }
-
-    }
-
+    // ---------------- 조회 ----------------
     public ProductResult getProduct(GetProductCommand command) {
-        Product product = findById(command.productId());
-        checkDeleted(product);
-        validateHubGetPermission(command, product);
+        Product product = productPersistenceService.findById(command.productId());
+        product.checkDeleted();
+        ProductDomainValidator.validateGetPermission(command.role(), command.affiliationId(),
+            product.getHubId().getId());
         return ProductResult.from(product);
     }
 
-    //---------------------------생성--------------------------------
+    // ---------------- 생성 ----------------
     public ProductResult createProduct(CreateProductCommand command) {
-
-        validateHubCreatePermission(command);
-        validateCompanyCreatePermission(command);
+        ProductDomainValidator.validateCreatePermission(command.role(), command.affiliationId(),
+            command.vendorId(), command.hubId());
 
         VendorId vendorId = VendorId.of(command.vendorId());
-        checkVendor(vendorId, command.token());
+        vendorClientService.validationVendor(vendorId, command.token());
 
         HubId hubId = HubId.of(command.hubId());
-        // TODO: HUB 값 존재하는 지 확인 checkHub()
-
-        return saveProduct(command, vendorId, hubId);
+        //TODO: hubValidationService.validationHub(vendorId, command.token());
+        return productPersistenceService.saveCreateProduct(command, vendorId, hubId);
     }
 
-    @Transactional
-    public ProductResult saveProduct(CreateProductCommand command, VendorId vendorId, HubId hubId) {
-        Product product = Product.create(command.productName(), command.productDescription(),
-            command.productPrice(), vendorId, hubId);
+    // ---------------- 수정 ----------------
+    public ProductResult updateProduct(UpdateProductCommand command) {
+        Product product = productPersistenceService.findById(command.productId());
+        product.checkDeleted();
 
-        productRepository.save(product);
+        ProductDomainValidator.validateUpdatePermission(
+            command.role(),
+            command.affiliationId(),
+            product,
+            command.vendorId(),
+            command.hubId()
+        );
 
-        return ProductResult.from(product);
+        // ID 변경 검증
+        validateIdChange(command.vendorId(), product.getVendorId().getId(),
+            () -> vendorClientService.validationVendorId(command.vendorId(), command.token()));
+
+        //TODO: hubValidationService.validationHub(vendorId, command.token());
+//        validateIdChange(command.hubId(), product.getHubId().getId(),
+//            () -> hubValidationService.validationHubId(command.hubId(), command.token()));
+
+        return productPersistenceService.updateProduct(command);
     }
 
-    private void validateHubCreatePermission(CreateProductCommand command) {
-        if (command.role() == UserRole.HUB && !command.affiliationId().equals(command.hubId())) {
-            throw new ForbiddenOperationException(ErrorCode.FORBIDDEN_HUB_OPERATION);
-        }
-    }
-
-    private void validateCompanyCreatePermission(CreateProductCommand command) {
-        if (command.role() == UserRole.COMPANY && !command.affiliationId()
-            .equals(command.vendorId())) {
-            throw new ForbiddenOperationException(ErrorCode.FORBIDDEN_COMPANY_OPERATION);
-        }
-    }
-
-    private void checkVendor(VendorId vendorId, String token) {
-
-        String bearerToken = "Bearer " + token;
-        BaseResponseDTO<VendorResponseDTO> response = vendorClient.getVendorById(bearerToken,
-            vendorId.getId());
-
-        if (response == null || !response.success() || response.data() == null) {
-            throw new VendorClientException(ErrorCode.VENDOR_NOT_FOUND);
+    private void validateIdChange(UUID newId, UUID currentId, Runnable validationCall) {
+        if (newId != null && !newId.equals(currentId)) {
+            validationCall.run();
         }
     }
 }

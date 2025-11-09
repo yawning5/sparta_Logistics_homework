@@ -1,5 +1,8 @@
 package com.sparta.product.domain.entity;
 
+import com.sparta.product.application.command.UpdateProductCommand;
+import com.sparta.product.application.exception.ErrorCode;
+import com.sparta.product.application.exception.ForbiddenOperationException;
 import com.sparta.product.domain.vo.VendorId;
 import com.sparta.product.domain.vo.HubId;
 import jakarta.persistence.AttributeOverride;
@@ -80,7 +83,40 @@ public class Product extends BaseEntity {
         return new Product(productName, productDescription, productPrice, vendorId, hubId);
     }
 
-    public boolean isDeleted() {
+    private boolean isDeleted() {
         return getDeletedBy() != null && getDeletedAt() != null;
+    }
+
+    public void checkDeleted() {
+        if (isDeleted()) {
+            throw new ForbiddenOperationException(ErrorCode.PRODUCT_DELETED);
+        }
+    }
+
+    public void updateProduct(UpdateProductCommand command) {
+        //productName 업데이트
+        if (command.productName() != null) {
+            this.productName = command.productName();
+        }
+
+        //productDescription 업데이트
+        if (command.productDescription() != null) {
+            this.productDescription = command.productDescription();
+        }
+
+        //productPrice 업데이트
+        if (command.productPrice() != null) {
+            this.productPrice = command.productPrice();
+        }
+
+        //vendorId 업데이트
+        if (command.vendorId() != null) {
+            this.vendorId = VendorId.of(command.vendorId());
+        }
+
+        //hubId 업데이트
+        if (command.hubId() != null) {
+            this.hubId = HubId.of(command.hubId());
+        }
     }
 }

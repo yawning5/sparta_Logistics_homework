@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 import com.nimbusds.jose.proc.SecurityContext;
+import com.sparta.member.infrastructure.userDetails.CustomUserDetailsService;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import javax.crypto.SecretKey;
@@ -12,6 +13,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.Import;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.jwt.JwsHeader;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
@@ -64,9 +67,21 @@ class JwtConfigTest {
     @Test
     void beans_shouldBeCreatedSuccessfully() {
         // 스프링 컨텍스트 직접 생성
-        try (var context = new AnnotationConfigApplicationContext(JwtConfig.class)) {
+//        try (var context = new AnnotationConfigApplicationContext(JwtConfig.class)) {
+//
+//            // Bean 존재 여부 검증
+//            JwtEncoder encoder = context.getBean(JwtEncoder.class);
+//            JwtDecoder decoder = context.getBean(JwtDecoder.class);
+//
+//            assertNotNull(encoder);
+//            assertNotNull(decoder);
+//        }
+        // TODO: 공부 및 정리
+        try (var context = new AnnotationConfigApplicationContext()) {
+            context.registerBean(UserDetailsService.class, () -> email -> null); // ✅ 추가
+            context.register(JwtConfig.class);
+            context.refresh();
 
-            // Bean 존재 여부 검증
             JwtEncoder encoder = context.getBean(JwtEncoder.class);
             JwtDecoder decoder = context.getBean(JwtDecoder.class);
 

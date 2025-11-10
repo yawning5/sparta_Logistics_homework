@@ -1,6 +1,7 @@
 package com.keepgoing.delivery.global;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.keepgoing.delivery.global.exception.ErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

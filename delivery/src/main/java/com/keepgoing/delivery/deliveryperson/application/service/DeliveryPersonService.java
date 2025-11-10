@@ -5,6 +5,8 @@ import com.keepgoing.delivery.deliveryperson.domain.entity.DeliveryPersonType;
 import com.keepgoing.delivery.deliveryperson.domain.entity.DeliverySeq;
 import com.keepgoing.delivery.deliveryperson.domain.repository.DeliveryPersonRepository;
 import com.keepgoing.delivery.deliveryperson.domain.service.DeliveryPersonDomainService;
+import com.keepgoing.delivery.global.exception.BusinessException;
+import com.keepgoing.delivery.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,7 +31,7 @@ public class DeliveryPersonService {
     ) {
         // 중복 등록 방지
         if (deliveryPersonRepository.findByIdAndIsDeletedFalse(userId).isPresent()) {
-            throw new IllegalStateException("이미 등록된 배송 담당자입니다.");
+            throw new BusinessException(ErrorCode.DELIVERY_PERSON_ALREADY_REGISTERED);
         }
 
         int currentPersonCount = deliveryPersonRepository.countByTypeAndHubId(type, hubId);
@@ -48,7 +50,7 @@ public class DeliveryPersonService {
     @Transactional(readOnly = true)
     public DeliveryPerson findDeliveryPerson(Long id) {
         return deliveryPersonRepository.findByIdAndIsDeletedFalse(id)
-                .orElseThrow(() -> new IllegalArgumentException("배송 담당자를 찾을 수 없습니다."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.DELIVERY_PERSON_NOT_FOUND));
     }
 
     // 배송 담당자 타입 별 조회

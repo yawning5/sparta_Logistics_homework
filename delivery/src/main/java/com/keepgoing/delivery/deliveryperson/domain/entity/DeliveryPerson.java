@@ -1,5 +1,8 @@
 package com.keepgoing.delivery.deliveryperson.domain.entity;
 
+import com.keepgoing.delivery.global.exception.BusinessException;
+import com.keepgoing.delivery.global.exception.ErrorCode;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -14,11 +17,11 @@ public class DeliveryPerson {
     private String deletedBy;
 
     private DeliveryPerson(Long userId, UUID hubId, String slackId, DeliveryPersonType type, DeliverySeq seq) {
-        if (userId == null) throw new IllegalArgumentException("userId는 필수입니다.");
-        if (type == null) throw new IllegalArgumentException("type은 필수입니다.");
-        if (slackId == null || slackId.isBlank()) throw new IllegalArgumentException("slackId는 필수입니다.");
+        if (userId == null) throw new BusinessException(ErrorCode.DELIVERY_PERSON_REQUIRED_USER_ID);
+        if (type == null) throw new BusinessException(ErrorCode.DELIVERY_PERSON_REQUIRED_TYPE);
+        if (slackId == null || slackId.isBlank()) throw new BusinessException(ErrorCode.DELIVERY_PERSON_REQUIRED_SLACK_ID);
         if (type == DeliveryPersonType.VENDOR && hubId == null)
-            throw new IllegalArgumentException("업체 배송 담당자의 hubId는 필수입니다.");
+            throw new BusinessException(ErrorCode.DELIVERY_PERSON_VENDOR_HUB_REQUIRED);
 
         this.id = userId;
         this.hubId = hubId;
@@ -63,7 +66,7 @@ public class DeliveryPerson {
 
     public void updateSlackId(String slackId) {
         if (slackId == null || slackId.isBlank())
-            throw new IllegalArgumentException("slackId는 필수입니다.");
+            throw new BusinessException(ErrorCode.DELIVERY_PERSON_REQUIRED_SLACK_ID);
         this.slackId = slackId;
     }
 

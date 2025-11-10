@@ -2,17 +2,23 @@ package com.sparta.vendor.presentation.controller;
 
 import com.sparta.vendor.application.command.CreateVendorCommand;
 import com.sparta.vendor.application.command.DeleteVendorCommand;
+import com.sparta.vendor.application.command.SearchVendorCommand;
 import com.sparta.vendor.application.command.UpdateVendorCommand;
 import com.sparta.vendor.application.dto.VendorResult;
 import com.sparta.vendor.application.service.VendorService;
 import com.sparta.vendor.infrastructure.security.CustomUserDetails;
 import com.sparta.vendor.presentation.dto.BaseResponseDTO;
+import com.sparta.vendor.presentation.dto.PageResponseDTO;
+import com.sparta.vendor.presentation.dto.VendorTypeDTO;
 import com.sparta.vendor.presentation.dto.request.CreateVendorRequestDTO;
 import com.sparta.vendor.presentation.dto.request.UpdateVendorRequestDTO;
 import com.sparta.vendor.presentation.dto.response.VendorResponseDTO;
 import jakarta.validation.Valid;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -23,6 +29,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -81,5 +88,40 @@ public class ExternalVendorController {
 
         vendorService.deleteVendor(command);
         return ResponseEntity.ok(BaseResponseDTO.ok());
+    }
+
+    @GetMapping("/search")
+    @PreAuthorize("hasAnyRole('MASTER', 'HUB', 'DELIVERY', 'COMPANY')")
+    public ResponseEntity<?> searchVendors(
+        Pageable pageable,
+        @RequestParam(value = "vendorId", required = false) UUID vendorId,
+        @RequestParam(value = "vendorName", required = false) String vendorName,
+        @RequestParam(value = "vendorType", required = false) VendorTypeDTO vendorType,
+        @RequestParam(value = "address", required = false) String address,
+        @RequestParam(value = "zipCode", required = false) String zipCode,
+        @RequestParam(value = "hubId", required = false) UUID hubId
+    ) {
+
+        int size = pageable.getPageSize();
+        if (size != 10 && size != 30 && size != 50) {
+            size = 10;
+        }
+
+        pageable = PageRequest.of(
+            pageable.getPageNumber(),
+            size,
+            pageable.getSort()
+        );
+
+        SearchVendorCommand command = SearchVendorCommand.of(vendorId, vendorName, vendorType,
+            address, zipCode, hubId);
+
+        Page<VendorResult> vendorResultPage = vendorService.searchVendors(command, pageable);
+
+        Page<VendorResponseDTO> responsePage = vendorResultPage.map(VendorResponseDTO::from);
+
+        PageResponseDTO<VendorResponseDTO> pageResponseDTO = PageResponseDTO.from(responsePage);
+
+        return ResponseEntity.ok(BaseResponseDTO.success(pageResponseDTO));
     }
 }

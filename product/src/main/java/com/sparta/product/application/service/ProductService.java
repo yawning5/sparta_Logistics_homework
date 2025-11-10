@@ -3,13 +3,17 @@ package com.sparta.product.application.service;
 import com.sparta.product.application.command.CreateProductCommand;
 import com.sparta.product.application.command.DeleteProductCommand;
 import com.sparta.product.application.command.GetProductCommand;
+import com.sparta.product.application.command.SearchProductCommand;
 import com.sparta.product.application.command.UpdateProductCommand;
 import com.sparta.product.application.dto.ProductResult;
 import com.sparta.product.domain.entity.Product;
 import com.sparta.product.domain.service.ProductDomainValidator;
 import com.sparta.product.domain.vo.HubId;
+import com.sparta.product.domain.vo.UserRole;
 import com.sparta.product.domain.vo.VendorId;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -82,5 +86,10 @@ public class ProductService {
             product.getHubId().getId());
 
         productPersistenceService.deleteProduct(command);
+    }
+
+    public Page<ProductResult> searchProducts(SearchProductCommand command, Pageable pageable) {
+        Page<Product> products = productPersistenceService.searchProducts(command, pageable);
+        return products.map(ProductResult::from);
     }
 }

@@ -4,17 +4,26 @@ package com.sparta.product.presentation.controller;
 import com.sparta.product.application.command.CreateProductCommand;
 import com.sparta.product.application.command.DeleteProductCommand;
 import com.sparta.product.application.command.GetProductCommand;
+import com.sparta.product.application.command.SearchProductCommand;
 import com.sparta.product.application.command.UpdateProductCommand;
 import com.sparta.product.application.dto.ProductResult;
+import com.sparta.product.application.exception.ErrorCode;
+import com.sparta.product.application.exception.ForbiddenOperationException;
 import com.sparta.product.application.service.ProductService;
+import com.sparta.product.domain.vo.UserRole;
 import com.sparta.product.infrastructure.security.CustomUserDetails;
 import com.sparta.product.presentation.dto.BaseResponseDTO;
+import com.sparta.product.presentation.dto.PageResponseDTO;
 import com.sparta.product.presentation.dto.reqeust.CreateProductRequestDTO;
 import com.sparta.product.presentation.dto.reqeust.UpdateRequestProductDTO;
 import com.sparta.product.presentation.dto.response.ProductResponseDTO;
 import jakarta.validation.Valid;
+import java.math.BigInteger;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -25,6 +34,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -79,5 +89,52 @@ public class ExternalProductController {
         DeleteProductCommand command = DeleteProductCommand.of(id, user);
         productService.deleteProduct(command);
         return ResponseEntity.ok(BaseResponseDTO.ok());
+    }
+
+    @GetMapping("/search")
+    @PreAuthorize("hasAnyRole('MASTER', 'HUB', 'DELIVERY', 'COMPANY')")
+    public ResponseEntity<?> searchProducts(
+        @AuthenticationPrincipal CustomUserDetails user,
+        Pageable pageable,
+        @RequestParam(value = "productId", required = false) UUID productId,
+        @RequestParam(value = "name", required = false) String name,
+        @RequestParam(value = "description", required = false) String description,
+        @RequestParam(value = "minPrice", required = false) BigInteger minPrice,
+        @RequestParam(value = "maxPrice", required = false) BigInteger maxPrice,
+        @RequestParam(value = "vendorId", required = false) UUID vendorId,
+        @RequestParam(value = "hubId", required = false) UUID hubId
+    ) {
+
+        int pageSize = pageable.getPageSize();
+        if (pageSize != 10 && pageSize != 30 && pageSize != 50) {
+            pageSize = 10;
+        }
+        pageable = PageRequest.of(pageable.getPageNumber(), pageSize, pageable.getSort());
+
+        hubId = resolveHubId(user, hubId);
+
+        SearchProductCommand command = SearchProductCommand.of(productId, name, description,
+            minPrice, maxPrice, vendorId, hubId);
+
+        Page<ProductResult> productResultPage = productService.searchProducts(command, pageable);
+
+        Page<ProductResponseDTO> responsePage = productResultPage.map(ProductResponseDTO::from);
+
+        PageResponseDTO<ProductResponseDTO> pageResponseDTO = PageResponseDTO.from(responsePage);
+
+        return ResponseEntity.ok(BaseResponseDTO.success(pageResponseDTO));
+    }
+
+
+    private UUID resolveHubId(CustomUserDetails user, UUID hubId) {
+        if (user.getRole() == UserRole.HUB) {
+            UUID affiliationId = user.getAffiliationId();
+
+            if (hubId != null && !hubId.equals(affiliationId)) {
+                throw new ForbiddenOperationException(ErrorCode.FORBIDDEN_HUB_GET_OPERATION);
+            }
+            return affiliationId;
+        }
+        return hubId;
     }
 }

@@ -1,7 +1,7 @@
-package com.sparta.vendor.application.command;
+package com.keepgoing.vendor.application.command;
 
-import com.sparta.vendor.domain.vo.UserRole;
-import com.sparta.vendor.infrastructure.security.CustomUserDetails;
+import com.keepgoing.vendor.domain.vo.UserRole;
+import com.keepgoing.vendor.infrastructure.security.CustomUserDetails;
 import java.util.UUID;
 import org.springframework.security.core.userdetails.UserDetails;
 

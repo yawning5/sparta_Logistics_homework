@@ -1,4 +1,4 @@
-package com.sparta.member.application.service;
+package com.keepgoing.member.application.service;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -8,12 +8,12 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.sparta.member.application.mapper.ApplicationMapper;
-import com.sparta.member.domain.model.Member;
-import com.sparta.member.domain.repository.MemberRepository;
-import com.sparta.member.fixture.MemberFixture;
-import com.sparta.member.fixture.SignUpRequestDtoFixture;
-import com.sparta.member.global.CustomException;
+import com.keepgoing.member.application.mapper.ApplicationMapper;
+import com.keepgoing.member.domain.model.Member;
+import com.keepgoing.member.domain.repository.MemberRepository;
+import com.keepgoing.member.fixture.MemberFixture;
+import com.keepgoing.member.fixture.SignUpRequestDtoFixture;
+import com.keepgoing.member.global.CustomException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -47,22 +47,22 @@ class MemberServiceTest {
         @DisplayName("메서드 실행후 id 가 존재해야한다")
         void requestSignUpTest() {
             //given
-            var s = SignUpRequestDtoFixture.normalRequest();
-            var m = MemberFixture.memberWithId(SignUpRequestDtoFixture.NAME, SignUpRequestDtoFixture.PASSWORD);
+            var signUpRequestDto = SignUpRequestDtoFixture.normalRequest();
+            var member = MemberFixture.memberWithId(SignUpRequestDtoFixture.NAME, SignUpRequestDtoFixture.PASSWORD);
             when(memberRepository.existsByEmail(anyString()))
                 .thenReturn(Boolean.FALSE);
             when(memberRepository.save(any(Member.class)))
-                .thenReturn(m);
+                .thenReturn(member);
             when(passwordEncoder.encode(any()))
                 .thenReturn("123");
 
 
             //when
-            Long id = memberService.requestSignUp(s);
+            Long id = memberService.requestSignUp(signUpRequestDto);
 
             //then
             assertAll(
-                () -> assertEquals(m.id(), id),
+                () -> assertEquals(member.id(), id),
                 () -> verify(memberRepository).save(any(Member.class))
             );
         }
@@ -71,13 +71,13 @@ class MemberServiceTest {
         @DisplayName("중복된 이메일로 가입 할 수 없음")
         void requestSignUpFailTest() {
             // given
-            var s = SignUpRequestDtoFixture.normalRequest();
-            var m = MemberFixture.memberWithId(SignUpRequestDtoFixture.NAME, SignUpRequestDtoFixture.PASSWORD);
+            var signUpRequestDto = SignUpRequestDtoFixture.normalRequest();
+            var member = MemberFixture.memberWithId(SignUpRequestDtoFixture.NAME, SignUpRequestDtoFixture.PASSWORD);
             when( memberRepository.existsByEmail(anyString()))
                 .thenReturn(Boolean.TRUE);
             // when
             var exception = assertThrows(CustomException.class, () -> {
-                memberService.requestSignUp(s);
+                memberService.requestSignUp(signUpRequestDto);
             });
 
             // then

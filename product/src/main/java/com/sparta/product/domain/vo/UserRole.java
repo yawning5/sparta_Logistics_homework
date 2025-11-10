@@ -1,4 +1,4 @@
-package com.sparta.product.domain.vo;
+package com.keepgoing.product.domain.vo;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

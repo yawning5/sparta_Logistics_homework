@@ -1,8 +1,8 @@
-package com.sparta.vendor.domain.entity;
+package com.keepgoing.vendor.domain.entity;
 
-import com.sparta.vendor.domain.vo.Address;
-import com.sparta.vendor.domain.vo.HubId;
-import com.sparta.vendor.domain.vo.VendorType;
+import com.keepgoing.vendor.domain.vo.Address;
+import com.keepgoing.vendor.domain.vo.HubId;
+import com.keepgoing.vendor.domain.vo.VendorType;
 import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

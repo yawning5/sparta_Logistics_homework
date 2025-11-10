@@ -1,6 +1,6 @@
-package com.sparta.vendor.config;
+package com.keepgoing.vendor.config;
 
-import com.sparta.vendor.domain.vo.UserRole;
+import com.keepgoing.vendor.domain.vo.UserRole;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import org.springframework.security.test.context.support.WithSecurityContext;

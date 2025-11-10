@@ -1,6 +1,6 @@
-package com.sparta.product.presentation.dto.response;
+package com.keepgoing.product.presentation.dto.response;
 
-import com.sparta.product.application.dto.ProductResult;
+import com.keepgoing.product.application.dto.ProductResult;
 import java.math.BigInteger;
 import java.util.UUID;
 

@@ -23,7 +23,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.support.PageableExecutionUtils;
-import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 public class OrderRepositoryCustomImpl implements OrderRepositoryCustom{
@@ -31,6 +30,7 @@ public class OrderRepositoryCustomImpl implements OrderRepositoryCustom{
     private final JPAQueryFactory queryFactory;
     private final EntityManager em;
 
+    // Query
     @Override
     public Page<UUID> findPendingIds(Collection<OrderState> states, Pageable pageable) {
 
@@ -50,6 +50,39 @@ public class OrderRepositoryCustomImpl implements OrderRepositoryCustom{
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
     }
 
+    @Override
+    public Page<Order> searchOrderPage(Pageable pageable) {
+
+        List<OrderSpecifier> orderSpecifiers = getOrderSpecifiers(pageable);
+
+        List<Order> content = queryFactory
+            .select(order)
+            .from(order)
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
+            .orderBy(orderSpecifiers.toArray(new OrderSpecifier[0]))
+            .fetch();
+
+        JPAQuery<Long> countQuery = queryFactory
+            .select(order.count())
+            .from(order);
+
+        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
+    }
+
+    @Override
+    public Optional<OrderState> findOrderStateById(UUID orderId) {
+        OrderState orderState = queryFactory
+            .select(order.orderState)
+            .from(order)
+            .where(order.id.eq(orderId))
+            .fetchOne();
+
+        return Optional.ofNullable(orderState);
+    }
+
+
+    // Command
     @Override
     public int claim(UUID orderId, OrderState beforeState, OrderState afterState, LocalDateTime now) {
         long updated = queryFactory
@@ -134,23 +167,24 @@ public class OrderRepositoryCustomImpl implements OrderRepositoryCustom{
     }
 
     @Override
-    public Page<Order> searchOrderPage(Pageable pageable) {
+    public int deleteOrder(UUID orderId, Long memberId, LocalDateTime now, Long version) {
 
-        List<OrderSpecifier> orderSpecifiers = getOrderSpecifiers(pageable);
+        long deleted = queryFactory
+            .update(order)
+            .set(order.deletedBy, memberId)
+            .set(order.deletedAt, now)
+            .set(order.version, version + 1)
+            .where(
+                order.id.eq(orderId),
+                order.orderState.eq(OrderState.ORDER_CONFIRMED),
+                order.deletedAt.isNull(),
+                order.version.eq(version)
+            )
+            .execute();
 
-        List<Order> content = queryFactory
-            .select(order)
-            .from(order)
-            .offset(pageable.getOffset())
-            .limit(pageable.getPageSize())
-            .orderBy(orderSpecifiers.toArray(new OrderSpecifier[0]))
-            .fetch();
+        em.flush(); em.clear();
 
-        JPAQuery<Long> countQuery = queryFactory
-            .select(order.count())
-            .from(order);
-
-        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
+        return (int) deleted;
     }
 
     // 동적 정렬을 위한 메서드
@@ -175,35 +209,4 @@ public class OrderRepositoryCustomImpl implements OrderRepositoryCustom{
         return orderSpecifiers;
     }
 
-    @Override
-    public Optional<OrderState> findOrderStateById(UUID orderId) {
-        OrderState orderState = queryFactory
-            .select(order.orderState)
-            .from(order)
-            .where(order.id.eq(orderId))
-            .fetchOne();
-
-        return Optional.ofNullable(orderState);
-    }
-
-    @Override
-    public int deleteOrder(UUID orderId, Long memberId, LocalDateTime now, Long version) {
-
-        long deleted = queryFactory
-            .update(order)
-            .set(order.deletedBy, memberId)
-            .set(order.deletedAt, now)
-            .set(order.version, version + 1)
-            .where(
-                order.id.eq(orderId),
-                order.orderState.eq(OrderState.ORDER_CONFIRMED),
-                order.deletedAt.isNull(),
-                order.version.eq(version)
-            )
-            .execute();
-
-        em.flush(); em.clear();
-
-        return (int) deleted;
-    }
 }

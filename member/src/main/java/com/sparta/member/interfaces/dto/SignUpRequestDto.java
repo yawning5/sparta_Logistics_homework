@@ -1,7 +1,7 @@
-package com.sparta.member.interfaces.dto;
+package com.keepgoing.member.interfaces.dto;
 
-import com.sparta.member.domain.enums.Role;
-import com.sparta.member.domain.vo.Type;
+import com.keepgoing.member.domain.enums.Role;
+import com.keepgoing.member.domain.vo.Type;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.util.UUID;

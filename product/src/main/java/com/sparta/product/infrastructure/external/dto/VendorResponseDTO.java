@@ -1,4 +1,4 @@
-package com.sparta.product.infrastructure.external.dto;
+package com.keepgoing.product.infrastructure.external.dto;
 
 import java.util.UUID;
 import lombok.Getter;

@@ -109,6 +109,23 @@ services:
     networks:
       - msa-network
 
+  hub-service:
+    container_name: member
+    build: ./member/.
+    restart: always
+    ports:
+      - "6060:6060"
+    depends_on:
+      config-server:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+      postgresql-server:
+        condition: service_healthy
+
+    networks:
+      - msa-network
+
   member-service:
     container_name: member
     build: ./member/.
@@ -159,6 +176,8 @@ services:
 
     networks:
       - msa-network
+
+
 
   zipkin:
     image: openzipkin/zipkin

@@ -1,7 +1,7 @@
-package com.sparta.member.infrastructure.jwt;
+package com.keepgoing.member.infrastructure.jwt;
 
 
-import com.sparta.member.infrastructure.userDetails.CustomUserDetails;
+import com.keepgoing.member.infrastructure.userDetails.CustomUserDetails;
 
 public interface JwtProvider {
     String generateAccessToken(CustomUserDetails user);

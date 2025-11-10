@@ -1,4 +1,4 @@
-package com.sparta.product.application.exception;
+package com.keepgoing.product.application.exception;
 
 public abstract class ClientException extends RuntimeException {
 

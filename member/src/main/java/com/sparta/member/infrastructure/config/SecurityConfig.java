@@ -1,5 +1,6 @@
-package com.sparta.member.infrastructure.config;
+package com.keepgoing.member.infrastructure.config;
 
+import com.sparta.member.infrastructure.jwt.CustomJwtAuthenticationConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,13 +13,12 @@ import org.springframework.security.config.annotation.web.configurers.HeadersCon
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
 // PreAuthorize 활성화를 하기위한 어노테이션
-@EnableMethodSecurity(prePostEnabled = true)
+@EnableMethodSecurity
 public class SecurityConfig {
 
     @Bean
@@ -29,7 +29,7 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain http(
         HttpSecurity http,
-        JwtAuthenticationConverter jwtAuthConverter,
+        CustomJwtAuthenticationConverter customJwtAuthenticationConverter,
         JwtDecoder jwtDecoder
     ) throws Exception {
         return http
@@ -66,7 +66,7 @@ public class SecurityConfig {
             .oauth2ResourceServer(oauth ->
                 oauth.jwt(jwt -> jwt
                     .decoder(jwtDecoder)
-                    .jwtAuthenticationConverter(jwtAuthConverter)
+                    .jwtAuthenticationConverter(customJwtAuthenticationConverter)
                 )
             )
             .build();

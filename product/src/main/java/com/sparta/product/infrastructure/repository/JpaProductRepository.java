@@ -1,6 +1,6 @@
-package com.sparta.product.infrastructure.repository;
+package com.keepgoing.product.infrastructure.repository;
 
-import com.sparta.product.domain.entity.Product;
+import com.keepgoing.product.domain.entity.Product;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 

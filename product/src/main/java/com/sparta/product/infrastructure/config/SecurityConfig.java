@@ -1,9 +1,9 @@
-package com.sparta.product.infrastructure.config;
+package com.keepgoing.product.infrastructure.config;
 
 
-import com.sparta.product.infrastructure.provider.JwtTokenProvider;
-import com.sparta.product.infrastructure.security.CustomAccessDeniedHandler;
-import com.sparta.product.infrastructure.security.JwtAuthenticationFilter;
+import com.keepgoing.product.infrastructure.provider.JwtTokenProvider;
+import com.keepgoing.product.infrastructure.security.CustomAccessDeniedHandler;
+import com.keepgoing.product.infrastructure.security.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

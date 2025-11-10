@@ -1,6 +1,6 @@
-package com.sparta.vendor.infrastructure.config;
+package com.keepgoing.vendor.infrastructure.config;
 
-import com.sparta.vendor.infrastructure.security.CustomUserDetails;
+import com.keepgoing.vendor.infrastructure.security.CustomUserDetails;
 import java.util.Optional;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.Authentication;

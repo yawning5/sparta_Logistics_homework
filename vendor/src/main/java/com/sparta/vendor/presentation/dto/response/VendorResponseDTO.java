@@ -1,7 +1,7 @@
-package com.sparta.vendor.presentation.dto.response;
+package com.keepgoing.vendor.presentation.dto.response;
 
-import com.sparta.vendor.application.dto.VendorResult;
-import com.sparta.vendor.presentation.dto.VendorTypeDTO;
+import com.keepgoing.vendor.application.dto.VendorResult;
+import com.keepgoing.vendor.presentation.dto.VendorTypeDTO;
 import java.util.UUID;
 
 public record VendorResponseDTO(

@@ -11,8 +11,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface OrderRepositoryCustom {
+
+    // query
     Page<UUID> findPendingIds(Collection<OrderState> states, Pageable pageable);
 
+    Page<Order> searchOrderPage(Pageable pageable);
+
+    Optional<OrderState> findOrderStateById(UUID orderId);
+
+    // command
     int claim(UUID orderId, OrderState beforeState, OrderState afterState, LocalDateTime now);
 
     int updateOrderStateToProductVerifiedWithHub(UUID orderId, UUID hubId, LocalDateTime now);
@@ -22,10 +29,6 @@ public interface OrderRepositoryCustom {
     int updateOrderStateToPaid(UUID orderId, LocalDateTime now);
 
     int updateOrderStateToCompleted(UUID orderId, LocalDateTime now);
-
-    Page<Order> searchOrderPage(Pageable pageable);
-
-    Optional<OrderState> findOrderStateById(UUID orderId);
 
     int deleteOrder(UUID orderId, Long memberId, LocalDateTime now, Long version);
 }

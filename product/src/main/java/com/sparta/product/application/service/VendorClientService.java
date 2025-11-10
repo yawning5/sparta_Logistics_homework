@@ -1,11 +1,11 @@
-package com.sparta.product.application.service;
+package com.keepgoing.product.application.service;
 
-import com.sparta.product.application.exception.ErrorCode;
-import com.sparta.product.application.exception.VendorClientException;
-import com.sparta.product.domain.vo.VendorId;
-import com.sparta.product.infrastructure.external.client.VendorClient;
-import com.sparta.product.infrastructure.external.dto.VendorResponseDTO;
-import com.sparta.product.presentation.dto.BaseResponseDTO;
+import com.keepgoing.product.application.exception.ErrorCode;
+import com.keepgoing.product.application.exception.VendorClientException;
+import com.keepgoing.product.domain.vo.VendorId;
+import com.keepgoing.product.infrastructure.external.client.VendorClient;
+import com.keepgoing.product.infrastructure.external.dto.VendorResponseDTO;
+import com.keepgoing.product.presentation.dto.BaseResponseDTO;
 import feign.FeignException;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;

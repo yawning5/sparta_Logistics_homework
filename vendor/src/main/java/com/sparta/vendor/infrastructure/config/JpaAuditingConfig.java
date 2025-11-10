@@ -1,4 +1,4 @@
-package com.sparta.vendor.infrastructure.config;
+package com.keepgoing.vendor.infrastructure.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;

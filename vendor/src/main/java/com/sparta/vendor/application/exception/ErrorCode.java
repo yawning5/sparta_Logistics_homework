@@ -1,4 +1,4 @@
-package com.sparta.vendor.application.exception;
+package com.keepgoing.vendor.application.exception;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

@@ -17,12 +17,11 @@ import com.keepgoing.order.domain.order.OrderState;
 import com.keepgoing.order.domain.outbox.OutBoxState;
 import com.keepgoing.order.infrastructure.outbox.OrderOutboxRepository;
 import com.keepgoing.order.infrastructure.order.OrderRepository;
-import com.keepgoing.order.presentation.dto.response.BaseResponseDto;
-import com.keepgoing.order.presentation.dto.response.CreateOrderResponse;
-import com.keepgoing.order.presentation.dto.response.DeleteOrderInfo;
-import com.keepgoing.order.presentation.dto.response.OrderInfo;
-import com.keepgoing.order.presentation.dto.response.OrderStateInfo;
-import com.keepgoing.order.presentation.dto.response.UpdateOrderStateInfo;
+import com.keepgoing.order.presentation.dto.response.api.CreateOrderResponse;
+import com.keepgoing.order.presentation.dto.response.api.DeleteOrderInfo;
+import com.keepgoing.order.presentation.dto.response.api.OrderInfo;
+import com.keepgoing.order.presentation.dto.response.api.OrderStateInfo;
+import com.keepgoing.order.presentation.dto.response.api.UpdateOrderStateInfo;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -60,9 +59,60 @@ public class OrderService {
         );
     }
 
+    public Page<OrderInfo> getOrderPage(Pageable pageable) {
+        return orderRepository.searchOrderPage(pageable).map(OrderInfo::from);
+    }
+
     public Order findById(UUID orderId) {
         return orderRepository.findById(orderId)
             .orElse(null);
+    }
+
+    public OrderInfo searchOrderOne(UUID orderId) {
+        Order order = orderRepository.findById(orderId).orElseThrow(
+            () -> new NotFoundOrderException("주문을 찾을 수 없습니다.")
+        );
+
+        return OrderInfo.from(order);
+    }
+
+    @Transactional
+    public DeleteOrderInfo deleteOrder(UUID orderId, Long memberId) {
+        Order order = orderRepository.findById(orderId).orElseThrow(
+            () -> new NotFoundOrderException("주문을 찾을 수 없습니다. : 주문 삭제 이전")
+        );
+
+        if (order.getOrderState() != OrderState.ORDER_CONFIRMED) {
+            throw new InvalidOrderStateException("주문 확정 상태에서만 주문을 삭제할 수 있습니다.");
+        }
+
+        LocalDateTime now = LocalDateTime.now(clock);
+
+        int deleted = orderRepository.deleteOrder(orderId, memberId, now, order.getVersion());
+
+        if (deleted == 0) {
+            throw new DeleteOrderFailException("주문 삭제에 실패했습니다.");
+        }
+
+        return DeleteOrderInfo.create(
+            orderId,
+            memberId,
+            now
+        );
+    }
+
+    public OrderStateInfo findOrderState(UUID orderId) {
+        OrderState state = orderRepository.findOrderStateById(orderId)
+            .orElseThrow(
+                () -> new NotFoundOrderException("해당 주문을 찾을 수 없습니다.")
+            );
+
+        return OrderStateInfo.create(orderId, state);
+    }
+
+    @Transactional
+    public int claim(UUID orderId, OrderState beforeState, OrderState afterState) {
+        return orderRepository.claim(orderId, beforeState, afterState, LocalDateTime.now(clock));
     }
 
     @Transactional
@@ -130,66 +180,6 @@ public class OrderService {
     }
 
     @Transactional
-    public int claim(UUID orderId, OrderState beforeState, OrderState afterState) {
-        return orderRepository.claim(orderId, beforeState, afterState, LocalDateTime.now(clock));
-    }
-
-    private String makePayloadForNotification(Order order) {
-        CreateOrderPayloadForNotification createOrderPayloadForNotification = new CreateOrderPayloadForNotification(
-            order.getId(),
-            order.getSupplierName(),
-            order.getReceiverName(),
-            order.getProductName(),
-            order.getQuantity(),
-            order.getOrderedAt(),
-            order.getDeliveryDueAt(),
-            order.getDeliveryRequestNote()
-        );
-
-        try {
-            return objectMapper.writeValueAsString(createOrderPayloadForNotification);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("JSON으로 변환하지 못했습니다.");
-        }
-    }
-
-    private String makePayloadForDelivery(Order order) {
-        CreateOrderPayloadForDelivery createOrderPayloadForDelivery = new CreateOrderPayloadForDelivery(
-            order.getId(),
-            order.getReceiverId(),
-            order.getProductId(),
-            order.getOrderState()
-        );
-
-        try {
-            return objectMapper.writeValueAsString(createOrderPayloadForDelivery);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("JSON으로 변환하지 못했습니다.");
-        }
-    }
-
-    public Page<OrderInfo> getSearchOrder(Pageable pageable) {
-        return orderRepository.searchOrderPage(pageable).map(OrderInfo::from);
-    }
-
-    public OrderInfo searchOrderOne(UUID orderId) {
-        Order order = orderRepository.findById(orderId).orElseThrow(
-            () -> new NotFoundOrderException("주문을 찾을 수 없습니다.")
-        );
-
-        return OrderInfo.from(order);
-    }
-
-    public OrderStateInfo findOrderState(UUID orderId) {
-        OrderState state = orderRepository.findOrderStateById(orderId)
-            .orElseThrow(
-                () -> new NotFoundOrderException("해당 주문을 찾을 수 없습니다.")
-            );
-
-        return OrderStateInfo.create(orderId, state);
-    }
-
-    @Transactional
     public UpdateOrderStateInfo updateStateToPaid(UUID orderId) {
         Order order = orderRepository.findById(orderId).orElseThrow(
             () -> new NotFoundOrderException("주문을 찾을 수 없습니다. : 상태 변경 이전(결제)")
@@ -222,28 +212,38 @@ public class OrderService {
         );
     }
 
-    @Transactional
-    public DeleteOrderInfo deleteOrder(UUID orderId, Long memberId) {
-        Order order = orderRepository.findById(orderId).orElseThrow(
-            () -> new NotFoundOrderException("주문을 찾을 수 없습니다. : 주문 삭제 이전")
+
+    private String makePayloadForDelivery(Order order) {
+        CreateOrderPayloadForDelivery createOrderPayloadForDelivery = new CreateOrderPayloadForDelivery(
+            order.getId(),
+            order.getReceiverId(),
+            order.getProductId(),
+            order.getOrderState()
         );
 
-        if (order.getOrderState() != OrderState.ORDER_CONFIRMED) {
-            throw new InvalidOrderStateException("주문 확정 상태에서만 주문을 삭제할 수 있습니다.");
+        try {
+            return objectMapper.writeValueAsString(createOrderPayloadForDelivery);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("JSON으로 변환하지 못했습니다.");
         }
+    }
 
-        LocalDateTime now = LocalDateTime.now(clock);
-
-        int deleted = orderRepository.deleteOrder(orderId, memberId, now, order.getVersion());
-
-        if (deleted == 0) {
-            throw new DeleteOrderFailException("주문 삭제에 실패했습니다.");
-        }
-
-        return DeleteOrderInfo.create(
-            orderId,
-            memberId,
-            now
+    private String makePayloadForNotification(Order order) {
+        CreateOrderPayloadForNotification createOrderPayloadForNotification = new CreateOrderPayloadForNotification(
+            order.getId(),
+            order.getSupplierName(),
+            order.getReceiverName(),
+            order.getProductName(),
+            order.getQuantity(),
+            order.getOrderedAt(),
+            order.getDeliveryDueAt(),
+            order.getDeliveryRequestNote()
         );
+
+        try {
+            return objectMapper.writeValueAsString(createOrderPayloadForNotification);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("JSON으로 변환하지 못했습니다.");
+        }
     }
 }

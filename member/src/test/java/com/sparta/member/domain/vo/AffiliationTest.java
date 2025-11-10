@@ -1,4 +1,4 @@
-package com.sparta.member.domain.vo;
+package com.keepgoing.member.domain.vo;
 
 import static org.junit.jupiter.api.Assertions.*;
 

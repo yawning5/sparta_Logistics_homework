@@ -1,7 +1,7 @@
-package com.sparta.vendor.infrastructure.security;
+package com.keepgoing.vendor.infrastructure.security;
 
-import com.sparta.vendor.domain.vo.UserRole;
-import com.sparta.vendor.infrastructure.provider.JwtTokenProvider;
+import com.keepgoing.vendor.domain.vo.UserRole;
+import com.keepgoing.vendor.infrastructure.provider.JwtTokenProvider;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

@@ -1,22 +1,18 @@
 package com.keepgoing.order.presentation.api;
 
-import com.keepgoing.order.application.dto.CreateOrderCommand;
 import com.keepgoing.order.application.service.order.OrderService;
-import com.keepgoing.order.domain.order.OrderState;
 import com.keepgoing.order.presentation.dto.request.CreateOrderRequest;
-import com.keepgoing.order.presentation.dto.response.BaseResponseDto;
-import com.keepgoing.order.presentation.dto.response.CreateOrderResponse;
-import com.keepgoing.order.presentation.dto.response.DeleteOrderInfo;
-import com.keepgoing.order.presentation.dto.response.OrderInfo;
-import com.keepgoing.order.presentation.dto.response.OrderStateInfo;
-import com.keepgoing.order.presentation.dto.response.UpdateOrderStateInfo;
+import com.keepgoing.order.presentation.dto.response.base.BaseResponseDto;
+import com.keepgoing.order.presentation.dto.response.api.CreateOrderResponse;
+import com.keepgoing.order.presentation.dto.response.api.DeleteOrderInfo;
+import com.keepgoing.order.presentation.dto.response.api.OrderInfo;
+import com.keepgoing.order.presentation.dto.response.api.OrderStateInfo;
+import com.keepgoing.order.presentation.dto.response.api.UpdateOrderStateInfo;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-import jakarta.ws.rs.Path;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.SortDefault;
@@ -26,7 +22,6 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -59,7 +54,7 @@ public class OrderControllerV1 implements OrderController{
 
         validate(pageable);
 
-        Page<OrderInfo> searchOrderPage = orderService.getSearchOrder(pageable);
+        Page<OrderInfo> searchOrderPage = orderService.getOrderPage(pageable);
         return BaseResponseDto.success(searchOrderPage);
     }
 

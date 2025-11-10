@@ -1,11 +1,11 @@
-package com.sparta.product.presentation.controller;
+package com.keepgoing.product.presentation.controller;
 
 
-import com.sparta.product.application.command.GetProductCommand;
-import com.sparta.product.application.dto.ProductResult;
-import com.sparta.product.application.service.ProductService;
-import com.sparta.product.infrastructure.security.CustomUserDetails;
-import com.sparta.product.presentation.dto.BaseResponseDTO;
+import com.keepgoing.product.application.command.GetProductCommand;
+import com.keepgoing.product.application.dto.ProductResult;
+import com.keepgoing.product.application.service.ProductService;
+import com.keepgoing.product.infrastructure.security.CustomUserDetails;
+import com.keepgoing.product.presentation.dto.BaseResponseDTO;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

@@ -9,10 +9,10 @@ import com.keepgoing.order.domain.order.OrderState;
 import com.keepgoing.order.presentation.client.HubClient;
 import com.keepgoing.order.presentation.client.ProductClient;
 import com.keepgoing.order.presentation.dto.request.ReservationInventoryRequest;
-import com.keepgoing.order.presentation.dto.response.InventoryReservationResponse;
-import com.keepgoing.order.presentation.dto.response.ProductInfo;
+import com.keepgoing.order.presentation.dto.response.client.InventoryReservationResponse;
+import com.keepgoing.order.presentation.dto.response.client.ProductInfo;
 
-import com.keepgoing.order.presentation.dto.response.ProductSearchResponse;
+import com.keepgoing.order.presentation.dto.response.client.ProductSearchResponse;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

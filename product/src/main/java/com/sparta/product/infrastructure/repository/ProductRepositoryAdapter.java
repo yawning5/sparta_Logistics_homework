@@ -1,7 +1,7 @@
-package com.sparta.product.infrastructure.repository;
+package com.keepgoing.product.infrastructure.repository;
 
-import com.sparta.product.domain.entity.Product;
-import com.sparta.product.domain.repository.ProductRepository;
+import com.keepgoing.product.domain.entity.Product;
+import com.keepgoing.product.domain.repository.ProductRepository;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;

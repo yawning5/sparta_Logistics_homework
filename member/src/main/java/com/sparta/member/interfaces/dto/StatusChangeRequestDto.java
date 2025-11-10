@@ -1,6 +1,6 @@
-package com.sparta.member.interfaces.dto;
+package com.keepgoing.member.interfaces.dto;
 
-import com.sparta.member.domain.enums.Status;
+import com.keepgoing.member.domain.enums.Status;
 
 public record StatusChangeRequestDto(
     String email,

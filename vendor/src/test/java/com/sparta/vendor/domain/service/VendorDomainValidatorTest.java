@@ -1,9 +1,9 @@
-package com.sparta.vendor.domain.service;
+package com.keepgoing.vendor.domain.service;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.sparta.vendor.application.exception.ForbiddenOperationException;
-import com.sparta.vendor.domain.vo.UserRole;
+import com.keepgoing.vendor.application.exception.ForbiddenOperationException;
+import com.keepgoing.vendor.domain.vo.UserRole;
 import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

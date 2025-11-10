@@ -1,4 +1,4 @@
-package com.sparta.vendor.domain.entity;
+package com.keepgoing.vendor.domain.entity;
 
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;

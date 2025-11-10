@@ -1,7 +1,7 @@
-package com.sparta.member.infrastructure.persistence.mapper;
+package com.keepgoing.member.infrastructure.persistence.mapper;
 
-import com.sparta.member.domain.model.Member;
-import com.sparta.member.infrastructure.persistence.jpa.entity.MemberJpa;
+import com.keepgoing.member.domain.model.Member;
+import com.keepgoing.member.infrastructure.persistence.jpa.entity.MemberJpa;
 import java.util.List;
 
 public interface PersistenceMapper {

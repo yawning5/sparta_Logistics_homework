@@ -1,15 +1,15 @@
-package com.sparta.vendor.presentation.controller;
+package com.keepgoing.vendor.presentation.controller;
 
-import com.sparta.vendor.application.command.CreateVendorCommand;
-import com.sparta.vendor.application.command.DeleteVendorCommand;
-import com.sparta.vendor.application.command.UpdateVendorCommand;
-import com.sparta.vendor.application.dto.VendorResult;
-import com.sparta.vendor.application.service.VendorService;
-import com.sparta.vendor.infrastructure.security.CustomUserDetails;
-import com.sparta.vendor.presentation.dto.BaseResponseDTO;
-import com.sparta.vendor.presentation.dto.request.CreateVendorRequestDTO;
-import com.sparta.vendor.presentation.dto.request.UpdateVendorRequestDTO;
-import com.sparta.vendor.presentation.dto.response.VendorResponseDTO;
+import com.keepgoing.vendor.application.command.CreateVendorCommand;
+import com.keepgoing.vendor.application.command.DeleteVendorCommand;
+import com.keepgoing.vendor.application.command.UpdateVendorCommand;
+import com.keepgoing.vendor.application.dto.VendorResult;
+import com.keepgoing.vendor.application.service.VendorService;
+import com.keepgoing.vendor.infrastructure.security.CustomUserDetails;
+import com.keepgoing.vendor.presentation.dto.BaseResponseDTO;
+import com.keepgoing.vendor.presentation.dto.request.CreateVendorRequestDTO;
+import com.keepgoing.vendor.presentation.dto.request.UpdateVendorRequestDTO;
+import com.keepgoing.vendor.presentation.dto.response.VendorResponseDTO;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

@@ -1,7 +1,7 @@
-package com.sparta.vendor.infrastructure.security;
+package com.keepgoing.vendor.infrastructure.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sparta.vendor.presentation.dto.BaseResponseDTO;
+import com.keepgoing.vendor.presentation.dto.BaseResponseDTO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

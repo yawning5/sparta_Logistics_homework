@@ -1,15 +1,15 @@
-package com.sparta.member.domain.model;
+package com.keepgoing.member.domain.model;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import com.sparta.member.domain.enums.Role;
-import com.sparta.member.domain.enums.Status;
-import com.sparta.member.domain.vo.Affiliation;
-import com.sparta.member.domain.vo.Type;
-import com.sparta.member.fixture.MemberFixture;
+import com.keepgoing.member.domain.enums.Role;
+import com.keepgoing.member.domain.enums.Status;
+import com.keepgoing.member.domain.vo.Affiliation;
+import com.keepgoing.member.domain.vo.Type;
+import com.keepgoing.member.fixture.MemberFixture;
 import java.lang.reflect.Field;
 import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;

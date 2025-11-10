@@ -1,15 +1,15 @@
-package com.sparta.vendor.application.service;
+package com.keepgoing.vendor.application.service;
 
-import com.sparta.vendor.application.command.CreateVendorCommand;
-import com.sparta.vendor.application.command.DeleteVendorCommand;
-import com.sparta.vendor.application.command.UpdateVendorCommand;
-import com.sparta.vendor.application.dto.VendorResult;
-import com.sparta.vendor.application.exception.ErrorCode;
-import com.sparta.vendor.application.exception.VendorNotFoundException;
-import com.sparta.vendor.domain.entity.Vendor;
-import com.sparta.vendor.domain.repository.VendorRepository;
-import com.sparta.vendor.domain.vo.Address;
-import com.sparta.vendor.domain.vo.HubId;
+import com.keepgoing.vendor.application.command.CreateVendorCommand;
+import com.keepgoing.vendor.application.command.DeleteVendorCommand;
+import com.keepgoing.vendor.application.command.UpdateVendorCommand;
+import com.keepgoing.vendor.application.dto.VendorResult;
+import com.keepgoing.vendor.application.exception.ErrorCode;
+import com.keepgoing.vendor.application.exception.VendorNotFoundException;
+import com.keepgoing.vendor.domain.entity.Vendor;
+import com.keepgoing.vendor.domain.repository.VendorRepository;
+import com.keepgoing.vendor.domain.vo.Address;
+import com.keepgoing.vendor.domain.vo.HubId;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

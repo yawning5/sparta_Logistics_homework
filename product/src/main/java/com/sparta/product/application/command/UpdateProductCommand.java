@@ -1,8 +1,8 @@
-package com.sparta.product.application.command;
+package com.keepgoing.product.application.command;
 
-import com.sparta.product.domain.vo.UserRole;
-import com.sparta.product.infrastructure.security.CustomUserDetails;
-import com.sparta.product.presentation.dto.reqeust.UpdateRequestProductDTO;
+import com.keepgoing.product.domain.vo.UserRole;
+import com.keepgoing.product.infrastructure.security.CustomUserDetails;
+import com.keepgoing.product.presentation.dto.reqeust.UpdateRequestProductDTO;
 import java.math.BigInteger;
 import java.util.UUID;
 

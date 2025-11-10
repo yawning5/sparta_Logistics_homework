@@ -1,9 +1,9 @@
-package com.sparta.vendor.presentation.controller;
+package com.keepgoing.vendor.presentation.controller;
 
-import com.sparta.vendor.application.dto.VendorResult;
-import com.sparta.vendor.application.service.VendorService;
-import com.sparta.vendor.presentation.dto.BaseResponseDTO;
-import com.sparta.vendor.presentation.dto.response.VendorResponseDTO;
+import com.keepgoing.vendor.application.dto.VendorResult;
+import com.keepgoing.vendor.application.service.VendorService;
+import com.keepgoing.vendor.presentation.dto.BaseResponseDTO;
+import com.keepgoing.vendor.presentation.dto.response.VendorResponseDTO;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

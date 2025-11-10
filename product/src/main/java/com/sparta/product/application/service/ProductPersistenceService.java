@@ -1,16 +1,16 @@
-package com.sparta.product.application.service;
+package com.keepgoing.product.application.service;
 
-import com.sparta.product.application.command.CreateProductCommand;
-import com.sparta.product.application.command.DeleteProductCommand;
-import com.sparta.product.application.command.UpdateProductCommand;
-import com.sparta.product.application.dto.ProductResult;
-import com.sparta.product.application.exception.ErrorCode;
-import com.sparta.product.application.exception.ProductDeletedException;
-import com.sparta.product.application.exception.ProductNotFoundException;
-import com.sparta.product.domain.entity.Product;
-import com.sparta.product.domain.repository.ProductRepository;
-import com.sparta.product.domain.vo.HubId;
-import com.sparta.product.domain.vo.VendorId;
+import com.keepgoing.product.application.command.CreateProductCommand;
+import com.keepgoing.product.application.command.DeleteProductCommand;
+import com.keepgoing.product.application.command.UpdateProductCommand;
+import com.keepgoing.product.application.dto.ProductResult;
+import com.keepgoing.product.application.exception.ErrorCode;
+import com.keepgoing.product.application.exception.ProductDeletedException;
+import com.keepgoing.product.application.exception.ProductNotFoundException;
+import com.keepgoing.product.domain.entity.Product;
+import com.keepgoing.product.domain.repository.ProductRepository;
+import com.keepgoing.product.domain.vo.HubId;
+import com.keepgoing.product.domain.vo.VendorId;
 
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;

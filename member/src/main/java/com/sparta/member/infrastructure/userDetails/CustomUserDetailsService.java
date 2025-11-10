@@ -1,7 +1,7 @@
-package com.sparta.member.infrastructure.userDetails;
+package com.keepgoing.member.infrastructure.userDetails;
 
-import com.sparta.member.domain.repository.MemberRepository;
-import com.sparta.member.infrastructure.persistence.jpa.entity.MemberJpa;
+import com.keepgoing.member.domain.repository.MemberRepository;
+import com.keepgoing.member.infrastructure.persistence.jpa.entity.MemberJpa;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

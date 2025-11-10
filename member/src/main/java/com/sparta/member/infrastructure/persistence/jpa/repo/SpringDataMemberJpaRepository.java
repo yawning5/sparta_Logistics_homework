@@ -1,8 +1,8 @@
-package com.sparta.member.infrastructure.persistence.jpa.repo;
+package com.keepgoing.member.infrastructure.persistence.jpa.repo;
 
-import com.sparta.member.domain.model.Member;
-import com.sparta.member.infrastructure.persistence.jpa.entity.MemberJpa;
-import com.sparta.member.infrastructure.persistence.jpa.querydsl.QueryDslMemberRepository;
+import com.keepgoing.member.domain.model.Member;
+import com.keepgoing.member.infrastructure.persistence.jpa.entity.MemberJpa;
+import com.keepgoing.member.infrastructure.persistence.jpa.querydsl.QueryDslMemberRepository;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;

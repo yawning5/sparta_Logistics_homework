@@ -1,7 +1,7 @@
-package com.sparta.product.infrastructure.external.client;
+package com.keepgoing.product.infrastructure.external.client;
 
-import com.sparta.product.infrastructure.external.dto.VendorResponseDTO;
-import com.sparta.product.presentation.dto.BaseResponseDTO;
+import com.keepgoing.product.infrastructure.external.dto.VendorResponseDTO;
+import com.keepgoing.product.presentation.dto.BaseResponseDTO;
 
 import java.util.UUID;
 import org.springframework.cloud.openfeign.FeignClient;

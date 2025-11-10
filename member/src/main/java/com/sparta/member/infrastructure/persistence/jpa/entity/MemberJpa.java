@@ -1,8 +1,8 @@
-package com.sparta.member.infrastructure.persistence.jpa.entity;
+package com.keepgoing.member.infrastructure.persistence.jpa.entity;
 
-import com.sparta.member.domain.enums.Role;
-import com.sparta.member.domain.enums.Status;
-import com.sparta.member.domain.vo.Type;
+import com.keepgoing.member.domain.enums.Role;
+import com.keepgoing.member.domain.enums.Status;
+import com.keepgoing.member.domain.vo.Type;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;

@@ -1,6 +1,6 @@
-package com.sparta.vendor.infrastructure.repository;
+package com.keepgoing.vendor.infrastructure.repository;
 
-import com.sparta.vendor.domain.entity.Vendor;
+import com.keepgoing.vendor.domain.entity.Vendor;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 

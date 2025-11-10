@@ -1,4 +1,4 @@
-package com.sparta.member.interfaces.web;
+package com.keepgoing.member.interfaces.web;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -7,10 +7,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sparta.member.application.service.AuthService;
-import com.sparta.member.application.service.MemberService;
-import com.sparta.member.config.TestSecurityConfig;
-import com.sparta.member.interfaces.dto.SignUpRequestDto;
+import com.keepgoing.member.application.service.AuthService;
+import com.keepgoing.member.application.service.MemberService;
+import com.keepgoing.member.config.TestSecurityConfig;
+import com.keepgoing.member.interfaces.dto.SignUpRequestDto;
 import org.instancio.Instancio;
 import org.instancio.Select;
 import org.junit.jupiter.api.DisplayName;

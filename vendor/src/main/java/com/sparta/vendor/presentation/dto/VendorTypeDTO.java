@@ -1,4 +1,4 @@
-package com.sparta.vendor.presentation.dto;
+package com.keepgoing.vendor.presentation.dto;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

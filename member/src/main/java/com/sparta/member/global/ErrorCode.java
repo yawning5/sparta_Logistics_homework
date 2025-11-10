@@ -1,4 +1,4 @@
-package com.sparta.member.global;
+package com.keepgoing.member.global;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;

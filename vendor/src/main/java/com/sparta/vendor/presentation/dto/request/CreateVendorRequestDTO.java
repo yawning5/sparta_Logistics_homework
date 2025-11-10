@@ -1,6 +1,6 @@
-package com.sparta.vendor.presentation.dto.request;
+package com.keepgoing.vendor.presentation.dto.request;
 
-import com.sparta.vendor.presentation.dto.VendorTypeDTO;
+import com.keepgoing.vendor.presentation.dto.VendorTypeDTO;
 import jakarta.validation.constraints.NotNull;
 import java.util.UUID;
 

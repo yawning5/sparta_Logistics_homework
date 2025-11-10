@@ -1,7 +1,7 @@
-package com.sparta.product.application.command;
+package com.keepgoing.product.application.command;
 
-import com.sparta.product.domain.vo.UserRole;
-import com.sparta.product.infrastructure.security.CustomUserDetails;
+import com.keepgoing.product.domain.vo.UserRole;
+import com.keepgoing.product.infrastructure.security.CustomUserDetails;
 import java.util.UUID;
 
 public record DeleteProductCommand(

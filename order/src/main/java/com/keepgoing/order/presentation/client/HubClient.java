@@ -1,7 +1,7 @@
 package com.keepgoing.order.presentation.client;
 
 import com.keepgoing.order.presentation.dto.request.ReservationInventoryRequest;
-import com.keepgoing.order.presentation.dto.response.InventoryReservationResponse;
+import com.keepgoing.order.presentation.dto.response.client.InventoryReservationResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

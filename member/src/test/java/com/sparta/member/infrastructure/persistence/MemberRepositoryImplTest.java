@@ -1,17 +1,17 @@
-package com.sparta.member.infrastructure.persistence;
+package com.keepgoing.member.infrastructure.persistence;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.sparta.member.domain.model.Member;
-import com.sparta.member.domain.vo.AccountInfo;
-import com.sparta.member.domain.vo.Type;
-import com.sparta.member.infrastructure.config.QuerydslConfig;
-import com.sparta.member.infrastructure.persistence.jpa.MemberRepositoryImpl;
-import com.sparta.member.infrastructure.persistence.jpa.querydsl.QueryDslMemberRepositoryImpl;
-import com.sparta.member.infrastructure.persistence.mapper.MemberJpaMapper;
+import com.keepgoing.member.domain.model.Member;
+import com.keepgoing.member.domain.vo.AccountInfo;
+import com.keepgoing.member.domain.vo.Type;
+import com.keepgoing.member.infrastructure.config.QuerydslConfig;
+import com.keepgoing.member.infrastructure.persistence.jpa.MemberRepositoryImpl;
+import com.keepgoing.member.infrastructure.persistence.jpa.querydsl.QueryDslMemberRepositoryImpl;
+import com.keepgoing.member.infrastructure.persistence.mapper.MemberJpaMapper;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -107,6 +107,8 @@ public class MemberRepositoryImplTest {
                 null,
                 null,
                 null,
+                null,
+                null,
                 null
             );
 
@@ -131,7 +133,9 @@ public class MemberRepositoryImplTest {
                 null,
                 null,
                 null,
-                "test@test.com"
+                "test@test.com",
+                null,
+                null
             );
 
             // then
@@ -154,6 +158,8 @@ public class MemberRepositoryImplTest {
                 pageable,
                 null,
                 "HUB",
+                null,
+                null,
                 null,
                 null
             );

@@ -1,11 +1,11 @@
-package com.sparta.member.domain.model;
+package com.keepgoing.member.domain.model;
 
-import static com.sparta.member.domain.support.ArgsValidator.requireAllNonNull;
+import static com.keepgoing.member.domain.support.ArgsValidator.requireAllNonNull;
 
-import com.sparta.member.domain.enums.Role;
-import com.sparta.member.domain.enums.Status;
-import com.sparta.member.domain.vo.AccountInfo;
-import com.sparta.member.domain.vo.Affiliation;
+import com.keepgoing.member.domain.enums.Role;
+import com.keepgoing.member.domain.enums.Status;
+import com.keepgoing.member.domain.vo.AccountInfo;
+import com.keepgoing.member.domain.vo.Affiliation;
 import java.time.LocalDateTime;
 
 public class Member {

@@ -1,10 +1,10 @@
-package com.sparta.member.infrastructure.config;
+package com.keepgoing.member.infrastructure.config;
 
-import com.sparta.member.domain.enums.Role;
-import com.sparta.member.domain.model.Member;
-import com.sparta.member.domain.repository.MemberRepository;
-import com.sparta.member.domain.vo.Affiliation;
-import com.sparta.member.domain.vo.Type;
+import com.keepgoing.member.domain.enums.Role;
+import com.keepgoing.member.domain.model.Member;
+import com.keepgoing.member.domain.repository.MemberRepository;
+import com.keepgoing.member.domain.vo.Affiliation;
+import com.keepgoing.member.domain.vo.Type;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +26,7 @@ public class DataInitializer {
 
     @Bean
     @Order(1)
-    public CommandLineRunner initDatabase(MemberRepository memberRepository) {
+    public CommandLineRunner initDatabase() {
         log.info("init database start MASTER account");
         return args -> {
             String masterEmail = "master@master.com";

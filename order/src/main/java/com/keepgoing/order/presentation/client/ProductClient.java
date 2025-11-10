@@ -1,7 +1,6 @@
 package com.keepgoing.order.presentation.client;
 
-import com.keepgoing.order.presentation.dto.response.ProductInfo;
-import com.keepgoing.order.presentation.dto.response.ProductSearchResponse;
+import com.keepgoing.order.presentation.dto.response.client.ProductSearchResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

@@ -30,6 +30,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -40,7 +41,10 @@ import org.springframework.test.context.ActiveProfiles;
     QueryDslMemberRepositoryImpl.class,
     QuerydslConfig.class
 })
-
+@TestPropertySource(properties = {
+    "spring.cloud.config.enabled=false",
+    "eureka.client.enabled=false"
+})
 public class MemberRepositoryImplTest {
 
     @Autowired

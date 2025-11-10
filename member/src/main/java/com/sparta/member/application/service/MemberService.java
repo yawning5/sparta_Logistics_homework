@@ -2,6 +2,7 @@ package com.sparta.member.application.service;
 
 import com.sparta.member.domain.enums.Status;
 import com.sparta.member.domain.vo.Affiliation;
+import com.sparta.member.interfaces.dto.MemberInfoResponseDto;
 import com.sparta.member.interfaces.dto.SignUpRequestDto;
 import com.sparta.member.application.mapper.ApplicationMapper;
 import com.sparta.member.domain.model.Member;
@@ -42,7 +43,7 @@ public class MemberService {
         return savedMember.id();
     }
 
-    public StatusUpdateResponseDto updateStatus(StatusChangeRequestDto requestDto) {
+    public StatusUpdateResponseDto updateStatus(StatusChangeRequestDto requestDto, Long id) {
         Member targetMember = memberRepository.findByEmail(requestDto.email());
         switch(requestDto.status()) {
             case APPROVED -> targetMember.approve();
@@ -50,5 +51,9 @@ public class MemberService {
         }
         Member savedMember = memberRepository.save(targetMember);
         return mapper.toStatusUpdateResponseDto(savedMember);
+    }
+
+    public MemberInfoResponseDto getMemberInfo(Long id) {
+        return mapper.toGetMemberResponseDto(memberRepository.findById(id));
     }
 }

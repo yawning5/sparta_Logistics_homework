@@ -28,6 +28,7 @@ public class Member {
         String slackId,
         Affiliation affiliation,
         Role role,
+        Status status,
         LocalDateTime createdAt,
         LocalDateTime updatedAt,
         LocalDateTime deletedAt,
@@ -42,7 +43,7 @@ public class Member {
         );
         this.affiliation = affiliation;
         this.role = role;
-        this.status = Status.PENDING;
+        this.status = status == null ? Status.PENDING :  status;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.deletedAt = deletedAt;
@@ -65,7 +66,7 @@ public class Member {
             "affiliation", affiliation,
             "role", role
         );
-        return new Member(null, name, password, email, slackId, affiliation, role, LocalDateTime.now(), LocalDateTime.now(), null, null);
+        return new Member(null, name, password, email, slackId, affiliation, role, null,LocalDateTime.now(), LocalDateTime.now(), null, null);
     }
 
     public void approve() {
@@ -127,6 +128,7 @@ public class Member {
         String slackId,
         Affiliation affiliation,
         Role role,
+        Status status,
         LocalDateTime createdAt,
         LocalDateTime updatedAt,
         LocalDateTime deletedAt,
@@ -144,6 +146,6 @@ public class Member {
             "updatedAt", updatedAt
         );
 
-        return new Member(id, name, password, email, slackId, affiliation, role, createdAt, updatedAt, deletedAt, deleteBy);
+        return new Member(id, name, password, email, slackId, affiliation, role, status, createdAt, updatedAt, deletedAt, deleteBy);
     }
 }

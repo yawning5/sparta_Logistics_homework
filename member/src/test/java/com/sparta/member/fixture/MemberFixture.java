@@ -1,6 +1,7 @@
 package com.sparta.member.fixture;
 
 import com.sparta.member.domain.enums.Role;
+import com.sparta.member.domain.enums.Status;
 import com.sparta.member.domain.model.Member;
 import com.sparta.member.domain.vo.Affiliation;
 import com.sparta.member.domain.vo.Type;
@@ -61,6 +62,7 @@ public final class MemberFixture {
             SLACK_ID,
             affiliation(),
             ROLE,
+            null,
             LocalDateTime.now(),
             LocalDateTime.now(),
             null,

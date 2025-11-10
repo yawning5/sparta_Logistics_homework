@@ -7,6 +7,7 @@ import com.sparta.member.application.service.MemberService;
 import com.sparta.member.interfaces.dto.SignUpRequestDto;
 import com.sparta.member.interfaces.dto.StatusChangeRequestDto;
 import com.sparta.member.interfaces.dto.StatusUpdateResponseDto;
+import com.sparta.member.interfaces.dto.MemberInfoResponseDto;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -29,8 +30,18 @@ public class MemberController {
     private final MemberService memberService;
     private final AuthService authService;
 
+    @GetMapping("/{id}")
+    public ResponseEntity<BaseResponseDto<MemberInfoResponseDto>> getMemberById(
+        @PathVariable Long id
+    ) {
+        MemberInfoResponseDto res = memberService.getMemberInfo(id);
+
+        return ResponseEntity.ok()
+            .body(BaseResponseDto.success(res));
+    }
+
     @PostMapping("/login")
-    public ResponseEntity<?> login(
+    public ResponseEntity<BaseResponseDto<?>> login(
         @RequestBody LoginDto loginDto
     ) {
         String token = authService.login(loginDto);
@@ -40,7 +51,7 @@ public class MemberController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(
+    public ResponseEntity<BaseResponseDto<?>> register(
         @RequestBody @Validated SignUpRequestDto requestDto
     ) {
         Long id = memberService.requestSignUp(requestDto);
@@ -53,12 +64,12 @@ public class MemberController {
 
     @PreAuthorize("hasRole('MASTER')")
     @PatchMapping("/{id}/status")
-    public ResponseEntity<?> updateStatus(
+    public ResponseEntity<BaseResponseDto<?>> updateStatus(
         @PathVariable Long id,
         @RequestBody StatusChangeRequestDto requestDto
     ) {
 
-        StatusUpdateResponseDto res = memberService.updateStatus(requestDto);
+        StatusUpdateResponseDto res = memberService.updateStatus(requestDto, id);
 
         return ResponseEntity.noContent()
             .build();

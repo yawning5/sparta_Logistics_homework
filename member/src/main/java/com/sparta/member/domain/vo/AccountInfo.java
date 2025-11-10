@@ -10,7 +10,7 @@ public record AccountInfo(
 ) {
     public AccountInfo {
         requireAllNonNull(
-            "type", name,
+            "name", name,
             "password", password,
             "email", email,
             "slackId", slackId

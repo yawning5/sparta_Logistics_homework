@@ -1,5 +1,6 @@
 package com.sparta.member.infrastructure.userDetails;
 
+import com.sparta.member.domain.enums.Status;
 import com.sparta.member.infrastructure.persistence.jpa.entity.MemberJpa;
 import java.util.Collection;
 import java.util.List;
@@ -48,7 +49,7 @@ public class CustomUserDetails implements UserDetails {
     // TODO: 계정의 승인 상태에 따라 false 값 반환하도록 변경
     @Override
     public boolean isEnabled() {
-        return true;
+        return member.getStatus() == Status.APPROVED;
     }
 
     @Override

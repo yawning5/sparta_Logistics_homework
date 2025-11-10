@@ -25,4 +25,6 @@ public interface MemberRepository {
     List<Member> saveAll(List<Member> members);
 
     boolean existsByEmail(String email);
+
+    Member findById(Long id);
 }

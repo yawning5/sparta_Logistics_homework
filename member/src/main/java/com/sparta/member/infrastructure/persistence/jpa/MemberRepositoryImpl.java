@@ -68,4 +68,11 @@ public class MemberRepositoryImpl implements MemberRepository {
         return memberJpaRepository.findByEmail(email).isPresent();
     }
 
+    @Override
+    public Member findById(Long id) {
+        return mapper.toMember(memberJpaRepository.findById(id)
+            .orElseThrow(() ->
+                new CustomException(ErrorCode.MEMBER_NOT_FOUND)
+            ));
+    }
 }

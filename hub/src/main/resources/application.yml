@@ -1,9 +1,9 @@
 spring:
   application:
-    name: vendor-service
+    name: hub-service
 
   datasource:
-    url: jdbc:postgresql://postgresql:5432/vendor
+    url: jdbc:postgresql://postgresql:5432/hub_db
     username: root
     password: root
     driver-class-name: org.postgresql.Driver

@@ -1,0 +1,53 @@
+spring:
+  application:
+    name: vendor-service
+
+  datasource:
+    url: jdbc:postgresql://postgresql:5432/vendor
+    username: root
+    password: root
+    driver-class-name: org.postgresql.Driver
+
+  config:
+    import: "optional:configserver:"
+
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+      defer-datasource-initialization: true
+
+  cloud:
+    config:
+      discovery:
+        enabled: true
+        service-id: config-server
+      fail-fast: true   # config 서버 접근 실패시 즉시 예외 발생
+      retry:
+        max-attempts: 6
+        initial-interval: 2000
+        multiplier: 1.5
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://${EUREKA-HOST:localhost}:18080/eureka/
+  instance:
+    hostname: vendor-service
+
+
+management:
+  zipkin:
+    tracing:
+      endpoint: "http://zipkin:9411/api/v2/spans"
+  tracing:
+    enabled: true
+    sampling:
+      probability: 1.0
+
+jwt:
+  secret: dfkldfdfdfdfdfdfdfdfdfdfdfdfdfdfd

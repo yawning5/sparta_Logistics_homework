@@ -1,0 +1,101 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.5.7'
+    id 'io.spring.dependency-management' version '1.1.7'
+}
+
+group = 'com.sparta'
+version = '0.0.1-SNAPSHOT'
+description = 'member'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    set('springCloudVersion', "2025.0.0")
+}
+
+dependencies {
+    // --- Core & Security ---
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+    implementation 'org.springframework.security:spring-security-oauth2-jose'
+
+    // --- Spring Cloud ---
+    implementation 'org.springframework.cloud:spring-cloud-starter-config'
+    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+
+    // --- Data & Database ---
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    runtimeOnly 'org.postgresql:postgresql'
+    runtimeOnly 'com.h2database:h2'
+
+    // --- QueryDSL ---
+    implementation 'io.github.openfeign.querydsl:querydsl-core:7.0'
+    implementation 'io.github.openfeign.querydsl:querydsl-jpa:7.0'
+    annotationProcessor 'io.github.openfeign.querydsl:querydsl-apt:7.0:jpa'
+
+    // --- Lombok ---
+    compileOnly 'org.projectlombok:lombok:1.18.42'
+    annotationProcessor 'org.projectlombok:lombok:1.18.42'
+    testCompileOnly 'org.projectlombok:lombok:1.18.42'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.42'
+
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.14'
+
+    // --- Test ---
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'org.instancio:instancio-junit:5.5.1'
+    testImplementation 'org.testcontainers:postgresql'
+    testImplementation 'org.springframework.boot:spring-boot-testcontainers'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testImplementation 'io.rest-assured:rest-assured:5.5.0'
+    testImplementation 'io.rest-assured:json-path:5.5.0'
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
+
+// Querydsl 이 생성하는 Q 클래스가 저장된 디렉터리를 지정
+// 경로 변수 정의
+// layout.buildDirectory 는 Gradle 자동으로 관리하는 빌드 폴더
+def generated = layout.buildDirectory.dir("generated/querydsl")
+
+// Gradle 에서 모든 Java 컴파일 작업에 대해 추가 설정을 하는 블록
+// 즉, compileJava, compileTestJava 같은 Task 에 동일하게 적용된다.
+tasks.named("compileJava") {
+    // 자바의 annotation processor 가 생성하는소스 파일의 출력 경로를 generated 로 지정
+    // Querydsl 은 컴파일 중 @Entity 를 분석해 자동으로 QMember.java 같은 소스를 생성
+    // 이때 그 결과를 build/generated/querydsl 폴더에 저장하도록 지정
+    options.generatedSourceOutputDirectory.set(generated)
+}
+
+
+// 방금 생성된 build/generated/querydsl 폴더를 정식 Java 소스 경로로 등록
+// 이렇게 해야 IDE 와 Gardle 이 QMember.java 를 일반 소스처럼 인식해 import 와 자동완성 작동
+sourceSets {
+    main {
+        java.srcDirs += generated
+    }
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+

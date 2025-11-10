@@ -1,0 +1,4 @@
+CREATE DATABASE vendor;
+CREATE DATABASE product;
+CREATE DATABASE delivery;
+CREATE DATABASE d_order;

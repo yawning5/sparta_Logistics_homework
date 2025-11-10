@@ -1,0 +1,14 @@
+# src/test/resources/application.yml
+spring:
+  config:
+    import: ""           # configserver import 완전 해제
+  cloud:
+    config:
+      enabled: false
+    discovery:
+      enabled: false
+eureka:
+  client:
+    enabled: false
+    register-with-eureka: false
+    fetch-registry: false

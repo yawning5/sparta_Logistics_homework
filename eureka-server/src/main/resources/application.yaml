@@ -9,9 +9,11 @@ eureka:
   client:
     register-with-eureka: false
     fetch-registry: false
+    service-url:
+      defaultZone: http://eureka-server:18080/eureka/
 
   instance:
-    hostname: localhost
+    hostname: Eureka-server
 
   server:
     enable-self-preservation: false

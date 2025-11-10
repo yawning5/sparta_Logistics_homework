@@ -10,6 +10,7 @@ import com.sparta.vendor.presentation.dto.BaseResponseDTO;
 import com.sparta.vendor.presentation.dto.request.CreateVendorRequestDTO;
 import com.sparta.vendor.presentation.dto.request.UpdateVendorRequestDTO;
 import com.sparta.vendor.presentation.dto.response.VendorResponseDTO;
+import jakarta.validation.Valid;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -39,7 +40,7 @@ public class ExternalVendorController {
     @PostMapping
     @PreAuthorize("hasAnyRole('MASTER', 'HUB')")
     public ResponseEntity<?> createVendor(@AuthenticationPrincipal CustomUserDetails user,
-        @RequestBody CreateVendorRequestDTO request) {
+        @Valid @RequestBody CreateVendorRequestDTO request) {
 
         CreateVendorCommand command = CreateVendorCommand.of(user, request);
 
@@ -62,7 +63,7 @@ public class ExternalVendorController {
     @PreAuthorize("hasAnyRole('MASTER', 'HUB', 'COMPANY')")
     public ResponseEntity<?> updateVendor(@PathVariable UUID id,
         @AuthenticationPrincipal CustomUserDetails user,
-        @RequestBody UpdateVendorRequestDTO request) {
+        @Valid @RequestBody UpdateVendorRequestDTO request) {
 
         UpdateVendorCommand command = UpdateVendorCommand.of(id, user, request);
 

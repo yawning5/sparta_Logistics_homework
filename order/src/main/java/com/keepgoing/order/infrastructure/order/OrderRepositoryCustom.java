@@ -30,5 +30,7 @@ public interface OrderRepositoryCustom {
 
     int updateOrderStateToCompleted(UUID orderId, LocalDateTime now);
 
+    int updateOrderStateToPaidForPayment(UUID orderId, Long version, LocalDateTime now);
+
     int deleteOrder(UUID orderId, Long memberId, LocalDateTime now, Long version);
 }

@@ -11,8 +11,24 @@ spring:
         enabled: true
         service-id: config-server
 
+    openfeign:
+      client:
+        config:
+          default:
+            connect-timeout: 2000
+            read-timeout: 3000
+            logger-level: basic
+
+          product-service:
+            connect-timeout: 2000
+            read-timeout: 3000
+
+          hub-service:
+            connect-timeout: 2000
+            read-timeout: 3000
+
   datasource:
-    url: jdbc:postgresql://postgresql-server:5432/default
+    url: jdbc:postgresql://postgresql-server:5432/d_order
     username: root
     password: root
 

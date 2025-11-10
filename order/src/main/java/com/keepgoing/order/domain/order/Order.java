@@ -2,7 +2,6 @@ package com.keepgoing.order.domain.order;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
@@ -20,9 +19,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.FilterDef;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Getter
 @Entity
@@ -75,6 +71,10 @@ public class Order{
     @Column(name = "order_state", nullable = false)
     private OrderState orderState;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "cancel_state", nullable = false)
+    private CancelState cancelState;
+
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
 
@@ -121,7 +121,7 @@ public class Order{
         UUID supplierId, String supplierName,
         UUID receiverId, String receiverName,
         UUID productId, String productName,
-        UUID deliveryId, OrderState orderState,
+        UUID deliveryId, OrderState orderState, CancelState cancelState,
         Integer quantity, Integer totalPrice, UUID idempotencyKey,
         LocalDateTime deliveryDueAt, String deliveryRequestNote,
         LocalDateTime orderedAt
@@ -145,6 +145,7 @@ public class Order{
         this.productName = productName;
         this.deliveryId = deliveryId;
         this.orderState = (orderState != null) ? orderState : OrderState.PENDING_VALIDATION;
+        this.cancelState = (orderState != null) ? cancelState : CancelState.NONE;
         this.quantity = quantity;
         this.totalPrice = totalPrice;
         this.idempotencyKey = idempotencyKey;
@@ -171,6 +172,7 @@ public class Order{
             .productId(productId)
             .productName(productName)
             .orderState(OrderState.PENDING_VALIDATION)
+            .cancelState(CancelState.NONE)
             .quantity(quantity)
             .totalPrice(totalPrice)
             .idempotencyKey(UUID.randomUUID())
@@ -186,6 +188,7 @@ public class Order{
         if (this.createdAt == null) this.createdAt = now;
         if (this.updatedAt == null) this.updatedAt = now;
         if (this.orderState == null) this.orderState = OrderState.PENDING_VALIDATION;
+        if (this.cancelState == null) this.cancelState = CancelState.NONE;
 
     }
 
@@ -222,6 +225,8 @@ public class Order{
         this.hubId = hubId;
     }
 
-
+    public boolean isCancellationInProgress() {
+        return cancelState != CancelState.NONE;
+    }
 
 }

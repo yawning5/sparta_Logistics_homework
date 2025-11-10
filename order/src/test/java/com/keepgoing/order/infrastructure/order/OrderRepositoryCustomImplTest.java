@@ -439,8 +439,6 @@ class OrderRepositoryCustomImplTest {
         // when
         int result = orderRepository.updateOrderStateToPaidForPayment(
             orderId,
-            OrderState.AWAITING_PAYMENT,
-            OrderState.PAID,
             order.getVersion(),
             now
         );

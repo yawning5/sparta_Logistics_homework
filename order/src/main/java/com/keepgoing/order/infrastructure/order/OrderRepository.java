@@ -11,23 +11,23 @@ import org.springframework.data.repository.query.Param;
 
 public interface OrderRepository extends JpaRepository<Order, UUID>, OrderRepositoryCustom {
 
-    @Modifying(clearAutomatically = true, flushAutomatically = true)
-    @Query(
-    """
-      UPDATE Order o 
-          SET o.orderState = :after, 
-              o.version = o.version + 1, 
-              o.updatedAt = :now 
-      WHERE o.id = :orderId 
-          AND o.orderState = :before  
-          AND o.version = :version 
-    """
-    )
-    int updateOrderStateToPaidForPayment(
-        @Param("orderId") UUID orderId,
-        @Param("before") OrderState before,
-        @Param("after") OrderState after,
-        @Param("version") Long version,
-        @Param("now")LocalDateTime now
-    );
+//    @Modifying(clearAutomatically = true, flushAutomatically = true)
+//    @Query(
+//    """
+//      UPDATE Order o
+//          SET o.orderState = :after,
+//              o.version = o.version + 1,
+//              o.updatedAt = :now
+//      WHERE o.id = :orderId
+//          AND o.orderState = :before
+//          AND o.version = :version
+//    """
+//    )
+//    int updateOrderStateToPaidForPayment(
+//        @Param("orderId") UUID orderId,
+//        @Param("before") OrderState before,
+//        @Param("after") OrderState after,
+//        @Param("version") Long version,
+//        @Param("now")LocalDateTime now
+//    );
 }

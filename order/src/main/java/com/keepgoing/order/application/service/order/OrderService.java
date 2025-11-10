@@ -135,38 +135,43 @@ public class OrderService {
             () -> new NotFoundOrderException("해당 주문을 찾을 수 없습니다.")
         ); // 읽기용
 
-        String payloadForNotification = makePayloadForNotification(order);
-        orderOutboxRepository.save(OrderOutbox.create(
-            UUID.randomUUID(),
-            AggregateType.ORDER,
-            order.getId().toString(),
-            EventType.PAID,
-            OutBoxState.NOTIFICATION_PENDING,
-            payloadForNotification,
-            LocalDateTime.now(clock)
-        ));
+        int result = orderRepository.updateOrderStateToPaid(orderId, LocalDateTime.now(clock));
 
-        int u = orderRepository.updateOrderStateToPaid(orderId, LocalDateTime.now(clock));
-        if (u == 0) throw new IllegalStateException("전이 실패: " + orderId);
+        if (result == 1) {
+            Order fresh = orderRepository.findById(orderId).orElseThrow();
+            String payloadForNotification = makePayloadForNotification(fresh);
+            orderOutboxRepository.save(OrderOutbox.create(
+                UUID.randomUUID(),
+                AggregateType.ORDER,
+                fresh.getId().toString(),
+                EventType.PAID,
+                OutBoxState.NOTIFICATION_PENDING,
+                payloadForNotification,
+                LocalDateTime.now(clock)
+            ));
+        }
+
     }
 
     @Transactional
     public void toCompleted(UUID orderId) {
         Order order = orderRepository.findById(orderId).orElseThrow(); // 읽기용
 
-        String payloadForDelivery = makePayloadForDelivery(order);
+        int u = orderRepository.updateOrderStateToCompleted(orderId, LocalDateTime.now(clock));
+        if (u == 0) throw new IllegalStateException("전이 실패: " + orderId);
+
+        Order fresh = orderRepository.findById(orderId).orElseThrow();
+        String payloadForDelivery = makePayloadForDelivery(fresh);
         orderOutboxRepository.save(OrderOutbox.create(
             UUID.randomUUID(),
             AggregateType.ORDER,
-            order.getId().toString(),
+            fresh.getId().toString(),
             EventType.COMPLETED,
             OutBoxState.DELIVERY_PENDING,
             payloadForDelivery,
             LocalDateTime.now(clock)
         ));
 
-        int u = orderRepository.updateOrderStateToCompleted(orderId, LocalDateTime.now(clock));
-        if (u == 0) throw new IllegalStateException("전이 실패: " + orderId);
     }
 
     @Transactional
@@ -194,8 +199,6 @@ public class OrderService {
         LocalDateTime now = LocalDateTime.now(clock);
         int updated = orderRepository.updateOrderStateToPaidForPayment(
             orderId,
-            OrderState.AWAITING_PAYMENT,
-            OrderState.PAID,
             order.getVersion(),
             now
         );

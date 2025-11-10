@@ -4,6 +4,7 @@ package com.keepgoing.order.infrastructure.order;
 
 import static com.keepgoing.order.domain.order.QOrder.*;
 
+import com.keepgoing.order.domain.order.CancelState;
 import com.keepgoing.order.domain.order.Order;
 import com.keepgoing.order.domain.order.OrderState;
 import com.querydsl.core.types.OrderSpecifier;
@@ -37,7 +38,10 @@ public class OrderRepositoryCustomImpl implements OrderRepositoryCustom{
         List<UUID> content = queryFactory
             .select(order.id)
             .from(order)
-            .where(order.orderState.in(states))
+            .where(
+                order.orderState.in(states),
+                order.cancelState.eq(CancelState.NONE)
+            )
             .orderBy(order.createdAt.asc())
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
@@ -46,7 +50,10 @@ public class OrderRepositoryCustomImpl implements OrderRepositoryCustom{
         JPAQuery<Long> countQuery = queryFactory
             .select(order.count())
             .from(order)
-            .where(order.orderState.in(states));
+            .where(
+                order.orderState.in(states),
+                order.cancelState.eq(CancelState.NONE)
+            );
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
     }
 
@@ -91,7 +98,8 @@ public class OrderRepositoryCustomImpl implements OrderRepositoryCustom{
             .set(order.updatedAt, now)
             .where(
                 order.id.eq(orderId),
-                order.orderState.eq(beforeState)
+                order.orderState.eq(beforeState),
+                order.cancelState.eq(CancelState.NONE)
             )
             .execute();
 
@@ -159,6 +167,25 @@ public class OrderRepositoryCustomImpl implements OrderRepositoryCustom{
             .where(
                 order.id.eq(orderId),
                 order.orderState.eq(OrderState.COMPLETION_IN_PROGRESS)
+            )
+            .execute();
+        em.flush(); em.clear();
+
+        return (int) updated;
+    }
+
+    @Override
+    public int updateOrderStateToPaidForPayment(UUID orderId, Long version, LocalDateTime now) {
+        long updated = queryFactory
+            .update(order)
+            .set(order.orderState, OrderState.PAID)
+            .set(order.version, version + 1)
+            .set(order.updatedAt, now)
+            .where(
+                order.id.eq(orderId),
+                order.orderState.eq(OrderState.AWAITING_PAYMENT),
+                order.version.eq(version),
+                order.cancelState.eq(CancelState.NONE)
             )
             .execute();
         em.flush(); em.clear();

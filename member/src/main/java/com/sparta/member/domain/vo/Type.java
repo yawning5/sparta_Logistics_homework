@@ -1,4 +1,4 @@
-package com.keepgoing.member.domain.vo;
+package com.sparta.member.domain.vo;
 
 public enum Type {
     HUB("허브 소속"),

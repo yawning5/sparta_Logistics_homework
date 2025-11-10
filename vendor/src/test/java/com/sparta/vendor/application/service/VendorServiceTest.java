@@ -1,4 +1,4 @@
-package com.keepgoing.vendor.application.service;
+package com.sparta.vendor.application.service;
 
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -10,11 +10,11 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.keepgoing.vendor.application.command.CreateVendorCommand;
-import com.keepgoing.vendor.application.dto.VendorResult;
-import com.keepgoing.vendor.application.exception.ForbiddenOperationException;
-import com.keepgoing.vendor.domain.vo.UserRole;
-import com.keepgoing.vendor.domain.vo.VendorType;
+import com.sparta.vendor.application.command.CreateVendorCommand;
+import com.sparta.vendor.application.dto.VendorResult;
+import com.sparta.vendor.application.exception.ForbiddenOperationException;
+import com.sparta.vendor.domain.vo.UserRole;
+import com.sparta.vendor.domain.vo.VendorType;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

@@ -1,4 +1,4 @@
-package com.keepgoing.vendor;
+package com.sparta.vendor;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

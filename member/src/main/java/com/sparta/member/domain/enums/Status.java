@@ -1,4 +1,4 @@
-package com.keepgoing.member.domain.enums;
+package com.sparta.member.domain.enums;
 
 public enum Status {
     PENDING("승인 대기"),

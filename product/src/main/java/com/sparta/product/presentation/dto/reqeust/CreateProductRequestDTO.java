@@ -1,4 +1,4 @@
-package com.keepgoing.product.presentation.dto.reqeust;
+package com.sparta.product.presentation.dto.reqeust;
 
 import jakarta.validation.constraints.NotNull;
 import java.math.BigInteger;

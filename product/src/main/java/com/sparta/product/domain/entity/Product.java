@@ -1,10 +1,10 @@
-package com.keepgoing.product.domain.entity;
+package com.sparta.product.domain.entity;
 
-import com.keepgoing.product.application.command.UpdateProductCommand;
-import com.keepgoing.product.application.exception.ErrorCode;
-import com.keepgoing.product.application.exception.ForbiddenOperationException;
-import com.keepgoing.product.domain.vo.VendorId;
-import com.keepgoing.product.domain.vo.HubId;
+import com.sparta.product.application.command.UpdateProductCommand;
+import com.sparta.product.application.exception.ErrorCode;
+import com.sparta.product.application.exception.ForbiddenOperationException;
+import com.sparta.product.domain.vo.VendorId;
+import com.sparta.product.domain.vo.HubId;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.Column;

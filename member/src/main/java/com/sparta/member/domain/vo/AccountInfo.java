@@ -1,6 +1,6 @@
-package com.keepgoing.member.domain.vo;
+package com.sparta.member.domain.vo;
 
-import static com.keepgoing.member.domain.support.ArgsValidator.requireAllNonNull;
+import static com.sparta.member.domain.support.ArgsValidator.requireAllNonNull;
 
 public record AccountInfo(
     String name,

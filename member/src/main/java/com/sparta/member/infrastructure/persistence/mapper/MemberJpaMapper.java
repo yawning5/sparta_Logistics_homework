@@ -1,8 +1,8 @@
-package com.keepgoing.member.infrastructure.persistence.mapper;
+package com.sparta.member.infrastructure.persistence.mapper;
 
-import com.keepgoing.member.domain.model.Member;
-import com.keepgoing.member.domain.vo.Affiliation;
-import com.keepgoing.member.infrastructure.persistence.jpa.entity.MemberJpa;
+import com.sparta.member.domain.model.Member;
+import com.sparta.member.domain.vo.Affiliation;
+import com.sparta.member.infrastructure.persistence.jpa.entity.MemberJpa;
 import java.util.List;
 import org.springframework.stereotype.Component;
 

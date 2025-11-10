@@ -1,17 +1,5 @@
-package com.keepgoing.member.application.service;
+package com.sparta.member.application.service;
 
-<<<<<<< HEAD
-import com.keepgoing.member.domain.enums.Status;
-import com.keepgoing.member.domain.vo.Affiliation;
-import com.keepgoing.member.interfaces.dto.SignUpRequestDto;
-import com.keepgoing.member.application.mapper.ApplicationMapper;
-import com.keepgoing.member.domain.model.Member;
-import com.keepgoing.member.domain.repository.MemberRepository;
-import com.keepgoing.member.global.CustomException;
-import com.keepgoing.member.global.ErrorCode;
-import com.keepgoing.member.interfaces.dto.StatusChangeRequestDto;
-import com.keepgoing.member.interfaces.dto.StatusUpdateResponseDto;
-=======
 import com.sparta.member.domain.enums.Status;
 import com.sparta.member.domain.vo.Affiliation;
 import com.sparta.member.interfaces.dto.MemberInfoResponseDto;
@@ -28,7 +16,6 @@ import jakarta.persistence.criteria.CriteriaBuilder.In;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
->>>>>>> 84b265aace245f24c5ee8f8823dd3a33829a6688
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

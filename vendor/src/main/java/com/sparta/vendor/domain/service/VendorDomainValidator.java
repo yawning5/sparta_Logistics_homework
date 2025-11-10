@@ -1,9 +1,9 @@
-package com.keepgoing.vendor.domain.service;
+package com.sparta.vendor.domain.service;
 
-import com.keepgoing.vendor.application.exception.ErrorCode;
-import com.keepgoing.vendor.application.exception.ForbiddenOperationException;
-import com.keepgoing.vendor.domain.entity.Vendor;
-import com.keepgoing.vendor.domain.vo.UserRole;
+import com.sparta.vendor.application.exception.ErrorCode;
+import com.sparta.vendor.application.exception.ForbiddenOperationException;
+import com.sparta.vendor.domain.entity.Vendor;
+import com.sparta.vendor.domain.vo.UserRole;
 import java.util.UUID;
 import lombok.experimental.UtilityClass;
 

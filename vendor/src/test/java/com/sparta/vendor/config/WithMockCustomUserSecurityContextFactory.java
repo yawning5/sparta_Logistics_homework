@@ -1,6 +1,6 @@
-package com.keepgoing.vendor.config;
+package com.sparta.vendor.config;
 
-import com.keepgoing.vendor.infrastructure.security.CustomUserDetails;
+import com.sparta.vendor.infrastructure.security.CustomUserDetails;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;

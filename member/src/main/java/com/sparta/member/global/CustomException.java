@@ -1,4 +1,4 @@
-package com.keepgoing.member.global;
+package com.sparta.member.global;
 
 import lombok.Getter;
 

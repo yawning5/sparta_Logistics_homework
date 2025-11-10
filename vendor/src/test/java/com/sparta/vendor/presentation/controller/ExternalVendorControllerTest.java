@@ -1,4 +1,4 @@
-package com.keepgoing.vendor.presentation.controller;
+package com.sparta.vendor.presentation.controller;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -11,14 +11,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.keepgoing.vendor.application.command.CreateVendorCommand;
-import com.keepgoing.vendor.application.dto.VendorResult;
-import com.keepgoing.vendor.application.service.VendorService;
-import com.keepgoing.vendor.config.WithMockCustomUser;
-import com.keepgoing.vendor.domain.vo.UserRole;
-import com.keepgoing.vendor.domain.vo.VendorType;
-import com.keepgoing.vendor.presentation.dto.VendorTypeDTO;
-import com.keepgoing.vendor.presentation.dto.request.CreateVendorRequestDTO;
+import com.sparta.vendor.application.command.CreateVendorCommand;
+import com.sparta.vendor.application.dto.VendorResult;
+import com.sparta.vendor.application.service.VendorService;
+import com.sparta.vendor.config.WithMockCustomUser;
+import com.sparta.vendor.domain.vo.UserRole;
+import com.sparta.vendor.domain.vo.VendorType;
+import com.sparta.vendor.presentation.dto.VendorTypeDTO;
+import com.sparta.vendor.presentation.dto.request.CreateVendorRequestDTO;
 import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

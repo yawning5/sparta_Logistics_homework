@@ -1,4 +1,4 @@
-package com.keepgoing.member.domain.enums;
+package com.sparta.member.domain.enums;
 
 public enum Role {
     MASTER("마스터 관리자"),

@@ -1,6 +1,6 @@
-package com.keepgoing.product.infrastructure.security;
+package com.sparta.product.infrastructure.security;
 
-import com.keepgoing.product.infrastructure.provider.JwtTokenProvider;
+import com.sparta.product.infrastructure.provider.JwtTokenProvider;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

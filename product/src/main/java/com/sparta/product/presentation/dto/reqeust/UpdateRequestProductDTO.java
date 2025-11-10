@@ -1,4 +1,4 @@
-package com.keepgoing.product.presentation.dto.reqeust;
+package com.sparta.product.presentation.dto.reqeust;
 
 import java.math.BigInteger;
 import java.util.UUID;

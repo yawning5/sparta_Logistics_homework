@@ -1,8 +1,8 @@
-package com.keepgoing.vendor.presentation.exception;
+package com.sparta.vendor.presentation.exception;
 
-import com.keepgoing.vendor.application.exception.BusinessException;
-import com.keepgoing.vendor.application.exception.ErrorCode;
-import com.keepgoing.vendor.presentation.dto.BaseResponseDTO;
+import com.sparta.vendor.application.exception.BusinessException;
+import com.sparta.vendor.application.exception.ErrorCode;
+import com.sparta.vendor.presentation.dto.BaseResponseDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;

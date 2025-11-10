@@ -1,4 +1,4 @@
-package com.keepgoing.member.domain.support;
+package com.sparta.member.domain.support;
 
 public final class ArgsValidator {
 

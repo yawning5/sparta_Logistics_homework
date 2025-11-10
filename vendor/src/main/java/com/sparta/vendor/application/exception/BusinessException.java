@@ -1,4 +1,4 @@
-package com.keepgoing.vendor.application.exception;
+package com.sparta.vendor.application.exception;
 
 public abstract class BusinessException extends RuntimeException {
 

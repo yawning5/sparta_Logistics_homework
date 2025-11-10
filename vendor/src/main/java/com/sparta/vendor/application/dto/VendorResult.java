@@ -1,7 +1,7 @@
-package com.keepgoing.vendor.application.dto;
+package com.sparta.vendor.application.dto;
 
-import com.keepgoing.vendor.domain.entity.Vendor;
-import com.keepgoing.vendor.domain.vo.VendorType;
+import com.sparta.vendor.domain.entity.Vendor;
+import com.sparta.vendor.domain.vo.VendorType;
 import java.util.UUID;
 import lombok.Builder;
 

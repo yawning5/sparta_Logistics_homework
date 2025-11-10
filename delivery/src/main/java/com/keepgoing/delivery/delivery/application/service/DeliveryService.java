@@ -9,8 +9,6 @@ import com.keepgoing.delivery.delivery.domain.repository.DeliveryRouteRepository
 import com.keepgoing.delivery.delivery.domain.service.DeliveryDomainService;
 import com.keepgoing.delivery.delivery.domain.vo.*;
 import com.keepgoing.delivery.deliveryperson.domain.entity.DeliveryPerson;
-import com.keepgoing.delivery.global.exception.BusinessException;
-import com.keepgoing.delivery.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,7 +37,7 @@ public class DeliveryService {
     ) {
         // 중복 생성 방지
         if (deliveryRepository.existsByOrderId(orderId)) {
-            throw new BusinessException(ErrorCode.DELIVERY_ALREADY_EXISTS);
+            throw new IllegalStateException("이미 해당 주문에 대한 배송이 존재합니다.");
         }
 
         // 배송 생성
@@ -183,7 +181,7 @@ public class DeliveryService {
     @Transactional(readOnly = true)
     public Delivery findDeliveryByIdWithRoutes(UUID deliveryId) {
         Delivery delivery = deliveryRepository.findByIdAndIsDeletedFalse(deliveryId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.DELIVERY_NOT_FOUND));
+                .orElseThrow(() -> new IllegalArgumentException("배송 정보를 찾을 수 없습니다."));
 
         List<DeliveryRoute> routes = deliveryRouteRepository
                 .findByDeliveryIdOrderByRouteSeq(deliveryId);
@@ -196,14 +194,14 @@ public class DeliveryService {
     @Transactional(readOnly = true)
     public Delivery findDeliveryById(UUID deliveryId) {
         return deliveryRepository.findByIdAndIsDeletedFalse(deliveryId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.DELIVERY_NOT_FOUND));
+                .orElseThrow(() -> new IllegalArgumentException("배송 정보를 찾을 수 없습니다."));
     }
 
     // 배송 조회 (주문 id)
     @Transactional(readOnly = true)
     public Delivery findDeliveryByOrderId(UUID orderId) {
         return deliveryRepository.findByOrderIdAndIsDeletedFalse(orderId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.DELIVERY_BY_ORDER_NOT_FOUND));
+                .orElseThrow(() -> new IllegalArgumentException("해당 주문의 배송 정보를 찾을 수 없습니다."));
     }
 
     // 배송 상태 별 목록 조회

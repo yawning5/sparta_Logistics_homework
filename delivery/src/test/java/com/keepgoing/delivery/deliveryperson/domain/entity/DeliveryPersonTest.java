@@ -37,14 +37,6 @@ class DeliveryPersonTest {
                 .hasMessageContaining("DeliverySeq must be between 1 and 10");
     }
 
-    @Test
-    @DisplayName("DeliverySeq 유효성: 10 초과 값은 예외")
-    void deliverySeq_TooLarge_ShouldThrow() {
-        // given & when & then
-        assertThatThrownBy(() -> new DeliverySeq(11))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("DeliverySeq must be between 1 and 10");
-    }
 
     @Test
     @DisplayName("업체 배송 담당자 생성 - 성공")

@@ -5,8 +5,6 @@ import com.keepgoing.delivery.delivery.domain.vo.Distance;
 import com.keepgoing.delivery.delivery.domain.vo.Duration;
 import com.keepgoing.delivery.delivery.domain.vo.RouteSeq;
 import com.keepgoing.delivery.deliveryperson.domain.entity.DeliveryPerson;
-import com.keepgoing.delivery.global.exception.BusinessException;
-import com.keepgoing.delivery.global.exception.ErrorCode;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -41,7 +39,7 @@ public class DeliveryDomainService {
     // 배송 담당자 선택 (round-robin)
     public DeliveryPerson selectDeliveryPerson(List<DeliveryPerson> availablePersons) {
         if (availablePersons == null || availablePersons.isEmpty()) {
-            throw new BusinessException(ErrorCode.HUB_DELIVERY_PERSON_NOT_AVAILABLE);
+            throw new IllegalStateException("사용 가능한 허브 배송담당자가 없습니다.");
         }
 
         return availablePersons.stream()
@@ -49,6 +47,6 @@ public class DeliveryDomainService {
                         p1.getDeliverySeq().value(),
                         p2.getDeliverySeq().value()
                 ))
-                .orElseThrow(() -> new BusinessException(ErrorCode.DELIVERY_PERSON_ASSIGN_FAILED));
+                .orElseThrow(() -> new IllegalStateException("배송담당자 배정 실패"));
     }
 }

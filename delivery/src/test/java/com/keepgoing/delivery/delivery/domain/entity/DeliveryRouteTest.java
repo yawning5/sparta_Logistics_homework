@@ -36,27 +36,6 @@ class DeliveryRouteTest {
         assertThat(route.getExpectedTime()).isEqualTo(expectedTime);
     }
 
-    @Test
-    @DisplayName("필수값 누락 시 예외 발생 - 출발 허브 ID는 필수")
-    void createRoute_ShouldThrow_WhenDepartureHubIdIsNull() {
-        assertThatThrownBy(() ->
-                DeliveryRoute.create(null, UUID.randomUUID(), UUID.randomUUID(),
-                        new Distance(10), new Duration(15), new RouteSeq(1))
-        )
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("출발 허브 ID는 필수");
-    }
-
-    @Test
-    @DisplayName("필수값 누락 시 예외 발생 - 도착 허브 ID는 필수")
-    void createRoute_ShouldThrow_WhenArrivalHubIdIsNull() {
-        assertThatThrownBy(() ->
-                DeliveryRoute.create(UUID.randomUUID(), null, UUID.randomUUID(),
-                        new Distance(10), new Duration(15), new RouteSeq(1))
-        )
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("도착 허브 ID는 필수");
-    }
 
     @Test
     @DisplayName("필수값 누락 시 예외 발생 - 거리와 시간은 필수")

@@ -1,11 +1,9 @@
 package com.sparta.member.global;
 
-import com.fasterxml.jackson.databind.ser.Serializers.Base;
-import com.sparta.member.application.dto.BaseResponseDto;
+import com.sparta.member.interfaces.dto.BaseResponseDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.method.MethodValidationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;

@@ -10,7 +10,9 @@ public interface QueryDslMemberRepository {
         String slackId,
         String affiliationType,
         String affiliationName,
-        String email
+        String email,
+        String name,
+        String status
     );
 
 }

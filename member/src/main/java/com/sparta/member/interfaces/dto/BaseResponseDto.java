@@ -1,4 +1,4 @@
-package com.sparta.member.application.dto;
+package com.sparta.member.interfaces.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.sparta.member.global.ErrorCode;

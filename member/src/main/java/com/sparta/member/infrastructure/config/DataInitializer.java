@@ -26,7 +26,7 @@ public class DataInitializer {
 
     @Bean
     @Order(1)
-    public CommandLineRunner initDatabase(MemberRepository memberRepository) {
+    public CommandLineRunner initDatabase() {
         log.info("init database start MASTER account");
         return args -> {
             String masterEmail = "master@master.com";

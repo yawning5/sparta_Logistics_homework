@@ -3,7 +3,7 @@ package com.sparta.member;
 import static io.restassured.RestAssured.given;
 import static org.instancio.Select.field;
 
-import com.sparta.member.application.dto.LoginDto;
+import com.sparta.member.interfaces.dto.LoginDto;
 import com.sparta.member.domain.enums.Role;
 import com.sparta.member.domain.enums.Status;
 import com.sparta.member.domain.model.Member;

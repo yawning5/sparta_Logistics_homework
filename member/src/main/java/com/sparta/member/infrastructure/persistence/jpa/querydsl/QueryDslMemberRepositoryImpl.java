@@ -6,6 +6,7 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.sparta.member.domain.enums.Status;
 import com.sparta.member.domain.vo.Type;
 import com.sparta.member.infrastructure.persistence.jpa.entity.MemberJpa;
 import com.sparta.member.infrastructure.persistence.jpa.entity.QMemberJpa;
@@ -20,7 +21,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @RequiredArgsConstructor
-public class QueryDslMemberRepositoryImpl implements QueryDslMemberRepository{
+public class QueryDslMemberRepositoryImpl implements QueryDslMemberRepository {
 
     private final JPAQueryFactory query;
 
@@ -30,7 +31,9 @@ public class QueryDslMemberRepositoryImpl implements QueryDslMemberRepository{
         String slackId,
         String affiliationType,
         String affiliationName,
-        String email
+        String email,
+        String name,
+        String status
     ) {
         QMemberJpa qMemberJpa = QMemberJpa.memberJpa;
 
@@ -46,6 +49,12 @@ public class QueryDslMemberRepositoryImpl implements QueryDslMemberRepository{
         }
         if (email != null) {
             where.and(qMemberJpa.email.eq(email));
+        }
+        if (name != null) {
+            where.and(qMemberJpa.name.eq(name));
+        }
+        if (status != null) {
+            where.and(qMemberJpa.status.eq(Status.valueOf(status)));
         }
 
         List<MemberJpa> members = query
@@ -71,8 +80,26 @@ public class QueryDslMemberRepositoryImpl implements QueryDslMemberRepository{
     private OrderSpecifier<?>[] getOrderSpecifiers(Pageable pageable, QMemberJpa qMemberJpa) {
         List<OrderSpecifier<?>> orderSpecifiers = new ArrayList<>();
 
+        // sort 에 MemberJpa 에 없는 필드명이 들어올 경우 방어하기 위한 코드
+        List<String> allowedSortProperties = List.of(
+            "id",
+            "name",
+            "email",
+            "slackId",
+            "affiliationName",
+            "createdAt",
+            "updatedAt",
+            "deletedAt"
+        );
+
         // Pageable 에서 정렬조건이 있으면 변환
         for (Sort.Order order : pageable.getSort()) {
+
+            // 여기서 정렬 필드 검사
+            if (!allowedSortProperties.contains(order.getProperty())) {
+                continue; // 잘못된 정렬 필드는 무시
+            }
+
             PathBuilder<?> pathBuilder
                 = new PathBuilder<>(qMemberJpa.getType(), qMemberJpa.getMetadata());
             orderSpecifiers.add(

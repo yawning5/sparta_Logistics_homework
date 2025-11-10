@@ -1,20 +1,26 @@
 package com.sparta.member.interfaces.web;
 
-import com.sparta.member.application.dto.BaseResponseDto;
-import com.sparta.member.application.dto.LoginDto;
+import com.sparta.member.interfaces.dto.BaseResponseDto;
+import com.sparta.member.interfaces.dto.LoginDto;
 import com.sparta.member.application.service.AuthService;
 import com.sparta.member.application.service.MemberService;
+import com.sparta.member.interfaces.dto.SearchRequestDto;
 import com.sparta.member.interfaces.dto.SignUpRequestDto;
 import com.sparta.member.interfaces.dto.StatusChangeRequestDto;
 import com.sparta.member.interfaces.dto.StatusUpdateResponseDto;
 import com.sparta.member.interfaces.dto.MemberInfoResponseDto;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.propertyeditors.StringTrimmerEditor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,6 +35,12 @@ public class MemberController {
 
     private final MemberService memberService;
     private final AuthService authService;
+
+    // TODO: 공부 필요
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        binder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<BaseResponseDto<MemberInfoResponseDto>> getMemberById(
@@ -73,6 +85,17 @@ public class MemberController {
 
         return ResponseEntity.noContent()
             .build();
+    }
+
+    @PreAuthorize("hasRole('MASTER')")
+    @GetMapping("/search")
+    public ResponseEntity<BaseResponseDto<Page<MemberInfoResponseDto>>> search(
+        SearchRequestDto searchRequestDto,
+        Pageable pageable
+    ) {
+        Page<MemberInfoResponseDto> res = memberService.searchMembers(searchRequestDto, pageable);
+
+        return ResponseEntity.ok(BaseResponseDto.success(res));
     }
 
 }

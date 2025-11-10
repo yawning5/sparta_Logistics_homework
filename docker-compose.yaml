@@ -110,8 +110,8 @@ services:
       - msa-network
 
   hub-service:
-    container_name: member
-    build: ./member/.
+    container_name: hub
+    build: ./hub/.
     restart: always
     ports:
       - "6060:6060"

@@ -1,2 +1,3 @@
 CREATE DATABASE vendor;
 CREATE DATABASE product;
+CREATE DATABASE delivery;

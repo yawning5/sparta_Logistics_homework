@@ -81,7 +81,7 @@ services:
       - "7070:7070"
     depends_on:
       config-server:
-        condition: service_completed_successfully
+        condition: service_healthy
       eureka-server:
         condition: service_healthy
       postgresql-server:

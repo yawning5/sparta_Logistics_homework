@@ -1,15 +1,40 @@
 spring:
   application:
     name: delivery-service
+
   profiles:
     active: local
+
   config:
     import: "optional:configserver:"
+
   cloud:
     config:
       discovery:
         enabled: true
         service-id: config-server
+      fail-fast: true
+      retry:
+        max-attempts: 6
+        initial-interval: 2000
+        multiplier: 1.5
+
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+      defer-datasource-initialization: true
+
+  datasource:
+    url: jdbc:postgresql://postgresql:5432/delivery
+    username: root
+    password: root
+    driver-class-name: org.postgresql.Driver
+
 
 server:
   port: 7070

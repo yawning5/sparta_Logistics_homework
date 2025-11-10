@@ -19,10 +19,14 @@ public interface MemberRepository {
         String slackId,
         String affiliationType,
         String affiliationName,
-        String email
+        String email,
+        String name,
+        String status
     );
 
     List<Member> saveAll(List<Member> members);
 
     boolean existsByEmail(String email);
+
+    Member findById(Long id);
 }

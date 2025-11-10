@@ -9,8 +9,10 @@ import com.keepgoing.order.domain.order.OrderState;
 import com.keepgoing.order.presentation.client.HubClient;
 import com.keepgoing.order.presentation.client.ProductClient;
 import com.keepgoing.order.presentation.dto.request.ReservationInventoryRequest;
-import com.keepgoing.order.presentation.dto.response.ProductInfo;
+import com.keepgoing.order.presentation.dto.response.client.InventoryReservationResponse;
+import com.keepgoing.order.presentation.dto.response.client.ProductInfo;
 
+import com.keepgoing.order.presentation.dto.response.client.ProductSearchResponse;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -60,13 +62,20 @@ public class OrderProcessor {
                     }
 
                     String productId = orderForProductValidation.getProductId().toString();
-                    ProductInfo productInfo = null;
+                    ProductSearchResponse productResponse = null;
                     try {
-                        productInfo = productClient.getProduct(productId);
+                         productResponse = productClient.getProduct(productId);
+
+                        if (productResponse == null || productResponse.fail()) {
+                            orderService.toFail(orderId);
+                            return;
+                        }
+
                     } catch (Exception e) {
                         orderService.toFail(orderId);
                         return;
                     }
+                    ProductInfo productInfo = productResponse.getProductInfo();
 
                     if (productInfo == null || productInfo.getHubId() == null){
                         orderService.toFail(orderId);
@@ -110,17 +119,17 @@ public class OrderProcessor {
                     Integer quantity = orderForInventoryReservation.getQuantity();
                     String idempotencyKey = orderForInventoryReservation.getIdempotencyKey().toString();
 
-                    boolean apiResult = false;
+                    InventoryReservationResponse inventoryResponse = null;
                     try {
-                        apiResult = hubClient.reservationInventoryForProduct(
+                        inventoryResponse = hubClient.reservationInventoryForProduct(
                             ReservationInventoryRequest.create(productIdForInventory, hubIdForInventory, quantity, idempotencyKey)
                         );
-                    } catch (Exception e) {
-                        orderService.toFail(orderId);
-                        return;
-                    }
 
-                    if (apiResult == false) {
+                        if (inventoryResponse == null || inventoryResponse.fail()) {
+                            orderService.toFail(orderId);
+                            return;
+                        }
+                    } catch (Exception e) {
                         orderService.toFail(orderId);
                         return;
                     }
@@ -144,6 +153,10 @@ public class OrderProcessor {
 
                     orderService.toCompleted(orderId);
                     break;
+
+                default:
+                    log.warn("처리 불필요/미지원 상태: {} {}", orderId, order.getOrderState());
+                    return;
             }
 
         } catch (NotFoundProductException | NotFoundOrderException | InventoryReservationFailException orderFailException) {

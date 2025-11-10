@@ -10,7 +10,11 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface OrderOutboxRepositoryCustom {
 
+    // Query
     Page<Long> findPendingOutboxIds(Set<OutBoxState> states, Pageable pageable);
+
+    // Command
+    int claim(Long outboxId, OutBoxState beforeState, OutBoxState afterState, LocalDateTime now);
 
     int updateStateToCompletedForDelivery(Long outboxId, LocalDateTime now);
 
@@ -20,6 +24,6 @@ public interface OrderOutboxRepositoryCustom {
 
     int updateOrderStateToFailedForNotification(Long outboxId, LocalDateTime now);
 
-    int claim(Long outboxId, OutBoxState beforeState, OutBoxState afterState, LocalDateTime now);
+
 
 }

@@ -3,7 +3,7 @@ package com.keepgoing.order.presentation.dto.request;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.keepgoing.order.application.service.order.OrderService;
 import com.keepgoing.order.presentation.api.OrderControllerV1;
-import com.keepgoing.order.presentation.dto.response.CreateOrderResponse;
+import com.keepgoing.order.presentation.dto.response.api.CreateOrderResponse;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;

@@ -18,6 +18,7 @@ class OrderTest {
         // when // then
         Assertions.assertThatThrownBy(
                 () -> Order.create(
+                    1L,
                     null,
                     null,
                     UUID.fromString("7027b9af-2c0c-4f04-b04d-6d2e27bd1928"),
@@ -42,6 +43,7 @@ class OrderTest {
         // when // then
         Assertions.assertThatThrownBy(
                 () -> Order.create(
+                    1L,
                     UUID.fromString("4e88649d-37ae-4b0f-b2a2-8b79e6912a9c"),
                     "김이 맛있는 집",
                     null,
@@ -66,6 +68,7 @@ class OrderTest {
         // when // then
         Assertions.assertThatThrownBy(
                 () -> Order.create(
+                    1L,
                     UUID.fromString("4e88649d-37ae-4b0f-b2a2-8b79e6912a9c"),
                     "김이 맛있는 집",
                     UUID.fromString("7027b9af-2c0c-4f04-b04d-6d2e27bd1928"),
@@ -91,6 +94,7 @@ class OrderTest {
         // when // then
         Assertions.assertThatThrownBy(
                 () -> Order.create(
+                    1L,
                     UUID.fromString("4e88649d-37ae-4b0f-b2a2-8b79e6912a9c"),
                     "김이 맛있는 집",
                     UUID.fromString("7027b9af-2c0c-4f04-b04d-6d2e27bd1928"),
@@ -115,6 +119,7 @@ class OrderTest {
         // when // then
         Assertions.assertThatThrownBy(
                 () -> Order.create(
+                    1L,
                     UUID.fromString("4e88649d-37ae-4b0f-b2a2-8b79e6912a9c"),
                     "김이 맛있는 집",
                     UUID.fromString("7027b9af-2c0c-4f04-b04d-6d2e27bd1928"),
@@ -139,6 +144,7 @@ class OrderTest {
         // when // then
         Assertions.assertThatThrownBy(
                 () -> Order.create(
+                    1L,
                     UUID.fromString("4e88649d-37ae-4b0f-b2a2-8b79e6912a9c"),
                     "김이 맛있는 집",
                     UUID.fromString("7027b9af-2c0c-4f04-b04d-6d2e27bd1928"),
@@ -163,6 +169,7 @@ class OrderTest {
         // when // then
         Assertions.assertThatThrownBy(
                 () -> Order.create(
+                    1L,
                     UUID.fromString("4e88649d-37ae-4b0f-b2a2-8b79e6912a9c"),
                     "김이 맛있는 집",
                     UUID.fromString("7027b9af-2c0c-4f04-b04d-6d2e27bd1928"),
@@ -186,6 +193,7 @@ class OrderTest {
 
         // when
         Order order = Order.create(
+            1L,
             UUID.fromString("4e88649d-37ae-4b0f-b2a2-8b79e6912a9c"),
             "김이 맛있는 집",
             UUID.fromString("7027b9af-2c0c-4f04-b04d-6d2e27bd1928"),

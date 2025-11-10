@@ -7,6 +7,7 @@ import com.keepgoing.member.domain.vo.Affiliation;
 import com.keepgoing.member.domain.vo.Type;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @RequiredArgsConstructor
+@Slf4j
 public class DataInitializer {
 
     private final MemberRepository memberRepository;
@@ -24,7 +26,8 @@ public class DataInitializer {
 
     @Bean
     @Order(1)
-    public CommandLineRunner initDatabase(MemberRepository memberRepository) {
+    public CommandLineRunner initDatabase() {
+        log.info("init database start MASTER account");
         return args -> {
             String masterEmail = "master@master.com";
             if (memberRepository.existsByEmail(masterEmail)) {
@@ -42,6 +45,8 @@ public class DataInitializer {
                 ),
                 Role.MASTER
             );
+            master.approve();
+            log.info("init database finish MASTER account" + master.status());
             memberRepository.save(master);
         };
     }

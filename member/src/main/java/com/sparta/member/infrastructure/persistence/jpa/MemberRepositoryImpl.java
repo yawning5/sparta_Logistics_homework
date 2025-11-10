@@ -51,9 +51,20 @@ public class MemberRepositoryImpl implements MemberRepository {
         String slackId,
         String affiliationType,
         String affiliationName,
-        String email) {
+        String email,
+        String name,
+        String status
+    ) {
 
-        Page<MemberJpa> MembersJpa = memberJpaRepository.findBySearchOption(pageable, slackId, affiliationType, affiliationName, email);
+        Page<MemberJpa> MembersJpa = memberJpaRepository.findBySearchOption(
+            pageable,
+            slackId,
+            affiliationType,
+            affiliationName,
+            email,
+            name,
+            status
+        );
 
         return MembersJpa.map(mapper::toMember);
     }
@@ -68,4 +79,11 @@ public class MemberRepositoryImpl implements MemberRepository {
         return memberJpaRepository.findByEmail(email).isPresent();
     }
 
+    @Override
+    public Member findById(Long id) {
+        return mapper.toMember(memberJpaRepository.findById(id)
+            .orElseThrow(() ->
+                new CustomException(ErrorCode.MEMBER_NOT_FOUND)
+            ));
+    }
 }

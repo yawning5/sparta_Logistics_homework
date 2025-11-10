@@ -22,6 +22,7 @@ public class OrderOutboxRepositoryCustomImpl implements OrderOutboxRepositoryCus
     private final JPAQueryFactory queryFactory;
     private final EntityManager em;
 
+    // Query
     @Override
     public Page<Long> findPendingOutboxIds(Set<OutBoxState> states, Pageable pageable) {
 
@@ -40,6 +41,26 @@ public class OrderOutboxRepositoryCustomImpl implements OrderOutboxRepositoryCus
             .where(orderOutbox.state.in(states));
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
+    }
+
+    // Command
+    @Override
+    @Transactional
+    public int claim(Long outboxId, OutBoxState beforeState, OutBoxState afterState, LocalDateTime now) {
+
+        long updated = queryFactory
+            .update(orderOutbox)
+            .set(orderOutbox.state, afterState)
+            .set(orderOutbox.updatedAt, now)
+            .where(
+                orderOutbox.id.eq(outboxId),
+                orderOutbox.state.eq(beforeState)
+            )
+            .execute();
+
+        em.flush(); em.clear();
+
+        return (int) updated;
     }
 
     @Override
@@ -109,25 +130,6 @@ public class OrderOutboxRepositoryCustomImpl implements OrderOutboxRepositoryCus
                 orderOutbox.state.eq(OutBoxState.NOTIFICATION_COMPLETION_IN_PROGRESS)
             )
             .execute();
-        em.flush(); em.clear();
-
-        return (int) updated;
-    }
-
-    @Override
-    @Transactional
-    public int claim(Long outboxId, OutBoxState beforeState, OutBoxState afterState, LocalDateTime now) {
-
-        long updated = queryFactory
-            .update(orderOutbox)
-            .set(orderOutbox.state, afterState)
-            .set(orderOutbox.updatedAt, now)
-            .where(
-                orderOutbox.id.eq(outboxId),
-                orderOutbox.state.eq(beforeState)
-            )
-            .execute();
-
         em.flush(); em.clear();
 
         return (int) updated;

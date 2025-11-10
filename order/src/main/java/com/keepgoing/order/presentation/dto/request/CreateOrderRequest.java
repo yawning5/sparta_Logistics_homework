@@ -108,8 +108,9 @@ public record CreateOrderRequest(
         return deliveryRequestNote;
     }
 
-    public CreateOrderCommand toCommand() {
+    public CreateOrderCommand toCommand(Long memberId) {
         return CreateOrderCommand.create(
+            memberId,
             supplierId, supplierName, receiverId, receiverName, productId, productName,
             quantity, price, deliveryDueAt, deliveryRequestNote
         );

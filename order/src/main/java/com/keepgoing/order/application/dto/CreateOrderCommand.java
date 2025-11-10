@@ -8,6 +8,8 @@ import lombok.Builder;
 @Builder
 public record CreateOrderCommand (
 
+    Long memberId,
+
     UUID supplierId,
 
     String supplierName,
@@ -32,6 +34,9 @@ public record CreateOrderCommand (
     public UUID supplierId() {
         return supplierId;
     }
+
+    @Override
+    public Long memberId() { return memberId; }
 
     @Override
     public String supplierName() {
@@ -80,6 +85,7 @@ public record CreateOrderCommand (
 
     public Order toEntity() {
 
+        if (memberId == null) throw new IllegalArgumentException("사용자 식별자는 필수값입니다.");
         if (supplierId == null) throw new IllegalArgumentException("공급 업체의 식별자는 필수값입니다.");
         if (supplierName == null || supplierName.isBlank()) throw new IllegalArgumentException("공급 업체 이름은 필수 값입니다.");
         if (receiverId == null) throw new IllegalArgumentException("수령 업체의 식별자는 필수값입니다.");
@@ -94,17 +100,20 @@ public record CreateOrderCommand (
         int totalPrice = calculateTotalPrice();
 
         return Order.create(
+            memberId,
             supplierId, supplierName, receiverId, receiverName, productId, productName,
             quantity, totalPrice, now, deliveryDueAt ,deliveryRequestNote
         );
     }
 
     public static CreateOrderCommand create(
+        Long memberId,
         UUID supplierId, String supplierName, UUID receiverId, String receiverName, UUID productId, String productName,
         Integer quantity, Integer price, LocalDateTime deliveryDueAt, String deliveryRequestNote
     ) {
 
         return CreateOrderCommand.builder()
+            .memberId(memberId)
             .supplierId(supplierId)
             .supplierName(supplierName)
             .receiverId(receiverId)

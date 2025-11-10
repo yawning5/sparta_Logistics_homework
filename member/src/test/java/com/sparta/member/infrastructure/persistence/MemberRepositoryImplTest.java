@@ -107,6 +107,8 @@ public class MemberRepositoryImplTest {
                 null,
                 null,
                 null,
+                null,
+                null,
                 null
             );
 
@@ -131,7 +133,9 @@ public class MemberRepositoryImplTest {
                 null,
                 null,
                 null,
-                "test@test.com"
+                "test@test.com",
+                null,
+                null
             );
 
             // then
@@ -154,6 +158,8 @@ public class MemberRepositoryImplTest {
                 pageable,
                 null,
                 "HUB",
+                null,
+                null,
                 null,
                 null
             );

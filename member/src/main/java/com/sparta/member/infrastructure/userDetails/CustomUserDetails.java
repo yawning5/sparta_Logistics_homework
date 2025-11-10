@@ -1,6 +1,11 @@
 package com.keepgoing.member.infrastructure.userDetails;
 
+<<<<<<< HEAD
 import com.keepgoing.member.infrastructure.persistence.jpa.entity.MemberJpa;
+=======
+import com.sparta.member.domain.enums.Status;
+import com.sparta.member.infrastructure.persistence.jpa.entity.MemberJpa;
+>>>>>>> 84b265aace245f24c5ee8f8823dd3a33829a6688
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -48,7 +53,7 @@ public class CustomUserDetails implements UserDetails {
     // TODO: 계정의 승인 상태에 따라 false 값 반환하도록 변경
     @Override
     public boolean isEnabled() {
-        return true;
+        return member.getStatus() == Status.APPROVED;
     }
 
     @Override

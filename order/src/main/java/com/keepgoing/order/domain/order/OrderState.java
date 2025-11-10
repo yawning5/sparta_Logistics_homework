@@ -15,6 +15,8 @@ public enum OrderState {
     COMPLETION_IN_PROGRESS("주문 진행 중"),
     COMPLETED("주문 완료"),
 
+    ORDER_CONFIRMED("주문 확정"),
+
     CANCEL_REQUESTED("주문 취소 요청"),
     PAYMENT_CANCELLED("결제 취소 완료"),
     STOCK_RELEASED("재고 복구 완료"),

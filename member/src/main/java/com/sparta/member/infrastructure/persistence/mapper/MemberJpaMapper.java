@@ -28,6 +28,7 @@ public class MemberJpaMapper implements PersistenceMapper {
                 memberJpa.getAffiliationName()
             ),
             memberJpa.getRole(),
+            memberJpa.getStatus(),
             memberJpa.getCreatedAt(),
             memberJpa.getUpdatedAt(),
             memberJpa.getDeletedAt(),

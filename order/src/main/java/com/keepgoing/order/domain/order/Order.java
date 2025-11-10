@@ -2,6 +2,7 @@ package com.keepgoing.order.domain.order;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
@@ -17,16 +18,31 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Getter
 @Entity
 @Table(name = "p_order")
+@FilterDef(
+    name = "softDeleteFilter",
+    defaultCondition = "deleted_at IS NULL",
+    autoEnabled = true, // 항상 기본적으로 필터를 켜는 옵션
+    applyToLoadByKey = true // PK 기반 단건 조회에도 필더 적용
+)
+@Filter(name = "softDeleteFilter")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Order{
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
+    @Column(name="member_id")
+    private Long memberId;
 
     // supplier
     @Column(name = "supplier_id", nullable = false)
@@ -90,7 +106,7 @@ public class Order{
     private LocalDateTime updatedAt;
 
     @Column(name = "deleted_by")
-    private UUID deletedBy;
+    private Long deletedBy;
 
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
@@ -101,6 +117,7 @@ public class Order{
 
     @Builder
     private Order(
+        Long memberId,
         UUID supplierId, String supplierName,
         UUID receiverId, String receiverName,
         UUID productId, String productName,
@@ -109,6 +126,7 @@ public class Order{
         LocalDateTime deliveryDueAt, String deliveryRequestNote,
         LocalDateTime orderedAt
     ) {
+        if (memberId == null) throw new IllegalArgumentException("memberId 필수");
         if (supplierId == null) throw new IllegalArgumentException("supplierId 필수");
         if (receiverId == null) throw new IllegalArgumentException("receiverId 필수");
         if (productId == null) throw new IllegalArgumentException("productId 필수");
@@ -118,6 +136,7 @@ public class Order{
         if (deliveryDueAt == null || deliveryDueAt.isBefore(orderedAt))
             throw new IllegalArgumentException("deliveryDueAt은 orderedAt 이후여야 함");
 
+        this.memberId = memberId;
         this.supplierId = supplierId;
         this.supplierName = supplierName;
         this.receiverId = receiverId;
@@ -135,6 +154,7 @@ public class Order{
     }
 
     public static Order create(
+        Long memberId,
         UUID supplierId, String supplierName,
         UUID receiverId, String receiverName,
         UUID productId, String productName,
@@ -143,6 +163,7 @@ public class Order{
         LocalDateTime deliveryDueAt, String deliveryRequestNote
     ) {
         return Order.builder()
+            .memberId(memberId)
             .supplierId(supplierId)
             .supplierName(supplierName)
             .receiverId(receiverId)

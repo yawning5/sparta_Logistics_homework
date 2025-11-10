@@ -1,8 +1,8 @@
-package com.keepgoing.product.infrastructure.config;
+package com.sparta.product.infrastructure.config;
 
-import com.keepgoing.product.domain.repository.ProductRepository;
-import com.keepgoing.product.infrastructure.repository.JpaProductRepository;
-import com.keepgoing.product.infrastructure.repository.ProductRepositoryAdapter;
+import com.sparta.product.domain.repository.ProductRepository;
+import com.sparta.product.infrastructure.repository.JpaProductRepository;
+import com.sparta.product.infrastructure.repository.ProductRepositoryAdapter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

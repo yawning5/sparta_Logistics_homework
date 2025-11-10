@@ -1,4 +1,4 @@
-package com.keepgoing.member.infrastructure.persistence.jpa.querydsl;
+package com.sparta.member.infrastructure.persistence.jpa.querydsl;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Order;
@@ -6,16 +6,10 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-<<<<<<< HEAD
-import com.keepgoing.member.domain.vo.Type;
-import com.keepgoing.member.infrastructure.persistence.jpa.entity.MemberJpa;
-import com.keepgoing.member.infrastructure.persistence.jpa.entity.QMemberJpa;
-=======
 import com.sparta.member.domain.enums.Status;
 import com.sparta.member.domain.vo.Type;
 import com.sparta.member.infrastructure.persistence.jpa.entity.MemberJpa;
 import com.sparta.member.infrastructure.persistence.jpa.entity.QMemberJpa;
->>>>>>> 84b265aace245f24c5ee8f8823dd3a33829a6688
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

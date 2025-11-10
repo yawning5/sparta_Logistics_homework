@@ -1,7 +1,7 @@
-package com.keepgoing.product.presentation.dto;
+package com.sparta.product.presentation.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.keepgoing.product.application.exception.ErrorCode;
+import com.sparta.product.application.exception.ErrorCode;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record BaseResponseDTO<T>(

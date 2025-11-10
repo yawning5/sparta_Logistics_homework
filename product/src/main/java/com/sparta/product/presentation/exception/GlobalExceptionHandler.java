@@ -1,10 +1,10 @@
-package com.keepgoing.product.presentation.exception;
+package com.sparta.product.presentation.exception;
 
-import com.keepgoing.product.application.exception.BusinessException;
-import com.keepgoing.product.application.exception.ClientException;
-import com.keepgoing.product.application.exception.ErrorCode;
-import com.keepgoing.product.application.exception.VendorClientException;
-import com.keepgoing.product.presentation.dto.BaseResponseDTO;
+import com.sparta.product.application.exception.BusinessException;
+import com.sparta.product.application.exception.ClientException;
+import com.sparta.product.application.exception.ErrorCode;
+import com.sparta.product.application.exception.VendorClientException;
+import com.sparta.product.presentation.dto.BaseResponseDTO;
 import feign.FeignException;
 import java.util.Map;
 import org.springframework.http.HttpStatus;

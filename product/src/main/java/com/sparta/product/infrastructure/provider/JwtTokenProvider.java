@@ -1,4 +1,4 @@
-package com.keepgoing.product.infrastructure.provider;
+package com.sparta.product.infrastructure.provider;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;

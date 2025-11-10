@@ -1,7 +1,7 @@
-package com.keepgoing.member.domain.repository;
+package com.sparta.member.domain.repository;
 
-import com.keepgoing.member.domain.model.Member;
-import com.keepgoing.member.infrastructure.persistence.jpa.entity.MemberJpa;
+import com.sparta.member.domain.model.Member;
+import com.sparta.member.infrastructure.persistence.jpa.entity.MemberJpa;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

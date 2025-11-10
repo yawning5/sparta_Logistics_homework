@@ -1,8 +1,8 @@
-package com.keepgoing.member.fixture;
+package com.sparta.member.fixture;
 
-import com.keepgoing.member.domain.enums.Role;
-import com.keepgoing.member.domain.vo.Type;
-import com.keepgoing.member.interfaces.dto.SignUpRequestDto;
+import com.sparta.member.domain.enums.Role;
+import com.sparta.member.domain.vo.Type;
+import com.sparta.member.interfaces.dto.SignUpRequestDto;
 import java.util.UUID;
 
 public final class SignUpRequestDtoFixture {

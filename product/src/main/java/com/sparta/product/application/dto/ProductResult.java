@@ -1,6 +1,6 @@
-package com.keepgoing.product.application.dto;
+package com.sparta.product.application.dto;
 
-import com.keepgoing.product.domain.entity.Product;
+import com.sparta.product.domain.entity.Product;
 import java.math.BigInteger;
 import java.util.UUID;
 

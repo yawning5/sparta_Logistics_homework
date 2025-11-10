@@ -1,7 +1,7 @@
-package com.keepgoing.vendor.infrastructure.security;
+package com.sparta.vendor.infrastructure.security;
 
 
-import com.keepgoing.vendor.domain.vo.UserRole;
+import com.sparta.vendor.domain.vo.UserRole;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.UUID;

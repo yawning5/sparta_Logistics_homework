@@ -1,4 +1,4 @@
-package com.keepgoing.member.application.service;
+package com.sparta.member.application.service;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -8,12 +8,12 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.keepgoing.member.application.mapper.ApplicationMapper;
-import com.keepgoing.member.domain.model.Member;
-import com.keepgoing.member.domain.repository.MemberRepository;
-import com.keepgoing.member.fixture.MemberFixture;
-import com.keepgoing.member.fixture.SignUpRequestDtoFixture;
-import com.keepgoing.member.global.CustomException;
+import com.sparta.member.application.mapper.ApplicationMapper;
+import com.sparta.member.domain.model.Member;
+import com.sparta.member.domain.repository.MemberRepository;
+import com.sparta.member.fixture.MemberFixture;
+import com.sparta.member.fixture.SignUpRequestDtoFixture;
+import com.sparta.member.global.CustomException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

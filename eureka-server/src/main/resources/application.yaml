@@ -1,6 +1,6 @@
 spring:
   application:
-    name: eureka-server
+    name: Eureka-server
 
 server:
   port: 18080
@@ -13,7 +13,7 @@ eureka:
       defaultZone: http://eureka-server:18080/eureka/
 
   instance:
-    hostname: eureka-server
+    hostname: Eureka-server
 
   server:
     enable-self-preservation: false

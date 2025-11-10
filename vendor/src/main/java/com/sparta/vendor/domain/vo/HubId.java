@@ -1,4 +1,4 @@
-package com.keepgoing.vendor.domain.vo;
+package com.sparta.vendor.domain.vo;
 
 import jakarta.persistence.Embeddable;
 import java.util.UUID;

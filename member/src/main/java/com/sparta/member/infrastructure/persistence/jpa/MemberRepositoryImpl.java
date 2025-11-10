@@ -1,12 +1,12 @@
-package com.keepgoing.member.infrastructure.persistence.jpa;
+package com.sparta.member.infrastructure.persistence.jpa;
 
-import com.keepgoing.member.domain.model.Member;
-import com.keepgoing.member.domain.repository.MemberRepository;
-import com.keepgoing.member.global.CustomException;
-import com.keepgoing.member.global.ErrorCode;
-import com.keepgoing.member.infrastructure.persistence.jpa.entity.MemberJpa;
-import com.keepgoing.member.infrastructure.persistence.jpa.repo.SpringDataMemberJpaRepository;
-import com.keepgoing.member.infrastructure.persistence.mapper.MemberJpaMapper;
+import com.sparta.member.domain.model.Member;
+import com.sparta.member.domain.repository.MemberRepository;
+import com.sparta.member.global.CustomException;
+import com.sparta.member.global.ErrorCode;
+import com.sparta.member.infrastructure.persistence.jpa.entity.MemberJpa;
+import com.sparta.member.infrastructure.persistence.jpa.repo.SpringDataMemberJpaRepository;
+import com.sparta.member.infrastructure.persistence.mapper.MemberJpaMapper;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

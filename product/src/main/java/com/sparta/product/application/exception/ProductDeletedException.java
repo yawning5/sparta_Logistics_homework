@@ -1,4 +1,4 @@
-package com.keepgoing.product.application.exception;
+package com.sparta.product.application.exception;
 
 public class ProductDeletedException extends BusinessException {
 

@@ -1,4 +1,4 @@
-package com.keepgoing.member.interfaces.dto;
+package com.sparta.member.interfaces.dto;
 
 public record SearchRequestDto(
     String name,

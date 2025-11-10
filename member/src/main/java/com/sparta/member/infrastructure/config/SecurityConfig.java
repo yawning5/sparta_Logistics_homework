@@ -1,4 +1,4 @@
-package com.keepgoing.member.infrastructure.config;
+package com.sparta.member.infrastructure.config;
 
 import com.sparta.member.infrastructure.jwt.CustomJwtAuthenticationConverter;
 import org.springframework.context.annotation.Bean;

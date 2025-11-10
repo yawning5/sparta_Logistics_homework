@@ -1,6 +1,6 @@
-package com.keepgoing.vendor.domain.repository;
+package com.sparta.vendor.domain.repository;
 
-import com.keepgoing.vendor.domain.entity.Vendor;
+import com.sparta.vendor.domain.entity.Vendor;
 import java.util.Optional;
 import java.util.UUID;
 

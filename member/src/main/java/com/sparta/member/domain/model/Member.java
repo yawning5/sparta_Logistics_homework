@@ -16,7 +16,7 @@ public class Member {
     private final Long id;
     private final AccountInfo accountInfo;
     private final Affiliation affiliation;
-    private final Role role;
+    private Role role;
     private Status status;
     private final LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -199,5 +199,9 @@ public class Member {
 
     private boolean hasText(String value) {
         return value != null && !value.isBlank();
+    }
+
+    public void changRole(Role role) {
+        this.role = role;
     }
 }

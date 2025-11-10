@@ -111,30 +111,16 @@ public class ExternalProductController {
         }
         pageable = PageRequest.of(pageable.getPageNumber(), pageSize, pageable.getSort());
 
-        hubId = resolveHubId(user, hubId);
-
-        SearchProductCommand command = SearchProductCommand.of(productId, name, description,
+        SearchProductCommand command = SearchProductCommand.of(user, productId, name, description,
             minPrice, maxPrice, vendorId, hubId);
 
-        Page<ProductResult> productResultPage = productService.searchProducts(command, pageable);
+        Page<ProductResult> productResultPage = productService.searchProducts(command,
+            pageable);
 
         Page<ProductResponseDTO> responsePage = productResultPage.map(ProductResponseDTO::from);
 
         PageResponseDTO<ProductResponseDTO> pageResponseDTO = PageResponseDTO.from(responsePage);
 
         return ResponseEntity.ok(BaseResponseDTO.success(pageResponseDTO));
-    }
-
-
-    private UUID resolveHubId(CustomUserDetails user, UUID hubId) {
-        if (user.getRole() == UserRole.HUB) {
-            UUID affiliationId = user.getAffiliationId();
-
-            if (hubId != null && !hubId.equals(affiliationId)) {
-                throw new ForbiddenOperationException(ErrorCode.FORBIDDEN_HUB_GET_OPERATION);
-            }
-            return affiliationId;
-        }
-        return hubId;
     }
 }

@@ -6,6 +6,8 @@ import com.sparta.product.application.command.GetProductCommand;
 import com.sparta.product.application.command.SearchProductCommand;
 import com.sparta.product.application.command.UpdateProductCommand;
 import com.sparta.product.application.dto.ProductResult;
+import com.sparta.product.application.exception.ErrorCode;
+import com.sparta.product.application.exception.ForbiddenOperationException;
 import com.sparta.product.domain.entity.Product;
 import com.sparta.product.domain.service.ProductDomainValidator;
 import com.sparta.product.domain.vo.HubId;
@@ -89,6 +91,30 @@ public class ProductService {
     }
 
     public Page<ProductResult> searchProducts(SearchProductCommand command, Pageable pageable) {
+
+        if (command.role() == UserRole.HUB) {
+            UUID userHubId = command.affiliationId();
+            UUID requestedHubId = command.hubId();
+
+            if (requestedHubId != null && !requestedHubId.equals(userHubId)) {
+                throw new ForbiddenOperationException(ErrorCode.FORBIDDEN_HUB_GET_OPERATION);
+            }
+
+            // 새로운 Command 생성
+            command = SearchProductCommand.of(
+                command.userId(),
+                command.affiliationId(),
+                command.role(),
+                command.productId(),
+                command.name(),
+                command.description(),
+                command.minPrice(),
+                command.maxPrice(),
+                command.vendorId(),
+                userHubId // hubId를 HUB의 affiliationId로 설정
+            );
+        }
+
         Page<Product> products = productPersistenceService.searchProducts(command, pageable);
         return products.map(ProductResult::from);
     }

@@ -1,5 +1,6 @@
 package com.keepgoing.gateway.filter;
 
+import com.keepgoing.gateway.dto.BaseResponseDto;
 import com.keepgoing.gateway.dto.MemberResponseDto;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -7,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
@@ -60,12 +62,12 @@ public class JwtVerifyFilter implements Ordered, GlobalFilter {
             .header("Authorization", authHeader)
             .retrieve()
             // TODO: BaseEntity 로 감싸져서 오는 코드 해석
-            .bodyToMono(MemberResponseDto.class)
-            .flatMap(member -> {
-                boolean isValid = validateMemberClaims(token, member);
-                log.info(member.toString());
+            .bodyToMono(new ParameterizedTypeReference<BaseResponseDto<MemberResponseDto>>() {})
+            .flatMap(dto -> {
+                boolean isValid = validateMemberClaims(token, dto.getData());
+                log.info(dto.toString());
                 if (!isValid) {
-                    log.warn("Invalid member claims for member '{}'", member);
+                    log.warn("Invalid member claims for member '{}'", dto.getData());
                     exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
                     return exchange.getResponse().setComplete();
                 }
@@ -85,11 +87,11 @@ public class JwtVerifyFilter implements Ordered, GlobalFilter {
      */
     private boolean validateMemberClaims(String authHeader, MemberResponseDto member) {
         Jwt jwt = jwtDecoder.decode(authHeader);
-        log.debug("jwt: {}", jwt);
+        log.info("jwt: {}", jwt);
         String requestRole = jwt.getClaims().get("role").toString();
         String requestUserId = jwt.getClaims().get("userId").toString();
-        log.debug("requestUserId: {}", requestUserId);
-        log.debug("requestRole: {}", requestRole);
+        log.info("requestUserId: {}", requestUserId);
+        log.info("requestRole: {}", requestRole);
 
         return requestRole.equals(member.role())
             && requestUserId.equals(member.userId().toString())

@@ -1,6 +1,6 @@
 package com.keepgoing.gateway.dto;
 
-public record MemberResposneDto(
+public record MemberResponseDto(
     Long userId,
     String role,
     String status

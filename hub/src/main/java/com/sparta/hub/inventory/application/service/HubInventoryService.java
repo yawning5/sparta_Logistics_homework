@@ -10,6 +10,7 @@ import com.sparta.hub.inventory.domain.repository.HubInventoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +26,13 @@ public class HubInventoryService {
                     existing.increaseQuantity(command.quantity());
                     return existing;
                 })
-                .orElseGet(() -> HubInventory.create(command.hubId(), command.productId(), command.quantity()));
+                .orElseGet(() -> HubInventory.create(
+                        command.hubId(),
+                        command.hubName(),
+                        command.productId(),
+                        command.productName(),
+                        command.quantity()
+                ));
 
         hubInventoryRepository.save(inventory);
         return HubInventoryResponse.from(inventory);
@@ -41,7 +48,7 @@ public class HubInventoryService {
         }
 
         inventory.decreaseQuantity(command.reservedQuantity());
-        inventory.setStatus("RESERVED");
+        inventory.setProductStatus("RESERVED");
         hubInventoryRepository.save(inventory);
 
         return HubInventoryResponse.from(inventory);
@@ -56,7 +63,7 @@ public class HubInventoryService {
             throw new IllegalStateException("출고 대기 상태가 아닙니다.");
         }
 
-        inventory.setStatus("SHIPPED");
+        inventory.setProductStatus("SHIPPED");
         hubInventoryRepository.save(inventory);
 
         return HubInventoryResponse.from(inventory);
@@ -70,11 +77,11 @@ public class HubInventoryService {
         switch (command.action().toUpperCase()) {
             case "CANCEL" -> {
                 inventory.increaseQuantity(command.quantity());
-                inventory.setStatus("AVAILABLE");
+                inventory.setProductStatus("AVAILABLE");
             }
             case "ADJUST" -> {
                 inventory.setQuantity(command.quantity());
-                inventory.setStatus("ADJUSTED");
+                inventory.setProductStatus("ADJUSTED");
             }
             default -> throw new IllegalArgumentException("올바르지 않은 action 값입니다. (CANCEL 또는 ADJUST)");
         }

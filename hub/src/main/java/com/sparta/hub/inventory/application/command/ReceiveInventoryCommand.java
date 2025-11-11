@@ -7,6 +7,8 @@ import java.util.UUID;
 
 public record ReceiveInventoryCommand(
         @NotNull UUID hubId,
+        @NotNull String hubName,
         @NotNull UUID productId,
+        @NotNull String productName,
         @Min(1) int quantity
 ) {}

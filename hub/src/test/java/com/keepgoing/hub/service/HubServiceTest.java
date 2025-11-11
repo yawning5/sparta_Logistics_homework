@@ -1,9 +1,9 @@
 package com.keepgoing.hub.service;
 
-import com.keepgoing.hub.application.command.CreateHubCommand;
-import com.keepgoing.hub.application.service.HubService;
-import com.keepgoing.hub.domain.entity.Hub;
-import com.keepgoing.hub.domain.repository.HubRepository;
+import com.sparta.hub.application.command.CreateHubCommand;
+import com.sparta.hub.application.service.HubService;
+import com.sparta.hub.domain.entity.Hub;
+import com.sparta.hub.domain.repository.HubRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

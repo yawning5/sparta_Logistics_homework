@@ -4,6 +4,7 @@ import com.sparta.vendor.application.exception.BusinessException;
 import com.sparta.vendor.application.exception.ErrorCode;
 import com.sparta.vendor.presentation.dto.BaseResponseDTO;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -16,5 +17,14 @@ public class GlobalExceptionHandler {
         return ResponseEntity
             .status(errorCode.getHttpStatus()) // ErrorCode에 HttpStatus 있으면 사용
             .body(BaseResponseDTO.error(errorCode));
+    }
+
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<BaseResponseDTO<?>> handleMethodArgumentNotValidException(
+        MethodArgumentNotValidException ex) {
+        return ResponseEntity
+            .status(ErrorCode.INVALID_JSON_FORMAT.getHttpStatus())
+            .body(BaseResponseDTO.error(ErrorCode.INVALID_JSON_FORMAT, ex.getBindingResult()));
     }
 }

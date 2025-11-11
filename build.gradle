@@ -9,7 +9,7 @@ subprojects {
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
 
-    group = 'com.keepgoing'
+    group = 'com.sparta'
     version = '0.0.1-SNAPSHOT'
     description = 'Demo project for Spring Boot'
 

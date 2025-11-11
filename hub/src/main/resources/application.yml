@@ -1,9 +1,12 @@
+server:
+  port: 6060
+
 spring:
   application:
     name: hub-service
 
   datasource:
-    url: jdbc:postgresql://postgresql:5432/hub_db
+    url: jdbc:postgresql://postgresql:5432/hub
     username: root
     password: root
     driver-class-name: org.postgresql.Driver
@@ -31,6 +34,7 @@ spring:
         max-attempts: 6
         initial-interval: 2000
         multiplier: 1.5
+
 
 eureka:
   client:

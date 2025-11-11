@@ -2,6 +2,7 @@ package com.sparta.vendor.application.service;
 
 import com.sparta.vendor.application.command.CreateVendorCommand;
 import com.sparta.vendor.application.command.DeleteVendorCommand;
+import com.sparta.vendor.application.command.SearchVendorCommand;
 import com.sparta.vendor.application.command.UpdateVendorCommand;
 import com.sparta.vendor.application.dto.VendorResult;
 import com.sparta.vendor.domain.entity.Vendor;
@@ -9,6 +10,8 @@ import com.sparta.vendor.domain.service.VendorDomainValidator;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -64,5 +67,11 @@ public class VendorService {
         VendorDomainValidator.validateDeletePermission(command.role(), command.affiliationId(),
             vendor.getHubId().getId());
         vendorPersistenceService.deleteVendor(command);
+    }
+
+    // --------------------- 검색 ---------------------
+    public Page<VendorResult> searchVendors(SearchVendorCommand command, Pageable pageable) {
+        Page<Vendor> vendors = vendorPersistenceService.searchVendors(command, pageable);
+        return vendors.map(VendorResult::from);
     }
 }

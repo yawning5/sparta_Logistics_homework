@@ -87,6 +87,15 @@ public class HubRouteService {
         return HubRouteResponse.from(route);
     }
 
+    @Transactional
+    public void deleteRoute(UUID id) {
+        HubRoute route = hubRouteRepository.findByIdAndDeletedAtIsNull(id)
+                .orElseThrow(() -> new IllegalArgumentException("허브 이동 경로를 찾을 수 없습니다."));
+
+        route.delete(); // Soft delete (deletedAt 세팅)
+        hubRouteRepository.save(route);
+    }
+
     // ==================== Specification ====================
     private Specification<HubRoute> isNotDeleted() {
         return (root, query, cb) -> cb.isNull(root.get("deletedAt"));

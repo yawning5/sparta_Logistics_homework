@@ -86,13 +86,17 @@ public class JwtProviderImpl implements JwtProvider{
         Claims claims = getClaims(token);
 
         String email = claims.getSubject();
-        String role = claims.get("role", String.class);
+        Long userId = Long.valueOf(claims.get("userId", String.class));
 
+
+        CustomPrincipal principal = new CustomPrincipal(email, userId);
+
+        String role = claims.get("role", String.class);
         List<GrantedAuthority> authorities = List.of(
             new SimpleGrantedAuthority(role)
         );
 
-        return new UsernamePasswordAuthenticationToken(email, null, authorities);
+        return new UsernamePasswordAuthenticationToken(principal, null, authorities);
     }
 
     private Claims getClaims(String token) {

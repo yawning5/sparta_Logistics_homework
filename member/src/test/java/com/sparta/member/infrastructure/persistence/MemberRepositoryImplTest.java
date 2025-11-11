@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.sparta.member.config.TestContainerConfig;
 import com.sparta.member.domain.model.Member;
 import com.sparta.member.domain.vo.AccountInfo;
 import com.sparta.member.domain.vo.Type;
@@ -23,6 +24,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
@@ -34,15 +36,13 @@ import org.springframework.test.context.TestPropertySource;
 
 @DataJpaTest
 @ActiveProfiles("test")
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Import({
     MemberJpaMapper.class,
     MemberRepositoryImpl.class,
     QueryDslMemberRepositoryImpl.class,
-    QuerydslConfig.class
-})
-@TestPropertySource(properties = {
-    "spring.cloud.config.enabled=false",
-    "eureka.client.enabled=false"
+    QuerydslConfig.class,
+    TestContainerConfig.class
 })
 public class MemberRepositoryImplTest {
 

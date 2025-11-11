@@ -4,6 +4,6 @@ import com.sparta.vendor.domain.entity.Vendor;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface JpaVendorRepository extends JpaRepository<Vendor, UUID> {
+public interface JpaVendorRepository extends JpaRepository<Vendor, UUID>, VendorRepositoryCustom {
 
 }

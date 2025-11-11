@@ -1,8 +1,8 @@
 package com.sparta.member.application.mapper;
 
 import com.sparta.member.domain.model.Member;
-import com.sparta.member.interfaces.dto.MemberInfoResponseDto;
-import com.sparta.member.interfaces.dto.StatusUpdateResponseDto;
+import com.sparta.member.interfaces.dto.response.MemberInfoResponseDto;
+import com.sparta.member.interfaces.dto.response.StatusUpdateResponseDto;
 import org.springframework.stereotype.Component;
 
 @Component

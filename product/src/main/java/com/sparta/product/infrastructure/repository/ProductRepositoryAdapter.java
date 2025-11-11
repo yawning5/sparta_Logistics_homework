@@ -1,10 +1,13 @@
 package com.sparta.product.infrastructure.repository;
 
+import com.sparta.product.application.command.SearchProductCommand;
 import com.sparta.product.domain.entity.Product;
 import com.sparta.product.domain.repository.ProductRepository;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -26,5 +29,10 @@ public class ProductRepositoryAdapter implements ProductRepository {
     @Override
     public void delete(Product product) {
         jpaProductRepository.delete(product);
+    }
+
+    @Override
+    public Page<Product> searchVendors(SearchProductCommand command, Pageable pageable) {
+        return jpaProductRepository.searchProducts(command, pageable);
     }
 }

@@ -1,6 +1,6 @@
 package com.sparta.member.application.service;
 
-import com.sparta.member.interfaces.dto.LoginDto;
+import com.sparta.member.interfaces.dto.request.LoginDto;
 import com.sparta.member.infrastructure.jwt.JwtProvider;
 import com.sparta.member.infrastructure.userDetails.CustomUserDetails;
 import lombok.RequiredArgsConstructor;

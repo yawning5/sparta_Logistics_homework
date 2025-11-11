@@ -1,23 +1,26 @@
+# member - application.yml
+
 spring:
   application:
     name: member-service
+  profiles:
+    active: local
   config:
     import: "optional:configserver:"
   cloud:
     config:
+      fail-fast: true   # config 서버 접근 실패시 즉시 예외 발생
       discovery:
         enabled: true
         service-id: config-server
-      fail-fast: true   # config 서버 접근 실패시 즉시 예외 발생
       retry:
         max-attempts: 6
         initial-interval: 2000
         multiplier: 1.5
 
-
 eureka:
   client:
     service-url:
-      defaultZone: http://eureka-server:18080/eureka/
+      defaultZone: http://${EUREKA_HOST:localhost}:18080/eureka/
   instance:
     hostname: member-service

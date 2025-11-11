@@ -21,14 +21,13 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-@WebMvcTest(MemberController.class)
+@WebMvcTest(MemberExternalController.class)
 @ActiveProfiles("test")
 @Import(TestSecurityConfig.class)
-class MemberControllerTest {
+class MemberExternalControllerTest {
 
     // DispatcherServlet 을 실제로 동작시키지만
     // 톰캣 서버(포트)는 띄우지 않고 메모리 내에서 요청/응답을 시뮬레이션함.

@@ -32,8 +32,10 @@ spring:
           predicates:
             - Path=/v*/products/**
 
-
-
+        - id: member-service
+          uri: lb://member-service
+          predicates:
+            - Path=/v*/member/**
 server:
   port: 17070
 

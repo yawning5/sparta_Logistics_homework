@@ -1,4 +1,4 @@
-package com.keepgoing.hub.application.exception;
+package com.sparta.hub.application.exception;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

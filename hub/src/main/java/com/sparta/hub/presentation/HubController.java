@@ -1,9 +1,9 @@
-package com.keepgoing.hub.presentation;
+package com.sparta.hub.presentation;
 
-import com.keepgoing.hub.application.command.CreateHubCommand;
-import com.keepgoing.hub.application.command.UpdateHubCommand;
-import com.keepgoing.hub.application.dto.HubResponse;
-import com.keepgoing.hub.application.service.HubService;
+import com.sparta.hub.application.command.CreateHubCommand;
+import com.sparta.hub.application.command.UpdateHubCommand;
+import com.sparta.hub.application.dto.HubResponse;
+import com.sparta.hub.application.service.HubService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

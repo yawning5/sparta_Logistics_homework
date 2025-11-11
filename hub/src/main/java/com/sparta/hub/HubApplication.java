@@ -1,4 +1,4 @@
-package com.keepgoing.hub;
+package com.sparta.hub;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

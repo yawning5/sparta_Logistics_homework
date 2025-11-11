@@ -1,13 +1,13 @@
-package com.keepgoing.hub.application.service;
+package com.sparta.hub.application.service;
 
-import com.keepgoing.hub.application.command.CreateHubCommand;
-import com.keepgoing.hub.application.command.UpdateHubCommand;
-import com.keepgoing.hub.application.dto.HubResponse;
-import com.keepgoing.hub.application.exception.ErrorCode;
-import com.keepgoing.hub.application.exception.ForbiddenOperationException;
-import com.keepgoing.hub.domain.entity.Hub;
-import com.keepgoing.hub.domain.repository.HubRepository;
-import com.keepgoing.hub.infrastructure.repository.JpaHubRepository;
+import com.sparta.hub.application.command.CreateHubCommand;
+import com.sparta.hub.application.command.UpdateHubCommand;
+import com.sparta.hub.application.dto.HubResponse;
+import com.sparta.hub.application.exception.ErrorCode;
+import com.sparta.hub.application.exception.ForbiddenOperationException;
+import com.sparta.hub.domain.entity.Hub;
+import com.sparta.hub.domain.repository.HubRepository;
+import com.sparta.hub.infrastructure.repository.JpaHubRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;

@@ -1,4 +1,4 @@
-package com.keepgoing.hub.application.command;
+package com.sparta.hub.application.command;
 
 public record UpdateHubCommand(
         String name,

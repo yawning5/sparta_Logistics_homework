@@ -1,4 +1,4 @@
-package com.keepgoing.hub.domain.entity;
+package com.sparta.hub.domain.entity;
 
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;

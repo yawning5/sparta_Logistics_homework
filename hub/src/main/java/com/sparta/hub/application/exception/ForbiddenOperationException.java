@@ -1,4 +1,4 @@
-package com.keepgoing.hub.application.exception;
+package com.sparta.hub.application.exception;
 
 public class ForbiddenOperationException extends RuntimeException {
     private final ErrorCode errorCode;

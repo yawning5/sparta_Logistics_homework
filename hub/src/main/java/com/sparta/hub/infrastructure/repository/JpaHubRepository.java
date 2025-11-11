@@ -1,6 +1,6 @@
-package com.keepgoing.hub.infrastructure.repository;
+package com.sparta.hub.infrastructure.repository;
 
-import com.keepgoing.hub.domain.entity.Hub;
+import com.sparta.hub.domain.entity.Hub;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;

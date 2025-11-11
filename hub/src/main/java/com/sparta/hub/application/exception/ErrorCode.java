@@ -1,4 +1,4 @@
-package com.keepgoing.hub.application.exception;
+package com.sparta.hub.application.exception;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;

@@ -1,9 +1,8 @@
-package com.keepgoing.hub.domain.entity;
+package com.sparta.hub.domain.entity;
 
-import com.keepgoing.hub.application.command.UpdateHubCommand;
-import com.keepgoing.hub.application.exception.ErrorCode;
-import com.keepgoing.hub.application.exception.ForbiddenOperationException;
-import com.keepgoing.hub.domain.entity.BaseEntity;
+import com.sparta.hub.application.command.UpdateHubCommand;
+import com.sparta.hub.application.exception.ErrorCode;
+import com.sparta.hub.application.exception.ForbiddenOperationException;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

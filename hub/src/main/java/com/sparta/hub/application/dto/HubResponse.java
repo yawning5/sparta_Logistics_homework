@@ -1,6 +1,6 @@
-package com.keepgoing.hub.application.dto;
+package com.sparta.hub.application.dto;
 
-import com.keepgoing.hub.domain.entity.Hub;
+import com.sparta.hub.domain.entity.Hub;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import lombok.Builder;

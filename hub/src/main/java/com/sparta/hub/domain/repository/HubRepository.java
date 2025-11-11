@@ -1,6 +1,6 @@
-package com.keepgoing.hub.domain.repository;
+package com.sparta.hub.domain.repository;
 
-import com.keepgoing.hub.domain.entity.Hub;
+import com.sparta.hub.domain.entity.Hub;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;

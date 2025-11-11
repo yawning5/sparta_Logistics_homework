@@ -1,7 +1,7 @@
-package com.keepgoing.hub.infrastructure.repository;
+package com.sparta.hub.infrastructure.repository;
 
-import com.keepgoing.hub.domain.entity.Hub;
-import com.keepgoing.hub.domain.repository.HubRepository;
+import com.sparta.hub.domain.entity.Hub;
+import com.sparta.hub.domain.repository.HubRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

@@ -1,8 +1,10 @@
 package com.keepgoing.order.application.exception;
 
-public class NotFoundProductException extends RuntimeException{
+import com.keepgoing.order.presentation.dto.response.base.ErrorCode;
+
+public class NotFoundProductException extends BusinessException{
 
     public NotFoundProductException(String message) {
-        super(message);
+        super(ErrorCode.PRODUCT_NOT_FOUND ,message);
     }
 }

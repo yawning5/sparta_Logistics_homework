@@ -1,8 +1,10 @@
 package com.keepgoing.order.application.exception;
 
-public class InventoryReservationFailException extends RuntimeException{
+import com.keepgoing.order.presentation.dto.response.base.ErrorCode;
+
+public class InventoryReservationFailException extends BusinessException{
 
     public InventoryReservationFailException(String message) {
-        super(message);
+        super(ErrorCode.INVENTORY_RESERVATION_FAIL, message);
     }
 }

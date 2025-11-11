@@ -2,6 +2,7 @@ package com.sparta.hub.inventory.application.service;
 
 import com.sparta.hub.inventory.application.command.AllocateInventoryCommand;
 import com.sparta.hub.inventory.application.command.ReceiveInventoryCommand;
+import com.sparta.hub.inventory.application.command.ShipInventoryCommand;
 import com.sparta.hub.inventory.application.dto.HubInventoryResponse;
 import com.sparta.hub.inventory.domain.entity.HubInventory;
 import com.sparta.hub.inventory.domain.repository.HubInventoryRepository;
@@ -40,6 +41,21 @@ public class HubInventoryService {
 
         inventory.decreaseQuantity(command.reservedQuantity());
         inventory.setStatus("RESERVED");
+        hubInventoryRepository.save(inventory);
+
+        return HubInventoryResponse.from(inventory);
+    }
+
+    @Transactional
+    public HubInventoryResponse shipInventory(ShipInventoryCommand command) {
+        var inventory = hubInventoryRepository.findByHubIdAndProductId(command.hubId(), command.productId())
+                .orElseThrow(() -> new IllegalArgumentException("재고를 찾을 수 없습니다."));
+
+        if (!"RESERVED".equals(inventory.getStatus())) {
+            throw new IllegalStateException("출고 대기 상태가 아닙니다.");
+        }
+
+        inventory.setStatus("SHIPPED");
         hubInventoryRepository.save(inventory);
 
         return HubInventoryResponse.from(inventory);

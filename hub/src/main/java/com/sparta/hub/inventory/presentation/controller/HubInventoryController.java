@@ -2,6 +2,7 @@ package com.sparta.hub.inventory.presentation.controller;
 
 import com.sparta.hub.inventory.application.command.AllocateInventoryCommand;
 import com.sparta.hub.inventory.application.command.ReceiveInventoryCommand;
+import com.sparta.hub.inventory.application.command.ShipInventoryCommand;
 import com.sparta.hub.inventory.application.dto.HubInventoryResponse;
 import com.sparta.hub.inventory.application.service.HubInventoryService;
 import jakarta.validation.Valid;
@@ -26,5 +27,11 @@ public class HubInventoryController {
     public ResponseEntity<HubInventoryResponse> allocateInventory(
             @Valid @RequestBody AllocateInventoryCommand command) {
         return ResponseEntity.ok(hubInventoryService.allocateInventory(command));
+    }
+
+    @PostMapping("/ship")
+    public ResponseEntity<HubInventoryResponse> shipInventory(
+            @Valid @RequestBody ShipInventoryCommand command) {
+        return ResponseEntity.ok(hubInventoryService.shipInventory(command));
     }
 }

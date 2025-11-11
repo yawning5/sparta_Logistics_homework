@@ -1,6 +1,7 @@
 package com.sparta.member.application.service;
 
 import com.sparta.member.domain.vo.Affiliation;
+import com.sparta.member.interfaces.dto.RoleChangeRequestDto;
 import com.sparta.member.interfaces.dto.request.ChangeInfoRequestDto;
 import com.sparta.member.interfaces.dto.response.MemberInfoResponseDto;
 import com.sparta.member.interfaces.dto.request.SearchRequestDto;
@@ -114,5 +115,13 @@ public class MemberService {
 
 
         memberRepository.save(changeMember);
+    }
+
+    @Transactional
+    public void changeRole(Long id, RoleChangeRequestDto reqDto) {
+        Member targetMember = memberRepository.findById(id);
+        targetMember.changRole(reqDto.role());
+        System.out.println(targetMember.role().toString());
+        memberRepository.save(targetMember);
     }
 }

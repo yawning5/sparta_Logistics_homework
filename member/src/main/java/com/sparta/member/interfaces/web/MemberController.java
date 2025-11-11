@@ -4,6 +4,7 @@ import com.sparta.member.application.service.AuthService;
 import com.sparta.member.application.service.MemberService;
 import com.sparta.member.infrastructure.userDetails.CustomUserDetails;
 import com.sparta.member.interfaces.dto.BaseResponseDto;
+import com.sparta.member.interfaces.dto.RoleChangeRequestDto;
 import com.sparta.member.interfaces.dto.request.ChangeInfoRequestDto;
 import com.sparta.member.interfaces.dto.request.LoginDto;
 import com.sparta.member.interfaces.dto.response.MemberInfoResponseDto;
@@ -120,6 +121,18 @@ public class MemberController {
         @RequestBody ChangeInfoRequestDto requestDto
     ) {
         memberService.changeInfo(id, requestDto);
+
+        return ResponseEntity.noContent()
+            .build();
+    }
+
+    @PreAuthorize("hasRole('MASTER')")
+    @PatchMapping("/{id}/role")
+    public ResponseEntity<BaseResponseDto<?>> changeRole(
+        @PathVariable Long id,
+        @RequestBody RoleChangeRequestDto reqDto
+    ) {
+        memberService.changeRole(id, reqDto);
 
         return ResponseEntity.noContent()
             .build();

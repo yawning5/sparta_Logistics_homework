@@ -56,4 +56,16 @@ public class HubRoute {
     public boolean isDeleted() {
         return deletedAt != null;
     }
+
+    public void updateTransitMinutes(int transitMinutes) {
+        if (transitMinutes <= 0)
+            throw new IllegalArgumentException("운송 시간은 1분 이상이어야 합니다.");
+        this.transitMinutes = transitMinutes;
+    }
+
+    public void updateDistanceKm(BigDecimal distanceKm) {
+        if (distanceKm == null || distanceKm.compareTo(BigDecimal.ZERO) <= 0)
+            throw new IllegalArgumentException("거리는 0보다 커야 합니다.");
+        this.distanceKm = distanceKm;
+    }
 }

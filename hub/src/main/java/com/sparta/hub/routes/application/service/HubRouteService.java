@@ -1,6 +1,7 @@
 package com.sparta.hub.routes.application.service;
 
 import com.sparta.hub.routes.application.command.CreateHubRouteCommand;
+import com.sparta.hub.routes.application.command.UpdateHubRouteCommand;
 import com.sparta.hub.routes.application.dto.HubRouteResponse;
 import com.sparta.hub.routes.application.query.HubRouteSearchQuery;
 import com.sparta.hub.routes.domain.entity.HubRoute;
@@ -70,6 +71,22 @@ public class HubRouteService {
                 .map(HubRouteResponse::from);
     }
 
+    @Transactional
+    public HubRouteResponse updateRoute(UUID id, UpdateHubRouteCommand command) {
+        HubRoute route = hubRouteRepository.findByIdAndDeletedAtIsNull(id)
+                .orElseThrow(() -> new IllegalArgumentException("허브 이동 경로를 찾을 수 없습니다."));
+
+        if (command.transitMinutes() != null) {
+            route.updateTransitMinutes(command.transitMinutes());
+        }
+        if (command.distanceKm() != null) {
+            route.updateDistanceKm(command.distanceKm());
+        }
+
+        hubRouteRepository.save(route);
+        return HubRouteResponse.from(route);
+    }
+
     // ==================== Specification ====================
     private Specification<HubRoute> isNotDeleted() {
         return (root, query, cb) -> cb.isNull(root.get("deletedAt"));
@@ -90,4 +107,6 @@ public class HubRouteService {
     private Specification<HubRoute> distanceLe(BigDecimal maxDistanceKm) {
         return (root, query, cb) -> cb.lessThanOrEqualTo(root.get("distanceKm"), maxDistanceKm);
     }
+
+
 }

@@ -1,6 +1,7 @@
 package com.sparta.hub.routes.presentation.controller;
 
 import com.sparta.hub.routes.application.command.CreateHubRouteCommand;
+import com.sparta.hub.routes.application.command.UpdateHubRouteCommand;
 import com.sparta.hub.routes.application.dto.HubRouteResponse;
 import com.sparta.hub.routes.application.query.HubRouteSearchQuery;
 import com.sparta.hub.routes.application.service.HubRouteService;
@@ -46,6 +47,15 @@ public class HubRouteController {
                 originHubId, destinationHubId, maxTransitMinutes, maxDistanceKm, pageable
         );
         Page<HubRouteResponse> response = hubRouteService.searchRoutes(query);
+        return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<HubRouteResponse> updateRoute(
+            @PathVariable UUID id,
+            @Valid @RequestBody UpdateHubRouteCommand command
+    ) {
+        HubRouteResponse response = hubRouteService.updateRoute(id, command);
         return ResponseEntity.ok(response);
     }
 }

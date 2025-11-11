@@ -1,10 +1,13 @@
 package com.sparta.vendor.infrastructure.repository;
 
+import com.sparta.vendor.application.command.SearchVendorCommand;
 import com.sparta.vendor.domain.entity.Vendor;
 import com.sparta.vendor.domain.repository.VendorRepository;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -26,5 +29,10 @@ public class VendorRepositoryAdapter implements VendorRepository {
     @Override
     public void delete(Vendor vendor) {
         jpaVendorRepository.delete(vendor);
+    }
+
+    @Override
+    public Page<Vendor> searchVendors(SearchVendorCommand command, Pageable pageable) {
+        return jpaVendorRepository.searchVendors(command, pageable);
     }
 }

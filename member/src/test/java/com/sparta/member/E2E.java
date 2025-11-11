@@ -3,15 +3,15 @@ package com.sparta.member;
 import static io.restassured.RestAssured.given;
 import static org.instancio.Select.field;
 
-import com.sparta.member.interfaces.dto.LoginDto;
+import com.sparta.member.interfaces.dto.request.LoginDto;
 import com.sparta.member.domain.enums.Role;
 import com.sparta.member.domain.enums.Status;
 import com.sparta.member.domain.model.Member;
 import com.sparta.member.domain.repository.MemberRepository;
 import com.sparta.member.domain.vo.Affiliation;
 import com.sparta.member.domain.vo.Type;
-import com.sparta.member.interfaces.dto.SignUpRequestDto;
-import com.sparta.member.interfaces.dto.StatusChangeRequestDto;
+import com.sparta.member.interfaces.dto.request.SignUpRequestDto;
+import com.sparta.member.interfaces.dto.request.StatusChangeRequestDto;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import java.util.UUID;
@@ -28,10 +28,6 @@ import org.springframework.test.context.TestPropertySource;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-@TestPropertySource(properties = {
-    "spring.cloud.config.enabled=false",
-    "eureka.client.enabled=false"
-})
 public class E2E {
 
     @Autowired

@@ -1,4 +1,4 @@
-package com.sparta.member.interfaces.dto;
+package com.sparta.member.interfaces.dto.response;
 
 import com.sparta.member.domain.enums.Status;
 

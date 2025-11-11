@@ -2,6 +2,7 @@ package com.sparta.product.application.service;
 
 import com.sparta.product.application.command.CreateProductCommand;
 import com.sparta.product.application.command.DeleteProductCommand;
+import com.sparta.product.application.command.SearchProductCommand;
 import com.sparta.product.application.command.UpdateProductCommand;
 import com.sparta.product.application.dto.ProductResult;
 import com.sparta.product.application.exception.ErrorCode;
@@ -14,6 +15,8 @@ import com.sparta.product.domain.vo.VendorId;
 
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,5 +57,10 @@ public class ProductPersistenceService {
     public void deleteProduct(DeleteProductCommand command) {
         Product product = findById(command.productId());
         product.delete(command.userId());
+    }
+
+    @Transactional
+    public Page<Product> searchProducts(SearchProductCommand command, Pageable pageable) {
+        return productRepository.searchVendors(command, pageable);
     }
 }

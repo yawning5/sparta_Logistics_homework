@@ -1,7 +1,15 @@
-# member.application-test.yml
+# member.application-dev.yml
 spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/member
+    username: root
+    password: root
+    driver-class-name: org.postgresql.Driver
   application:
     name: member-service
+  config:
+    activate:
+      on-profile: dev
   jpa:
     hibernate:
       ddl-auto: create-drop

@@ -1,7 +1,11 @@
+# member - Dockerfile
 FROM eclipse-temurin:21-jdk
 
 WORKDIR /app
 
-COPY build/libs/*.jar delivery.jar
+ENV EUREKA_HOST=eureka-server
+ENV SPRING_PROFILES_ACTIVE=prod
 
-ENTRYPOINT ["java", "-jar", "/app/delivery.jar"]
+COPY build/libs/*.jar member.jar
+
+ENTRYPOINT ["java", "-jar", "/app/member.jar"]

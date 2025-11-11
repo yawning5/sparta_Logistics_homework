@@ -9,6 +9,7 @@ import feign.FeignException;
 import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -36,5 +37,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity
             .status(e.getErrorCode().getHttpStatus())
             .body(BaseResponseDTO.error(e.getErrorCode()));
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<BaseResponseDTO<?>> handleMethodArgumentNotValidException(
+        MethodArgumentNotValidException ex) {
+        return ResponseEntity
+            .status(ErrorCode.INVALID_JSON_FORMAT.getHttpStatus())
+            .body(BaseResponseDTO.error(ErrorCode.INVALID_JSON_FORMAT, ex.getBindingResult()));
     }
 }

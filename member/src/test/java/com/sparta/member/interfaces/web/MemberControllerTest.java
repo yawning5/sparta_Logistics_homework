@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.member.application.service.AuthService;
 import com.sparta.member.application.service.MemberService;
 import com.sparta.member.config.TestSecurityConfig;
-import com.sparta.member.interfaces.dto.SignUpRequestDto;
+import com.sparta.member.interfaces.dto.request.SignUpRequestDto;
 import org.instancio.Instancio;
 import org.instancio.Select;
 import org.junit.jupiter.api.DisplayName;
@@ -28,10 +28,6 @@ import org.springframework.test.web.servlet.MockMvc;
 @WebMvcTest(MemberController.class)
 @ActiveProfiles("test")
 @Import(TestSecurityConfig.class)
-@TestPropertySource(properties = {
-    "spring.cloud.config.enabled=false",
-    "eureka.client.enabled=false"
-})
 class MemberControllerTest {
 
     // DispatcherServlet 을 실제로 동작시키지만

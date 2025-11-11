@@ -28,7 +28,7 @@ import lombok.Setter;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class MemberJpa {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String password;

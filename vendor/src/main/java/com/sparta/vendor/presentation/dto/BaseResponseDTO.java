@@ -3,6 +3,8 @@ package com.sparta.vendor.presentation.dto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import com.sparta.vendor.application.exception.ErrorCode;
+import java.util.Objects;
+import org.springframework.validation.BindingResult;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record BaseResponseDTO<T>(
@@ -41,6 +43,17 @@ public record BaseResponseDTO<T>(
             false,
             null,
             new Error(code, message)
+        );
+    }
+
+
+    public static <T> BaseResponseDTO<T> error(ErrorCode errorCode, BindingResult bindingResult) {
+        return new BaseResponseDTO<>(
+            false,
+            null,
+            new Error(errorCode.getCode(),
+                Objects.requireNonNull(bindingResult.getFieldError()).getField() + " "
+                    + Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage())
         );
     }
 }

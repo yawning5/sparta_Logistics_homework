@@ -1,5 +1,6 @@
 package com.sparta.hub.inventory.presentation.controller;
 
+import com.sparta.hub.inventory.application.command.AdjustInventoryCommand;
 import com.sparta.hub.inventory.application.command.AllocateInventoryCommand;
 import com.sparta.hub.inventory.application.command.ReceiveInventoryCommand;
 import com.sparta.hub.inventory.application.command.ShipInventoryCommand;
@@ -33,5 +34,11 @@ public class HubInventoryController {
     public ResponseEntity<HubInventoryResponse> shipInventory(
             @Valid @RequestBody ShipInventoryCommand command) {
         return ResponseEntity.ok(hubInventoryService.shipInventory(command));
+    }
+
+    @PostMapping("/adjust")
+    public ResponseEntity<HubInventoryResponse> adjustInventory(
+            @Valid @RequestBody AdjustInventoryCommand command) {
+        return ResponseEntity.ok(hubInventoryService.adjustInventory(command));
     }
 }

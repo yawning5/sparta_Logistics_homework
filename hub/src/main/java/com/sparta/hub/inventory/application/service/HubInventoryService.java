@@ -1,5 +1,6 @@
 package com.sparta.hub.inventory.application.service;
 
+import com.sparta.hub.inventory.application.command.AdjustInventoryCommand;
 import com.sparta.hub.inventory.application.command.AllocateInventoryCommand;
 import com.sparta.hub.inventory.application.command.ReceiveInventoryCommand;
 import com.sparta.hub.inventory.application.command.ShipInventoryCommand;
@@ -58,6 +59,27 @@ public class HubInventoryService {
         inventory.setStatus("SHIPPED");
         hubInventoryRepository.save(inventory);
 
+        return HubInventoryResponse.from(inventory);
+    }
+
+    @Transactional
+    public HubInventoryResponse adjustInventory(AdjustInventoryCommand command) {
+        var inventory = hubInventoryRepository.findByHubIdAndProductId(command.hubId(), command.productId())
+                .orElseThrow(() -> new IllegalArgumentException("재고를 찾을 수 없습니다."));
+
+        switch (command.action().toUpperCase()) {
+            case "CANCEL" -> {
+                inventory.increaseQuantity(command.quantity());
+                inventory.setStatus("AVAILABLE");
+            }
+            case "ADJUST" -> {
+                inventory.setQuantity(command.quantity());
+                inventory.setStatus("ADJUSTED");
+            }
+            default -> throw new IllegalArgumentException("올바르지 않은 action 값입니다. (CANCEL 또는 ADJUST)");
+        }
+
+        hubInventoryRepository.save(inventory);
         return HubInventoryResponse.from(inventory);
     }
 }

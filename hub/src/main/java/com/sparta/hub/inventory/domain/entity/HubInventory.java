@@ -49,4 +49,9 @@ public class HubInventory extends BaseEntity {
         }
         this.quantity -= amount;
     }
+
+    public void setQuantity(int quantity) {
+        if (quantity < 0) throw new IllegalArgumentException("수량은 0 이상이어야 합니다.");
+        this.quantity = quantity;
+    }
 }

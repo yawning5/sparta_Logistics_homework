@@ -58,4 +58,10 @@ public class HubRouteController {
         HubRouteResponse response = hubRouteService.updateRoute(id, command);
         return ResponseEntity.ok(response);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteRoute(@PathVariable UUID id) {
+        hubRouteService.deleteRoute(id);
+        return ResponseEntity.noContent().build();
+    }
 }

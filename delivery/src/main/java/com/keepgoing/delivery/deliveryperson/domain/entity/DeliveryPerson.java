@@ -14,7 +14,7 @@ public class DeliveryPerson {
     private final DeliverySeq deliverySeq;
     private boolean isDeleted = false;
     private LocalDateTime deletedAt;
-    private String deletedBy;
+    private Long deletedBy;
 
     private DeliveryPerson(Long userId, UUID hubId, String slackId, DeliveryPersonType type, DeliverySeq seq) {
         if (userId == null)
@@ -49,7 +49,7 @@ public class DeliveryPerson {
             DeliverySeq deliverySeq,
             boolean isDeleted,
             LocalDateTime deletedAt,
-            String deletedBy
+            Long deletedBy
     ) {
         DeliveryPerson deliveryPerson = new DeliveryPerson(id, hubId, slackId, type, deliverySeq);
         deliveryPerson.isDeleted = isDeleted;
@@ -66,7 +66,7 @@ public class DeliveryPerson {
     public DeliverySeq getDeliverySeq() { return deliverySeq; }
     public boolean isDeleted() { return isDeleted; }
     public LocalDateTime getDeletedAt() { return deletedAt; }
-    public String getDeletedBy() { return deletedBy; }
+    public Long getDeletedBy() { return deletedBy; }
 
     public void updateSlackId(String slackId) {
         if (slackId == null || slackId.isBlank())
@@ -108,7 +108,7 @@ public class DeliveryPerson {
         }
     }
 
-    public void markDeleted(String deletedBy) {
+    public void markDeleted(Long deletedBy) {
         if (this.isDeleted) {
             throw new BusinessException(ErrorCode.DELIVERY_PERSON_ALREADY_DELETED);
         }

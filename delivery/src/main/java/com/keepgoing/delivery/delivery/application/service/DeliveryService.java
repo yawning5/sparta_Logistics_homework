@@ -107,7 +107,9 @@ public class DeliveryService {
             UUID deliveryId,
             int routeSeqValue,
             Distance actualDistance,
-            Duration actualTime
+            Duration actualTime,
+            String userRole,
+            UUID hubId
     ) {
         Delivery delivery = findDeliveryByIdWithRoutes(deliveryId);
 
@@ -142,7 +144,7 @@ public class DeliveryService {
 
             // Facade를 통해 업체 배송담당자 목록 조회
             List<DeliveryPerson> vendorDeliveryPersons = deliveryPersonFacade
-                    .getVendorDeliveryPersonsByHub(delivery.getDestinationHubId());
+                    .getVendorDeliveryPersonsByHub(delivery.getDestinationHubId(), userRole, hubId);
 
             // 도메인 서비스를 통해 선택
             DeliveryPerson vendorPerson = deliveryDomainService
@@ -155,14 +157,16 @@ public class DeliveryService {
     }
 
     // 업체 배송 시작
-    public void startVendorDelivery(UUID deliveryId) {
+    public void startVendorDelivery(UUID deliveryId, Long userId, String userRole) {
         Delivery delivery = findDeliveryById(deliveryId);
 
         // 배송담당자 유효성 검증 (Facade 사용)
         if (delivery.getVendorDeliveryPersonId() != null) {
             deliveryPersonFacade.validateDeliveryPerson(
                     delivery.getVendorDeliveryPersonId(),
-                    "VENDOR"
+                    "VENDOR",
+                    userId,
+                    userRole
             );
         }
 

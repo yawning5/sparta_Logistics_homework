@@ -191,7 +191,7 @@ class DeliveryPersonTest {
     void markDeleted_Success() {
         // Given
         DeliveryPerson person = DeliveryPerson.createHubDeliveryPerson(1L, "@hub", new DeliverySeq(1));
-        String deletedBy = "admin";
+        Long deletedBy = 2L;
 
         // When
         person.markDeleted(deletedBy);
@@ -207,10 +207,10 @@ class DeliveryPersonTest {
     void markDeleted_AlreadyDeleted_Fail() {
         // Given
         DeliveryPerson person = DeliveryPerson.createHubDeliveryPerson(1L, "@hub", new DeliverySeq(1));
-        person.markDeleted("admin");
+        person.markDeleted(2L);
 
         // When & Then
-        assertThatThrownBy(() -> person.markDeleted("admin2"))
+        assertThatThrownBy(() -> person.markDeleted(3L))
                 .isInstanceOf(RuntimeException.class)
                 .hasMessage("이미 삭제된 배송 담당자입니다.");
     }

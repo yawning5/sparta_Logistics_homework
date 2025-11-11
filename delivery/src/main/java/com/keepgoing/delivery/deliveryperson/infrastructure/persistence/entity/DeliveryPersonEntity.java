@@ -38,7 +38,7 @@ public class DeliveryPersonEntity {
     private LocalDateTime deletedAt;
 
     @Column(name = "deleted_by")
-    private String deletedBy;
+    private Long deletedBy;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -54,7 +54,7 @@ public class DeliveryPersonEntity {
             Integer deliverySeq,
             boolean isDeleted,
             LocalDateTime deletedAt,
-            String deletedBy,
+            Long deletedBy,
             LocalDateTime createdAt,
             LocalDateTime updatedAt
     ) {

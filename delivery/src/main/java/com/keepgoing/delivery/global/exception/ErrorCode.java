@@ -52,7 +52,13 @@ public enum ErrorCode {
     DELIVERY_PERSON_HUB_REQUIRED_FOR_VENDOR_CONVERT(HttpStatus.BAD_REQUEST, "7115", "업체 배송 담당자로 전환 시 소속 허브는 필수입니다."),
     DELIVERY_PERSON_ASSIGN_ONLY_AFTER_DEST_ARRIVED(HttpStatus.BAD_REQUEST, "7116", "목적지 허브 도착 후에만 업체 배송담당자를 배정할 수 있습니다."),
     DELIVERY_PERSON_ALREADY_ASSIGNED(HttpStatus.CONFLICT, "7117", "이미 배달원이 지정되어 있습니다."),
-    DELIVERY_PERSON_REQUIRED_DELIVERY_ID(HttpStatus.BAD_REQUEST, "7118", "배달원 ID는 필수입니다.");
+    DELIVERY_PERSON_REQUIRED_DELIVERY_ID(HttpStatus.BAD_REQUEST, "7118", "배달원 ID는 필수입니다."),
+
+
+    // Security 관련
+    USER_UNAUTHORIZED(HttpStatus.UNAUTHORIZED ,"7201", "인증되지 않은 사용자 입니다."),
+    USER_FORBIDDEN(HttpStatus.FORBIDDEN, "7202", "접근 권한이 없는 사용자 입니다."),
+    FORBIDDEN_HUB_ACCESS(HttpStatus.FORBIDDEN , "7203", "해당 허브에 접근 권한이 없습니다.");
 
     private final HttpStatus status;
     private final String code;

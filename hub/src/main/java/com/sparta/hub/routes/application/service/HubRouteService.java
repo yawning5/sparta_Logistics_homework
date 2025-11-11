@@ -7,6 +7,7 @@ import com.sparta.hub.routes.domain.repository.HubRouteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +32,13 @@ public class HubRouteService {
         );
 
         hubRouteRepository.save(route);
+        return HubRouteResponse.from(route);
+    }
+
+    @Transactional(readOnly = true)
+    public HubRouteResponse getRoute(UUID id) {
+        HubRoute route = hubRouteRepository.findByIdAndDeletedAtIsNull(id)
+                .orElseThrow(() -> new IllegalArgumentException("허브 이동 경로를 찾을 수 없습니다."));
         return HubRouteResponse.from(route);
     }
 }

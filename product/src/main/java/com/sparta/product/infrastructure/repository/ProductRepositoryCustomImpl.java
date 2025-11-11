@@ -3,6 +3,7 @@ package com.sparta.product.infrastructure.repository;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sparta.product.application.command.SearchProductCommand;
 import com.sparta.product.domain.entity.Product;
@@ -12,8 +13,8 @@ import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -26,7 +27,6 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
     public Page<Product> searchProducts(SearchProductCommand command, Pageable pageable) {
         QProduct product = QProduct.product;
 
-        // ✅ 데이터 조회
         List<Product> content = queryFactory
             .selectFrom(product)
             .where(
@@ -42,8 +42,7 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
             .orderBy(getOrderSpecifiers(pageable))
             .fetch();
 
-        // ✅ 전체 개수 (fetchOne 사용)
-        Long total = queryFactory
+        JPAQuery<Long> countQuery = queryFactory
             .select(product.count())
             .from(product)
             .where(
@@ -53,10 +52,9 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
                 priceBetween(command.minPrice(), command.maxPrice()),
                 vendorIdEq(command.vendorId()),
                 hubIdEq(command.hubId())
-            )
-            .fetchOne();
+            );
 
-        return new PageImpl<>(content, pageable, total == null ? 0 : total);
+        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
     }
 
     private BooleanExpression productIdEq(UUID productId) {

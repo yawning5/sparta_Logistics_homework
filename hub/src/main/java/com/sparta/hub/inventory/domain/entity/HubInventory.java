@@ -42,4 +42,11 @@ public class HubInventory extends BaseEntity {
     public void increaseQuantity(int amount) {
         this.quantity += amount;
     }
+
+    public void decreaseQuantity(int amount) {
+        if (amount > this.quantity) {
+            throw new IllegalArgumentException("재고보다 많은 수량을 차감할 수 없습니다.");
+        }
+        this.quantity -= amount;
+    }
 }

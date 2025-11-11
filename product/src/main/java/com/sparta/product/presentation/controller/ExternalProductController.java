@@ -7,18 +7,15 @@ import com.sparta.product.application.command.GetProductCommand;
 import com.sparta.product.application.command.SearchProductCommand;
 import com.sparta.product.application.command.UpdateProductCommand;
 import com.sparta.product.application.dto.ProductResult;
-import com.sparta.product.application.exception.ErrorCode;
-import com.sparta.product.application.exception.ForbiddenOperationException;
 import com.sparta.product.application.service.ProductService;
-import com.sparta.product.domain.vo.UserRole;
 import com.sparta.product.infrastructure.security.CustomUserDetails;
 import com.sparta.product.presentation.dto.BaseResponseDTO;
 import com.sparta.product.presentation.dto.PageResponseDTO;
 import com.sparta.product.presentation.dto.reqeust.CreateProductRequestDTO;
+import com.sparta.product.presentation.dto.reqeust.SearchProductRequest;
 import com.sparta.product.presentation.dto.reqeust.UpdateRequestProductDTO;
 import com.sparta.product.presentation.dto.response.ProductResponseDTO;
 import jakarta.validation.Valid;
-import java.math.BigInteger;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -29,12 +26,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -96,13 +93,7 @@ public class ExternalProductController {
     public ResponseEntity<?> searchProducts(
         @AuthenticationPrincipal CustomUserDetails user,
         Pageable pageable,
-        @RequestParam(value = "productId", required = false) UUID productId,
-        @RequestParam(value = "name", required = false) String name,
-        @RequestParam(value = "description", required = false) String description,
-        @RequestParam(value = "minPrice", required = false) BigInteger minPrice,
-        @RequestParam(value = "maxPrice", required = false) BigInteger maxPrice,
-        @RequestParam(value = "vendorId", required = false) UUID vendorId,
-        @RequestParam(value = "hubId", required = false) UUID hubId
+        @ModelAttribute SearchProductRequest request
     ) {
 
         int pageSize = pageable.getPageSize();
@@ -111,8 +102,17 @@ public class ExternalProductController {
         }
         pageable = PageRequest.of(pageable.getPageNumber(), pageSize, pageable.getSort());
 
-        SearchProductCommand command = SearchProductCommand.of(user, productId, name, description,
-            minPrice, maxPrice, vendorId, hubId);
+
+        SearchProductCommand command = SearchProductCommand.of(
+            user,
+            request.productId(),
+            request.name(),
+            request.description(),
+            request.minPrice(),
+            request.maxPrice(),
+            request.vendorId(),
+            request.hubId()
+        );
 
         Page<ProductResult> productResultPage = productService.searchProducts(command,
             pageable);

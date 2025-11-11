@@ -1,6 +1,5 @@
 package com.sparta.vendor.infrastructure.security;
 
-import com.sparta.vendor.domain.vo.UserRole;
 import com.sparta.vendor.infrastructure.provider.JwtTokenProvider;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
@@ -72,8 +71,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String path = request.getRequestURI();
         return path.startsWith("/v1/vendors/health-check") ||
-            path.startsWith("/actuator/health") ||
-            path.startsWith("/v1/vendors/health-check") ||
             path.startsWith("/actuator/health") ||
             path.startsWith("/v3/api-docs") ||
             path.startsWith("/swagger-ui") ||

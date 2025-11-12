@@ -1,6 +1,7 @@
 package com.keepgoing.order.presentation.api;
 
 import com.keepgoing.order.domain.order.PaymentApplyResult;
+import com.keepgoing.order.jwt.CustomPrincipal;
 import com.keepgoing.order.presentation.dto.response.api.CancelOrderResponse;
 import com.keepgoing.order.presentation.dto.response.api.DeleteOrderInfo;
 import com.keepgoing.order.presentation.dto.response.api.OrderInfo;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 public interface OrderController {
 
-    BaseResponseDto<CreateOrderResponse> create(CreateOrderRequest request);
+    BaseResponseDto<CreateOrderResponse> create(CreateOrderRequest request, CustomPrincipal customPrincipal);
 
     BaseResponseDto<Page<OrderInfo>> getOrderInfoList(Pageable pageable);
 
@@ -25,7 +26,7 @@ public interface OrderController {
 
     BaseResponseDto<PaymentApplyResult> updateStateToPaid(@PathVariable UUID orderId);
 
-    BaseResponseDto<DeleteOrderInfo> deleteOrder(UUID orderId);
+    BaseResponseDto<DeleteOrderInfo> deleteOrder(UUID orderId, CustomPrincipal customPrincipal);
 
-    BaseResponseDto<CancelOrderResponse> cancel(UUID orderId);
+    BaseResponseDto<CancelOrderResponse> cancel(UUID orderId, CustomPrincipal customPrincipal);
 }

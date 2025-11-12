@@ -128,7 +128,7 @@ public class OrderProcessor {
                     InventoryReservationResponse inventoryResponse = null;
                     try {
                         inventoryResponse = hubClient.reservationInventoryForProduct(
-                            ReservationInventoryRequest.create(productIdForInventory, hubIdForInventory, quantity, idempotencyKey)
+                            ReservationInventoryRequest.create(productIdForInventory, hubIdForInventory, quantity)
                         );
 
                         if (inventoryResponse == null || inventoryResponse.fail()) {

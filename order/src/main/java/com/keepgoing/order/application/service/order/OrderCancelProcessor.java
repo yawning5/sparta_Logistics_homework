@@ -79,8 +79,9 @@ public class OrderCancelProcessor {
                     try {
                         InventoryReservationResponse response = hubClient.reservationCancelInventoryForProduct(
                             ReservationCancelInventoryRequest.create(
-                                String.valueOf(refresh.getProductId()),
-                                String.valueOf(refresh.getHubId()))
+                                refresh.getProductId(),
+                                refresh.getHubId(),
+                                refresh.getQuantity())
                         );
 
                         if (response == null || response.fail()) {

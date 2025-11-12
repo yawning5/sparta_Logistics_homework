@@ -58,6 +58,7 @@ public class OrderProcessor {
 
                     if (orderForProductValidation == null) {
                         orderService.toFail(orderId);
+                        log.error("[상품 검증 실패] 검증 중 주문이 존재하지 않음 orderId={}", orderId);
                         return;
                     }
 
@@ -67,17 +68,20 @@ public class OrderProcessor {
                          productResponse = productClient.getProduct(productId);
 
                         if (productResponse == null || productResponse.fail()) {
+                            log.error("[상품 검증 실패] ProductClient 호출 null 혹은 실패 orderId={}", orderId);
                             orderService.toFail(orderId);
                             return;
                         }
 
                     } catch (Exception e) {
+                        log.error("[상품 검증 실패] ProductClient 호출 예외 발생 orderId={}, msg={}", orderId, e.getMessage(), e);
                         orderService.toFail(orderId);
                         return;
                     }
                     ProductInfo productInfo = productResponse.getProductInfo();
 
                     if (productInfo == null || productInfo.getHubId() == null){
+                        log.error("[상품 검증 실패] ProductClient 응답이 null orderId={}", orderId);
                         orderService.toFail(orderId);
                         return;
                     }
@@ -86,6 +90,7 @@ public class OrderProcessor {
                     try {
                         hubId = UUID.fromString(productInfo.getHubId());
                     } catch (IllegalArgumentException ex) {
+                        log.error("[상품 검증 실패] 잘못된 hubId 포맷: {} orderId={}", productInfo.getHubId(), orderId);
                         orderService.toFail(orderId);
                         return;
                     }
@@ -110,6 +115,7 @@ public class OrderProcessor {
                     Order orderForInventoryReservation = orderService.findById(orderId);
 
                     if (orderForInventoryReservation == null) {
+                        log.error("[재고 예약 실패] 주문을 찾지 못함 orderId={}", orderId);
                         orderService.toFail(orderId);
                         return;
                     }
@@ -126,10 +132,12 @@ public class OrderProcessor {
                         );
 
                         if (inventoryResponse == null || inventoryResponse.fail()) {
+                            log.error("[재고 예약 실패] HubClient null orderId={}", orderId);
                             orderService.toFail(orderId);
                             return;
                         }
                     } catch (Exception e) {
+                        log.error("[재고 예약 실패] HubClient 예외 발생 orderId={}, msg={}", orderId, e.getMessage(), e);
                         orderService.toFail(orderId);
                         return;
                     }

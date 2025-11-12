@@ -18,7 +18,8 @@ public enum ErrorCode {
     FORBIDDEN_COMPANY_UPDATE_OPERATION(HttpStatus.FORBIDDEN, "8005", "업체담당자는 자신의 업체만 수정할 수 있습니다."),
     FORBIDDEN_HUB_ID_MODIFICATION(HttpStatus.FORBIDDEN, "8006", "허브관리자는 허브아이디를 수정할 수 없습니다."),
     FORBIDDEN_COMPANY_ID_MODIFICATION(HttpStatus.FORBIDDEN, "8007", "업체 담당자는 허브아이디를 수정할 수 없습니다."),
-    FORBIDDEN_DELETE_HUB(HttpStatus.FORBIDDEN, "8008", "허브관리자는 담당 허브만 삭제할 수 있습니다.");
+    FORBIDDEN_DELETE_HUB(HttpStatus.FORBIDDEN, "8008", "허브관리자는 담당 허브만 삭제할 수 있습니다."),
+    HUB_NOT_FOUND(HttpStatus.NOT_FOUND, "8009", "존재하지 않는 허브 입니다.");
 
     private final HttpStatus httpStatus;
     private final String code;

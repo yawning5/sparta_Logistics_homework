@@ -51,3 +51,9 @@ management:
 
 jwt:
   secret: dfkldfdfdfdfdfdfdfdfdfdfdfdfdfdfd
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui
+    operations-sorter: method
+    tags-sorter: alpha

@@ -7,6 +7,7 @@ import com.sparta.vendor.application.command.UpdateVendorCommand;
 import com.sparta.vendor.application.dto.VendorResult;
 import com.sparta.vendor.domain.entity.Vendor;
 import com.sparta.vendor.domain.service.VendorDomainValidator;
+import com.sparta.vendor.domain.vo.HubId;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 public class VendorService {
 
     private final VendorPersistenceService vendorPersistenceService;
+    private final HubClientService hubClientService;
 
     // --------------------- 조회 ---------------------
     public VendorResult getVendor(UUID id) {
@@ -34,7 +36,8 @@ public class VendorService {
         VendorDomainValidator.validateCreatePermission(command.role(), command.affiliationId(),
             command.hubId());
 
-        // TODO: 존재하는 허브인지 확인하는 로직 필요
+        HubId hubId = HubId.of(command.hubId());
+        hubClientService.validationHub(hubId, command.token());
 
         return vendorPersistenceService.saveCreateVendor(command);
     }
@@ -47,9 +50,8 @@ public class VendorService {
         VendorDomainValidator.validateUpdatePermission(command.role(), command.affiliationId(),
             vendor, command.hubId());
 
-        // TODO: 존재하는 허브인지 확인하는 로직 필요
-//        validateIdChange(command.hubId(), vendor.getHubId().getId(),
-//            () -> hubClientService.validationHubId(command.hubId(), command.token()));
+        validateIdChange(command.hubId(), vendor.getHubId().getId(),
+            () -> hubClientService.validationHubId(command.hubId(), command.token()));
 
         return vendorPersistenceService.updateVendor(command);
     }

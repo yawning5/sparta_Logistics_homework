@@ -4,6 +4,7 @@ package com.sparta.vendor.application.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -30,6 +31,9 @@ class VendorServiceTest {
 
     @Mock
     private VendorPersistenceService vendorPersistenceService;
+
+    @Mock
+    private HubClientService hubClientService;
 
     @InjectMocks
     private VendorService vendorService;
@@ -70,6 +74,8 @@ class VendorServiceTest {
 
         when(vendorPersistenceService.saveCreateVendor(any(CreateVendorCommand.class)))
             .thenReturn(expectedResult);
+
+        doNothing().when(hubClientService).validationHub(any(), any());
 
         // when
         VendorResult result = vendorService.createVendor(command);

@@ -13,6 +13,17 @@ import static org.assertj.core.api.Assertions.*;
 
 class DeliveryTest {
 
+    private Delivery createTestDelivery() {
+        return Delivery.create(
+                UUID.randomUUID(),
+                UUID.randomUUID(),
+                UUID.randomUUID(),
+                new Address("서울시 강남구", "테헤란로", "06234"),
+                1L,
+                "@user123"
+        );
+    }
+
     @Test
     @DisplayName("배송 생성 - 성공")
     void createDelivery_Success() {
@@ -46,7 +57,7 @@ class DeliveryTest {
                 Delivery.create(null, UUID.randomUUID(), UUID.randomUUID(),
                         new Address("서울", "강남", "12345"), 1L, "@user")
         )
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(RuntimeException.class)
                 .hasMessage("orderId는 필수입니다.");
     }
 
@@ -93,8 +104,8 @@ class DeliveryTest {
         delivery.startFromHub();
 
         // When & Then
-        assertThatThrownBy(() -> delivery.startFromHub())
-                .isInstanceOf(IllegalStateException.class)
+        assertThatThrownBy(delivery::startFromHub)
+                .isInstanceOf(RuntimeException.class)
                 .hasMessage("HUB_WAITING 상태에서만 출발할 수 있습니다.");
     }
 
@@ -168,7 +179,7 @@ class DeliveryTest {
 
         // When & Then
         assertThatThrownBy(() -> delivery.assignVendorDeliveryPerson(vendorPersonId))
-                .isInstanceOf(IllegalStateException.class)
+                .isInstanceOf(RuntimeException.class)
                 .hasMessage("목적지 허브 도착 후에만 업체 배송담당자를 배정할 수 있습니다.");
     }
 
@@ -197,18 +208,9 @@ class DeliveryTest {
 
         // When & Then
         assertThatThrownBy(() -> delivery.markDeleted("admin"))
-                .isInstanceOf(IllegalStateException.class)
+                .isInstanceOf(RuntimeException.class)
                 .hasMessage("배송 시작 전에만 삭제할 수 있습니다.");
     }
 
-    private Delivery createTestDelivery() {
-        return Delivery.create(
-                UUID.randomUUID(),
-                UUID.randomUUID(),
-                UUID.randomUUID(),
-                new Address("서울시 강남구", "테헤란로", "06234"),
-                1L,
-                "@user123"
-        );
-    }
+
 }

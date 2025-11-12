@@ -14,6 +14,7 @@ import com.sparta.member.domain.repository.MemberRepository;
 import com.sparta.member.fixture.MemberFixture;
 import com.sparta.member.fixture.SignUpRequestDtoFixture;
 import com.sparta.member.global.CustomException;
+import com.sparta.member.interfaces.feign.DeliveryClient;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -34,6 +35,8 @@ class MemberServiceTest {
     ApplicationMapper mapper;
     @Mock
     PasswordEncoder passwordEncoder;
+    @Mock
+    DeliveryClient deliveryClient;
 
 
     // 실제 테스트 대상

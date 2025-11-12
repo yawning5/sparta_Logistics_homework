@@ -18,19 +18,21 @@ public enum ErrorCode {
     DELIVERY_ROUTE_NOT_FOUND(HttpStatus.NOT_FOUND, "7008", "해당 순서의 경로를 찾을 수 없습니다."),
     DELIVERY_INVALID_ROUTE(HttpStatus.BAD_REQUEST, "7009", "경로 정보는 null일 수 없습니다."),
     DELIVERY_REQUIRED_FIELDS_MISSING(HttpStatus.BAD_REQUEST, "7010", "배송 생성 시 필수 필드가 누락되었습니다."),
-    DELIVERY_INVALID_ID(HttpStatus.BAD_REQUEST, "7011", "배송 ID는 필수입니다."),
-    DELIVERY_INVALID_HUB(HttpStatus.BAD_REQUEST, "7012", "출발/도착 허브 ID는 필수입니다."),
-    DELIVERY_INVALID_DISTANCE_OR_TIME(HttpStatus.BAD_REQUEST, "7013", "거리와 소요 시간은 필수입니다."),
-    DELIVERY_INVALID_ROUTE_SEQ(HttpStatus.BAD_REQUEST, "7014", "경로 순서는 필수입니다."),
-    DELIVERY_INVALID_STATUS_TRANSITION(HttpStatus.BAD_REQUEST, "7015", "현재 상태에서는 해당 동작을 수행할 수 없습니다."),
-    DELIVERY_CAN_START_ONLY_FROM_HUB_WAITING(HttpStatus.BAD_REQUEST, "7016", "HUB_WAITING 상태에서만 출발할 수 있습니다."),
-    DELIVERY_CAN_ARRIVE_DEST_ONLY_FROM_HUB_IN_PROGRESS(HttpStatus.BAD_REQUEST, "7017", "HUB_IN_PROGRESS 상태에서만 도착 허브에 도착할 수 있습니다."),
-    DELIVERY_CAN_START_VENDOR_ONLY_FROM_DEST_HUB_ARRIVED(HttpStatus.BAD_REQUEST, "7018", "DEST_HUB_ARRIVED 상태에서만 가맹점 배송을 시작할 수 있습니다."),
-    DELIVERY_CAN_COMPLETE_ONLY_FROM_VENDOR_IN_PROGRESS(HttpStatus.BAD_REQUEST, "7019", "VENDOR_IN_PROGRESS 상태에서만 배송을 완료할 수 있습니다."),
-    DELIVERY_RECORD_ONLY_AFTER_ARRIVED(HttpStatus.BAD_REQUEST, "7020", "ARRIVED 상태에서만 실제 거리/시간을 기록할 수 있습니다."),
-    DELIVERY_REQUIRED_ACTUAL_DISTANCE_OR_TIME(HttpStatus.BAD_REQUEST, "7021", "실제 거리와 시간은 필수입니다."),
-    DELIVERY_ROUTE_CAN_MOVE_ONLY_FROM_WAITING(HttpStatus.BAD_REQUEST, "7022", "WAITING 상태에서만 이동할 수 있습니다."),
-    DELIVERY_ROUTE_CAN_ARRIVE_ONLY_FROM_MOVING(HttpStatus.BAD_REQUEST, "7023", "MOVING 상태에서만 도착 처리할 수 있습니다."),
+    DELIVERY_INVALID_ORDER_ID(HttpStatus.BAD_REQUEST, "7011", "orderId는 필수입니다."),
+    DELIVERY_INVALID_ID(HttpStatus.BAD_REQUEST, "7012", "배송 ID는 필수입니다."),
+    DELIVERY_INVALID_HUB(HttpStatus.BAD_REQUEST, "7013", "출발/도착 허브 ID는 필수입니다."),
+    DELIVERY_INVALID_DISTANCE_OR_TIME(HttpStatus.BAD_REQUEST, "7014", "거리와 소요 시간은 필수입니다."),
+    DELIVERY_INVALID_ROUTE_SEQ(HttpStatus.BAD_REQUEST, "7015", "경로 순서는 필수입니다."),
+    DELIVERY_INVALID_STATUS_TRANSITION(HttpStatus.BAD_REQUEST, "7016", "현재 상태에서는 해당 동작을 수행할 수 없습니다."),
+    DELIVERY_CAN_START_ONLY_FROM_HUB_WAITING(HttpStatus.BAD_REQUEST, "7017", "HUB_WAITING 상태에서만 출발할 수 있습니다."),
+    DELIVERY_CAN_ARRIVE_DEST_ONLY_FROM_HUB_IN_PROGRESS(HttpStatus.BAD_REQUEST, "7018", "HUB_IN_PROGRESS 상태에서만 도착 허브에 도착할 수 있습니다."),
+    DELIVERY_CAN_START_VENDOR_ONLY_FROM_DEST_HUB_ARRIVED(HttpStatus.BAD_REQUEST, "7019", "DEST_HUB_ARRIVED 상태에서만 가맹점 배송을 시작할 수 있습니다."),
+    DELIVERY_CAN_COMPLETE_ONLY_FROM_VENDOR_IN_PROGRESS(HttpStatus.BAD_REQUEST, "7020", "VENDOR_IN_PROGRESS 상태에서만 배송을 완료할 수 있습니다."),
+    DELIVERY_RECORD_ONLY_AFTER_ARRIVED(HttpStatus.BAD_REQUEST, "7021", "ARRIVED 상태에서만 실제 거리/시간을 기록할 수 있습니다."),
+    DELIVERY_REQUIRED_ACTUAL_DISTANCE_OR_TIME(HttpStatus.BAD_REQUEST, "7022", "실제 거리와 시간은 필수입니다."),
+    DELIVERY_ROUTE_CAN_MOVE_ONLY_FROM_WAITING(HttpStatus.BAD_REQUEST, "7023", "WAITING 상태에서만 이동할 수 있습니다."),
+    DELIVERY_ROUTE_CAN_ARRIVE_ONLY_FROM_MOVING(HttpStatus.BAD_REQUEST, "7024", "MOVING 상태에서만 도착 처리할 수 있습니다."),
+
 
     // DeliveryPerson 관련
     DELIVERY_PERSON_ALREADY_REGISTERED(HttpStatus.CONFLICT, "7101", "이미 등록된 배송 담당자입니다."),
@@ -50,7 +52,13 @@ public enum ErrorCode {
     DELIVERY_PERSON_HUB_REQUIRED_FOR_VENDOR_CONVERT(HttpStatus.BAD_REQUEST, "7115", "업체 배송 담당자로 전환 시 소속 허브는 필수입니다."),
     DELIVERY_PERSON_ASSIGN_ONLY_AFTER_DEST_ARRIVED(HttpStatus.BAD_REQUEST, "7116", "목적지 허브 도착 후에만 업체 배송담당자를 배정할 수 있습니다."),
     DELIVERY_PERSON_ALREADY_ASSIGNED(HttpStatus.CONFLICT, "7117", "이미 배달원이 지정되어 있습니다."),
-    DELIVERY_PERSON_REQUIRED_DELIVERY_ID(HttpStatus.BAD_REQUEST, "7118", "배달원 ID는 필수입니다.");
+    DELIVERY_PERSON_REQUIRED_DELIVERY_ID(HttpStatus.BAD_REQUEST, "7118", "배달원 ID는 필수입니다."),
+
+
+    // Security 관련
+    USER_UNAUTHORIZED(HttpStatus.UNAUTHORIZED ,"7201", "인증되지 않은 사용자 입니다."),
+    USER_FORBIDDEN(HttpStatus.FORBIDDEN, "7202", "접근 권한이 없는 사용자 입니다."),
+    FORBIDDEN_HUB_ACCESS(HttpStatus.FORBIDDEN , "7203", "해당 허브에 접근 권한이 없습니다.");
 
     private final HttpStatus status;
     private final String code;

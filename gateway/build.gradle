@@ -37,6 +37,10 @@ dependencies {
 
     // --- jwt ---
     implementation 'org.springframework.security:spring-security-oauth2-jose'
+
+    // --- cache ---
+    implementation 'com.github.ben-manes.caffeine:caffeine'
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
 }
 
 dependencyManagement {

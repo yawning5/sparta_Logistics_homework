@@ -40,7 +40,7 @@ public class DataInitializer {
                 "master",
                 new Affiliation(
                     Type.COMPANY,
-                    UUID.randomUUID(),
+                    UUID.fromString("11111111-2222-3333-4444-555555555555"),
                     "sparta"
                 ),
                 Role.MASTER

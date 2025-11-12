@@ -24,7 +24,8 @@ public enum ErrorCode {
         "업체담장자는 담당 업체에 등록된 상품만 수정할 수 있습니다."),
     FORBIDDEN_COMPANY_ID_UPDATE_OPERATION(HttpStatus.FORBIDDEN, "40010",
         "업체담당자는 업체 아이디를 수정할 수 없습니다."),
-    FORBIDDEN_DELETE_HUB(HttpStatus.FORBIDDEN, "40011" ,"허브관리자는 담당 허브만 삭제할 수 있습니다." );
+    FORBIDDEN_DELETE_HUB(HttpStatus.FORBIDDEN, "40011", "허브관리자는 담당 허브만 삭제할 수 있습니다."),
+    HUB_NOT_FOUND(HttpStatus.NOT_FOUND, "40012", "존재하지 않는 허브입니다.");
 
     private final HttpStatus httpStatus;
     private final String code;

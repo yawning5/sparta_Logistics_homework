@@ -1,6 +1,5 @@
 package com.sparta.vendor.infrastructure.security;
 
-import com.sparta.vendor.domain.vo.UserRole;
 import com.sparta.vendor.infrastructure.provider.JwtTokenProvider;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
@@ -46,7 +45,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 String role = claims.get("role", String.class);
                 String affiliationId = claims.get("affiliationId", String.class);
 
-                CustomUserDetails userDetails = new CustomUserDetails(userId, role, affiliationId, token);
+                CustomUserDetails userDetails = new CustomUserDetails(userId, role, affiliationId,
+                    token);
                 UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());
@@ -70,7 +70,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String path = request.getRequestURI();
-        return path.startsWith("/v1/vendors/health-check") || path.startsWith("/actuator/health");
+        return path.startsWith("/v1/vendors/health-check") ||
+            path.startsWith("/actuator/health") ||
+            path.startsWith("/v3/api-docs") ||
+            path.startsWith("/swagger-ui") ||
+            path.startsWith("/swagger-resources") ||
+            path.startsWith("/webjars");
     }
 
     private void sendErrorResponse(HttpServletResponse response, int code, String message)

@@ -1,8 +1,10 @@
 package com.keepgoing.order.application.exception;
 
-public class OrderCancelFailException extends RuntimeException{
+import com.keepgoing.order.presentation.dto.response.base.ErrorCode;
+
+public class OrderCancelFailException extends BusinessException{
 
     public OrderCancelFailException(String message) {
-        super(message);
+        super(ErrorCode.ORDER_CANCEL_FAIL ,message);
     }
 }

@@ -2,6 +2,8 @@ package com.keepgoing.order.presentation.dto.request;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.keepgoing.order.application.service.order.OrderService;
+import com.keepgoing.order.jwt.JwtAuthenticationFilter;
+import com.keepgoing.order.jwt.JwtProvider;
 import com.keepgoing.order.presentation.api.OrderControllerV1;
 import com.keepgoing.order.presentation.dto.response.api.CreateOrderResponse;
 import java.time.LocalDateTime;
@@ -10,8 +12,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties.Jwt;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -28,6 +33,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
     "eureka.client.fetch-registry=false"
 })
 @ActiveProfiles("test")
+@AutoConfigureMockMvc(addFilters = false)
 class CreateOrderRequestTest {
 
     @Autowired
@@ -39,6 +45,12 @@ class CreateOrderRequestTest {
     @MockitoBean
     OrderService orderService;
 
+    @MockitoBean
+    JwtProvider jwtProvider;
+
+    @MockitoBean
+    JwtAuthenticationFilter jwtAuthenticationFilter;
+
     @DisplayName("주문 생성시 전달되는 공급 업체의 식별자가 null인 경우 BadRequest 응답")
     @Test
     void CreateOrderRequestParameterValidationException1() throws Exception {
@@ -48,7 +60,7 @@ class CreateOrderRequestTest {
 
         CreateOrderRequest request = CreateOrderRequest.builder()
             .supplierId(null)
-            .supplierName(null)
+            .supplierName("무한업체")
             .receiverId(UUID.fromString("f3cb7a76-0ad3-4c2d-b269-2e8c9c92a4e7"))
             .receiverName("무한상사")
             .productId(UUID.fromString("7b8df265-6f41-4ad7-942a-7fdf81b5f1c3"))
@@ -66,7 +78,9 @@ class CreateOrderRequestTest {
                     .content(objectMapper.writeValueAsString(request))
                     .contentType(MediaType.APPLICATION_JSON)
             )
-            .andExpect(MockMvcResultMatchers.status().isBadRequest());
+            .andExpect(MockMvcResultMatchers.status().isBadRequest())
+            .andExpect(MockMvcResultMatchers.jsonPath("$.error.code").value("5400"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.error.message").value("공급 업체의 식별자는 필수값입니다."));
     }
 
     @DisplayName("주문 생성시 전달되는 공급 업체의 이름이 null인 경우 BadRequest")
@@ -96,7 +110,9 @@ class CreateOrderRequestTest {
                     .content(objectMapper.writeValueAsString(request))
                     .contentType(MediaType.APPLICATION_JSON)
             )
-            .andExpect(MockMvcResultMatchers.status().isBadRequest());
+            .andExpect(MockMvcResultMatchers.status().isBadRequest())
+            .andExpect(MockMvcResultMatchers.jsonPath("$.error.code").value("5400"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.error.message").value("공급 업체 이름은 필수값입니다."));
     }
 
     @DisplayName("주문 생성시 전달되는 수령 업체의 식별자가 null인 경우 BadRequest")
@@ -126,7 +142,9 @@ class CreateOrderRequestTest {
                     .content(objectMapper.writeValueAsString(request))
                     .contentType(MediaType.APPLICATION_JSON)
             )
-            .andExpect(MockMvcResultMatchers.status().isBadRequest());
+            .andExpect(MockMvcResultMatchers.status().isBadRequest())
+            .andExpect(MockMvcResultMatchers.jsonPath("$.error.code").value("5400"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.error.message").value("수령 업체 식별자는 필수값입니다."));
     }
 
     @DisplayName("주문 생성시 전달되는 수령 업체의 이름이 null인 경우 BadRequest")
@@ -156,7 +174,9 @@ class CreateOrderRequestTest {
                     .content(objectMapper.writeValueAsString(request))
                     .contentType(MediaType.APPLICATION_JSON)
             )
-            .andExpect(MockMvcResultMatchers.status().isBadRequest());
+            .andExpect(MockMvcResultMatchers.status().isBadRequest())
+            .andExpect(MockMvcResultMatchers.jsonPath("$.error.code").value("5400"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.error.message").value("수령 업체 이름은 필수값입니다."));
     }
 
     @DisplayName("주문 생성시 전달되는 판매 상품의 식별자가 null인 경우 BadRequest")
@@ -186,7 +206,9 @@ class CreateOrderRequestTest {
                     .content(objectMapper.writeValueAsString(request))
                     .contentType(MediaType.APPLICATION_JSON)
             )
-            .andExpect(MockMvcResultMatchers.status().isBadRequest());
+            .andExpect(MockMvcResultMatchers.status().isBadRequest())
+            .andExpect(MockMvcResultMatchers.jsonPath("$.error.code").value("5400"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.error.message").value("상품 식별자는 필수값입니다."));
     }
 
     @DisplayName("주문 생성시 전달되는 판매 상품의 이름이 null인 경우 BadRequest")
@@ -216,7 +238,9 @@ class CreateOrderRequestTest {
                     .content(objectMapper.writeValueAsString(request))
                     .contentType(MediaType.APPLICATION_JSON)
             )
-            .andExpect(MockMvcResultMatchers.status().isBadRequest());
+            .andExpect(MockMvcResultMatchers.status().isBadRequest())
+            .andExpect(MockMvcResultMatchers.jsonPath("$.error.code").value("5400"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.error.message").value("상품 이름은 필수값입니다."));
     }
 
     @DisplayName("주문 생성시 전달되는 상품 수량이 0인 경우 BadRequest")
@@ -246,7 +270,9 @@ class CreateOrderRequestTest {
                     .content(objectMapper.writeValueAsString(request))
                     .contentType(MediaType.APPLICATION_JSON)
             )
-            .andExpect(MockMvcResultMatchers.status().isBadRequest());
+            .andExpect(MockMvcResultMatchers.status().isBadRequest())
+            .andExpect(MockMvcResultMatchers.jsonPath("$.error.code").value("5400"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.error.message").value("상품 수량은 1개 이상의 자연수여야 합니다."));
     }
 
     @DisplayName("주문 생성시 전달되는 상품 수량이 1001인 경우 BadRequest")
@@ -276,7 +302,9 @@ class CreateOrderRequestTest {
                     .content(objectMapper.writeValueAsString(request))
                     .contentType(MediaType.APPLICATION_JSON)
             )
-            .andExpect(MockMvcResultMatchers.status().isBadRequest());
+            .andExpect(MockMvcResultMatchers.status().isBadRequest())
+            .andExpect(MockMvcResultMatchers.jsonPath("$.error.code").value("5400"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.error.message").value("상품 수량은 1000개를 초과할 수 없습니다."));
     }
 
     @DisplayName("주문 생성시 전달되는 상품 수량이 1000인 경우 OK")
@@ -348,7 +376,9 @@ class CreateOrderRequestTest {
                     .content(objectMapper.writeValueAsString(request))
                     .contentType(MediaType.APPLICATION_JSON)
             )
-            .andExpect(MockMvcResultMatchers.status().isBadRequest());
+            .andExpect(MockMvcResultMatchers.status().isBadRequest())
+            .andExpect(MockMvcResultMatchers.jsonPath("$.error.code").value("5400"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.error.message").value("가격은 0 이상의 정수여야 하며 음수는 사용할 수 없습니다."));
     }
 
     @DisplayName("주문 생성시 전달되는 납품 기한이 null인 경우 BadRequest")
@@ -364,7 +394,7 @@ class CreateOrderRequestTest {
             .productId(UUID.fromString("7b8df265-6f41-4ad7-942a-7fdf81b5f1c3"))
             .productName("무한동력기")
             .quantity(1000)
-            .price(-1)
+            .price(0)
             .deliveryDueAt(null)
             .deliveryRequestNote("무한 동력기가 고장나지 않도록 안전하게 배송해주세요.")
             .build();
@@ -376,6 +406,8 @@ class CreateOrderRequestTest {
                     .content(objectMapper.writeValueAsString(request))
                     .contentType(MediaType.APPLICATION_JSON)
             )
-            .andExpect(MockMvcResultMatchers.status().isBadRequest());
+            .andExpect(MockMvcResultMatchers.status().isBadRequest())
+            .andExpect(MockMvcResultMatchers.jsonPath("$.error.code").value("5400"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.error.message").value("납품 기한은 필수값입니다."));
     }
 }

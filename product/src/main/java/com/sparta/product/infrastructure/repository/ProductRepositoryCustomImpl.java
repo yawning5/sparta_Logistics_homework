@@ -35,7 +35,8 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
                 descriptionContains(command.description()),
                 priceBetween(command.minPrice(), command.maxPrice()),
                 vendorIdEq(command.vendorId()),
-                hubIdEq(command.hubId())
+                hubIdEq(command.hubId()),
+                notDeleted()
             )
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
@@ -51,11 +52,18 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
                 descriptionContains(command.description()),
                 priceBetween(command.minPrice(), command.maxPrice()),
                 vendorIdEq(command.vendorId()),
-                hubIdEq(command.hubId())
+                hubIdEq(command.hubId()),
+                notDeleted()
             );
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);
     }
+
+    private BooleanExpression notDeleted() {
+        QProduct product = QProduct.product;
+        return product.deletedAt.isNull().and(product.deletedBy.isNull());
+    }
+
 
     private BooleanExpression productIdEq(UUID productId) {
         return productId != null ? QProduct.product.id.eq(productId) : null;

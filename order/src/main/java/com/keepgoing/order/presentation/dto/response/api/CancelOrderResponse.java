@@ -19,7 +19,7 @@ public class CancelOrderResponse {
     private Long memberId;
 
     @JsonProperty("cancel_required_at")
-    private LocalDateTime cancelRequiredAt;
+    private String cancelRequiredAt;
 
     @JsonProperty("message")
     private String message;
@@ -30,7 +30,7 @@ public class CancelOrderResponse {
         this.orderId = orderId;
         this.cancelRequested = cancelRequested;
         this.memberId = memberId;
-        this.cancelRequiredAt = cancelRequiredAt;
+        this.cancelRequiredAt = String.valueOf(cancelRequiredAt);
         this.message = message;
     }
 

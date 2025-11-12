@@ -50,25 +50,25 @@ public record OrderInfo(
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty("ordered_at")
-    LocalDateTime orderedAt,
+    String orderedAt,
 
     @JsonProperty("confirmed_at")
-    LocalDateTime confirmedAt,
+    String confirmedAt,
 
     @JsonProperty("cancelled_at")
-    LocalDateTime cancelledAt,
+    String cancelledAt,
 
     @JsonProperty("delivery_due_at")
-    LocalDateTime deliveryDueAt,
+    String deliveryDueAt,
 
     @JsonProperty("delivery_request_note")
     String deliveryRequestNote,
 
     @JsonProperty("created_at")
-    LocalDateTime createdAt,
+    String createdAt,
 
     @JsonProperty("updated_at")
-    LocalDateTime updatedAt
+    String updatedAt
 
 ) {
 
@@ -133,22 +133,22 @@ public record OrderInfo(
     }
 
     @Override
-    public LocalDateTime orderedAt() {
+    public String orderedAt() {
         return orderedAt;
     }
 
     @Override
-    public LocalDateTime confirmedAt() {
+    public String confirmedAt() {
         return confirmedAt;
     }
 
     @Override
-    public LocalDateTime cancelledAt() {
+    public String cancelledAt() {
         return cancelledAt;
     }
 
     @Override
-    public LocalDateTime deliveryDueAt() {
+    public String deliveryDueAt() {
         return deliveryDueAt;
     }
 
@@ -158,12 +158,12 @@ public record OrderInfo(
     }
 
     @Override
-    public LocalDateTime createdAt() {
+    public String createdAt() {
         return createdAt;
     }
 
     @Override
-    public LocalDateTime updatedAt() {
+    public String updatedAt() {
         return updatedAt;
     }
 
@@ -189,13 +189,13 @@ public record OrderInfo(
             .quantity(quantity)
             .totalPrice(totalPrice)
             .state(state)
-            .orderedAt(orderedAt)
-            .confirmedAt(confirmedAt)
-            .cancelledAt(cancelledAt)
-            .deliveryDueAt(deliveryDueAt)
+            .orderedAt(String.valueOf(orderedAt))
+            .confirmedAt(String.valueOf(confirmedAt))
+            .cancelledAt(String.valueOf(cancelledAt))
+            .deliveryDueAt(String.valueOf(deliveryDueAt))
             .deliveryRequestNote(deliveryRequestNote)
-            .createdAt(createdAt)
-            .updatedAt(updatedAt)
+            .createdAt(String.valueOf(createdAt))
+            .updatedAt(String.valueOf(updatedAt))
             .build();
     }
 
@@ -213,13 +213,13 @@ public record OrderInfo(
             .quantity(order.getQuantity())
             .totalPrice(order.getTotalPrice())
             .state(order.getOrderState())
-            .orderedAt(order.getOrderedAt())
-            .confirmedAt(order.getConfirmedAt())
-            .cancelledAt(order.getCancelledAt())
-            .deliveryDueAt(order.getDeliveryDueAt())
+            .orderedAt(String.valueOf(order.getOrderedAt()))
+            .confirmedAt(String.valueOf(order.getConfirmedAt()))
+            .cancelledAt(String.valueOf(order.getCancelledAt()))
+            .deliveryDueAt(String.valueOf(order.getDeliveryDueAt()))
             .deliveryRequestNote(order.getDeliveryRequestNote())
-            .createdAt(order.getCreatedAt())
-            .updatedAt(order.getUpdatedAt())
+            .createdAt(String.valueOf(order.getCreatedAt()))
+            .updatedAt(String.valueOf(order.getUpdatedAt()))
             .build();
     }
 

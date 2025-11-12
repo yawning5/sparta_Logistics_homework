@@ -62,7 +62,7 @@ public class OrderProcessor {
                         return;
                     }
 
-                    String productId = orderForProductValidation.getProductId().toString();
+                    UUID productId = orderForProductValidation.getProductId();
                     ProductSearchResponse productResponse = null;
                     try {
                          productResponse = productClient.getProduct(productId);

@@ -50,7 +50,7 @@ public class FeignConfig {
             String email = "system1@system.com";
             String role = "MASTER";
             String userId = "0";
-            String affiliationId = "system";
+            String affiliationId = "20283a91-e391-4254-ba64-6fed6bc45d0d";
             cachedToken = jwtProvider.createAccessToken(email, role, userId, affiliationId);
 
             expiresAtMillis = now + tokenValidity;

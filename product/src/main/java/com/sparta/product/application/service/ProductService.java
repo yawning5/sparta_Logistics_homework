@@ -26,6 +26,7 @@ public class ProductService {
 
     private final ProductPersistenceService productPersistenceService;
     private final VendorClientService vendorClientService;
+    private final HubClientService hubClientService;
 
     // ---------------- 조회 ----------------
     public ProductResult getProduct(GetProductCommand command) {
@@ -45,7 +46,7 @@ public class ProductService {
         vendorClientService.validationVendor(vendorId, command.token());
 
         HubId hubId = HubId.of(command.hubId());
-        //TODO: hubValidationService.validationHub(vendorId, command.token());
+        hubClientService.validationHub(hubId, command.token());
         return productPersistenceService.saveCreateProduct(command, vendorId, hubId);
     }
 
@@ -66,9 +67,8 @@ public class ProductService {
         validateIdChange(command.vendorId(), product.getVendorId().getId(),
             () -> vendorClientService.validationVendorId(command.vendorId(), command.token()));
 
-        //TODO: hubValidationService.validationHub(vendorId, command.token());
-//        validateIdChange(command.hubId(), product.getHubId().getId(),
-//            () -> hubValidationService.validationHubId(command.hubId(), command.token()));
+        validateIdChange(command.hubId(), product.getHubId().getId(),
+            () -> hubClientService.validationHubId(command.hubId(), command.token()));
 
         return productPersistenceService.updateProduct(command);
     }

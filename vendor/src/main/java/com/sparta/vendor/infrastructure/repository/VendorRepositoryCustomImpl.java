@@ -3,6 +3,7 @@ package com.sparta.vendor.infrastructure.repository;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sparta.vendor.application.command.SearchVendorCommand;
 import com.sparta.vendor.domain.entity.QVendor;
@@ -11,8 +12,8 @@ import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -34,7 +35,8 @@ public class VendorRepositoryCustomImpl implements VendorRepositoryCustom {
                 vendorTypeEq(command.vendorType()),
                 addressContains(command.address()),
                 vendorZipCodeEq(command.zipCode()),
-                hubIdEq(command.hubId())
+                hubIdEq(command.hubId()),
+                notDeleted()
             )
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
@@ -42,7 +44,7 @@ public class VendorRepositoryCustomImpl implements VendorRepositoryCustom {
             .fetch();
 
         // 전체 개수 쿼리
-        Long total = queryFactory
+        JPAQuery<Long> total = queryFactory
             .select(vendor.count())
             .from(vendor)
             .where(
@@ -51,11 +53,16 @@ public class VendorRepositoryCustomImpl implements VendorRepositoryCustom {
                 vendorTypeEq(command.vendorType()),
                 addressContains(command.address()),
                 vendorZipCodeEq(command.zipCode()),
-                hubIdEq(command.hubId())
-            )
-            .fetchOne();
+                hubIdEq(command.hubId()),
+                notDeleted()
+            );
 
-        return new PageImpl<>(content, pageable, total);
+        return PageableExecutionUtils.getPage(content, pageable, total::fetchOne);
+    }
+
+    private BooleanExpression notDeleted() {
+        QVendor vendor = QVendor.vendor;
+        return vendor.deletedAt.isNull().and(vendor.deletedBy.isNull());
     }
 
     private BooleanExpression vendorIdEq(UUID vendorId) {

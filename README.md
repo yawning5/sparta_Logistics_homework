@@ -11,11 +11,9 @@
 **킵고잉로지(Keep Going Logi)** 는 기업 간 거래(B2B) 환경에서 **효율적인 허브 중심 물류 및 배송 관리**를 목표로 하는 시스템입니다.  
 허브를 중심으로 재고를 체계적으로 관리하고, 주문 발생 시 **허브 간 이동 → 최종 배송**까지의 전 과정을 단계별로 처리할 수 있도록 설계되었습니다.
 
-본 시스템은 **Spring Boot**와 **Spring Cloud (Eureka, Gateway, Config)** 를 기반으로 MSA 구조를 구현하여,  
-각 서비스가 독립적으로 **배포 및 확장**될 수 있도록 구성했습니다.
+본 시스템은 **Spring Boot**와 **Spring Cloud (Eureka, Gateway, Config)** 를 기반으로 MSA 구조를 구현하여, 각 서비스가 독립적으로 **배포 및 확장**될 수 있도록 구성했습니다.
 
-또한 **Java 21**, **Spring Boot 3.5.7**, **PostgreSQL**을 기반으로 개발되었으며,  
-**JWT 인증**으로 서비스 간 통신의 **보안성**을 강화했습니다.  
+또한 **Java 21**, **Spring Boot 3.5.7**, **PostgreSQL**을 기반으로 개발되었으며, **JWT 인증**으로 서비스 간 통신의 **보안성**을 강화했습니다.  
 **Dockerfile**을 활용해 컨테이너 단위로 빌드 및 배포함으로써, 환경에 관계없이 **일관된 실행 환경**을 유지할 수 있습니다.  
 **Kafka**를 통해 **주문 이벤트를 발행 및 구독**하여 **실시간 알림 및 서비스 간 연동성**을 강화했습니다.
 
@@ -59,16 +57,15 @@ MSA 기반의 물류 관리 시스템을 직접 설계하고 구현하며,
 ---
 
 ### 🏗️ 시스템 아키텍처
+<img width="1251" height="1111" alt="keepgoing아키텍처이미지" src="https://github.com/user-attachments/assets/b13336fe-68ea-490e-8ef1-9033ec2233a7" />
 
-![System Architecture](attachment:658b1cd8-1546-4e6d-9f2e-7a30be340207:image.png)
 
 ### 🧱 ERD
+<img width="1900" height="1217" alt="keepgoingerd" src="https://github.com/user-attachments/assets/0f9a2951-dafa-48d1-89f8-f1f24a537ddd" />
 
-![ERD](attachment:586dc9c9-5805-486b-9293-20dcbb1a5c98:image.png)
 
 ### 🗺️ Context Map
-
-![Context Map](attachment:224ae062-5f72-4413-922a-440aff986e32:image.png)
+<img width="702" height="492" alt="keepgoingcontextmap" src="https://github.com/user-attachments/assets/cfdba90b-48c9-47be-948a-90f116a88fd4" />
 
 ---
 

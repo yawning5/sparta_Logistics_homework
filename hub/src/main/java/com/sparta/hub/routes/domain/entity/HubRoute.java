@@ -68,4 +68,8 @@ public class HubRoute {
             throw new IllegalArgumentException("거리는 0보다 커야 합니다.");
         this.distanceKm = distanceKm;
     }
+
+    public void delete() {
+        this.deletedAt = LocalDateTime.now();
+    }
 }

@@ -1,6 +1,7 @@
 package com.sparta.member.application.mapper;
 
 import com.sparta.member.domain.model.Member;
+import com.sparta.member.interfaces.dto.response.MemberInfoInternalResponseDto;
 import com.sparta.member.interfaces.dto.response.MemberInfoResponseDto;
 import com.sparta.member.interfaces.dto.response.StatusUpdateResponseDto;
 import org.springframework.stereotype.Component;
@@ -30,6 +31,16 @@ public class MemberMapper implements ApplicationMapper {
             member.status(),
             member.deletedAt(),
             member.deleteBy()
+        );
+    }
+
+    @Override
+    public MemberInfoInternalResponseDto toMemberInfoInternalDto(
+        Member member) {
+        return new MemberInfoInternalResponseDto(
+            member.id(),
+            member.role(),
+            member.status()
         );
     }
 }

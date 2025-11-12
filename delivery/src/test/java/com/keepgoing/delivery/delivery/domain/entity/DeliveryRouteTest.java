@@ -47,13 +47,13 @@ class DeliveryRouteTest {
         assertThatThrownBy(() ->
                 DeliveryRoute.create(deliveryId, departureHubId, arrivalHubId, null, new Duration(10), new RouteSeq(1))
         )
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(RuntimeException.class)
                 .hasMessageContaining("거리와 소요 시간은 필수");
 
         assertThatThrownBy(() ->
                 DeliveryRoute.create(deliveryId, departureHubId, arrivalHubId, new Distance(10), null, new RouteSeq(1))
         )
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(RuntimeException.class)
                 .hasMessageContaining("거리와 소요 시간은 필수");
     }
 
@@ -80,7 +80,7 @@ class DeliveryRouteTest {
 
         // When & Then
         assertThatThrownBy(() -> route.assignDeliveryPerson(200L))
-                .isInstanceOf(IllegalStateException.class)
+                .isInstanceOf(RuntimeException.class)
                 .hasMessage("이미 배달원이 지정되어 있습니다.");
     }
 
@@ -122,7 +122,7 @@ class DeliveryRouteTest {
 
         // When & Then
         assertThatThrownBy(() -> route.recordActual(actualDistance, actualTime))
-                .isInstanceOf(IllegalStateException.class)
+                .isInstanceOf(RuntimeException.class)
                 .hasMessage("ARRIVED 상태에서만 실제 거리/시간을 기록할 수 있습니다.");
     }
 

@@ -3,6 +3,9 @@ package com.keepgoing.delivery.delivery.application.facade;
 import com.keepgoing.delivery.deliveryperson.application.service.DeliveryPersonService;
 import com.keepgoing.delivery.deliveryperson.domain.entity.DeliveryPerson;
 import com.keepgoing.delivery.deliveryperson.domain.entity.DeliveryPersonType;
+import com.keepgoing.delivery.global.exception.BusinessException;
+import com.keepgoing.delivery.global.exception.ErrorCode;
+import com.keepgoing.delivery.global.security.UserContextHolder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -15,34 +18,21 @@ public class DeliveryPersonFacade {
 
     private final DeliveryPersonService deliveryPersonService;
 
-
     // 허브 배송담당자 목록 조회
     public List<DeliveryPerson> getHubDeliveryPersons() {
         return deliveryPersonService.findDeliveryPersonsByType(DeliveryPersonType.HUB);
     }
 
-    // 업체 배송담당자 목록 조회
-    public List<DeliveryPerson> getVendorDeliveryPersons() {
-        return deliveryPersonService.findDeliveryPersonsByType(DeliveryPersonType.VENDOR);
-    }
-
     // 특정 허브의 업체 배송담당자 목록 조회
-    public List<DeliveryPerson> getVendorDeliveryPersonsByHub(UUID hubId) {
-        return deliveryPersonService.findVendorDeliveryPersonsByHub(hubId);
-    }
-
-    // 배송담당자 조회 (Id)
-    public DeliveryPerson getDeliveryPerson(Long id) {
-        return deliveryPersonService.findDeliveryPerson(id);
+    public List<DeliveryPerson> getVendorDeliveryPersonsByHub(UUID hubId, String userRole, UUID currentUserHubId) {
+        return deliveryPersonService.findVendorDeliveryPersonsByHub(hubId,  userRole, currentUserHubId);
     }
 
     // 배송담당자 검증
-    public void validateDeliveryPerson(Long userId, String expectedType) {
-        DeliveryPerson person = deliveryPersonService.findDeliveryPerson(userId);
+    public void validateDeliveryPerson(Long userId, String expectedType, Long currentUserId, String userRole) {
+        DeliveryPerson person = deliveryPersonService.findDeliveryPerson(userId, currentUserId, userRole);
         if (!person.getType().toString().equals(expectedType)) {
-            throw new IllegalArgumentException(
-                    String.format("배송담당자 타입이 %s가 아닙니다.", expectedType)
-            );
+            throw new BusinessException(ErrorCode.DELIVERY_PERSON_INVALID_TYPE);
         }
     }
 }

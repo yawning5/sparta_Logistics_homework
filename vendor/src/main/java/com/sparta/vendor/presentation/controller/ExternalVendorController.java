@@ -11,6 +11,7 @@ import com.sparta.vendor.presentation.dto.BaseResponseDTO;
 import com.sparta.vendor.presentation.dto.PageResponseDTO;
 import com.sparta.vendor.presentation.dto.VendorTypeDTO;
 import com.sparta.vendor.presentation.dto.request.CreateVendorRequestDTO;
+import com.sparta.vendor.presentation.dto.request.SearchVendorRequestDTO;
 import com.sparta.vendor.presentation.dto.request.UpdateVendorRequestDTO;
 import com.sparta.vendor.presentation.dto.response.VendorResponseDTO;
 import jakarta.validation.Valid;
@@ -24,6 +25,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -94,12 +96,7 @@ public class ExternalVendorController {
     @PreAuthorize("hasAnyRole('MASTER', 'HUB', 'DELIVERY', 'COMPANY')")
     public ResponseEntity<?> searchVendors(
         Pageable pageable,
-        @RequestParam(value = "vendorId", required = false) UUID vendorId,
-        @RequestParam(value = "vendorName", required = false) String vendorName,
-        @RequestParam(value = "vendorType", required = false) VendorTypeDTO vendorType,
-        @RequestParam(value = "address", required = false) String address,
-        @RequestParam(value = "zipCode", required = false) String zipCode,
-        @RequestParam(value = "hubId", required = false) UUID hubId
+        @ModelAttribute SearchVendorRequestDTO request
     ) {
 
         int size = pageable.getPageSize();
@@ -113,8 +110,13 @@ public class ExternalVendorController {
             pageable.getSort()
         );
 
-        SearchVendorCommand command = SearchVendorCommand.of(vendorId, vendorName, vendorType,
-            address, zipCode, hubId);
+        SearchVendorCommand command = SearchVendorCommand.of(
+            request.vendorId(),
+            request.vendorName(),
+            request.vendorType(),
+            request.address(),
+            request.zipCode(),
+            request.hubId());
 
         Page<VendorResult> vendorResultPage = vendorService.searchVendors(command, pageable);
 

@@ -5,7 +5,6 @@ import com.keepgoing.delivery.delivery.domain.vo.Distance;
 import com.keepgoing.delivery.delivery.domain.vo.Duration;
 import com.keepgoing.delivery.global.exception.BusinessException;
 import com.keepgoing.delivery.global.exception.ErrorCode;
-import lombok.Getter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -25,9 +24,13 @@ public class Delivery {
 
     // 경로 목록은 메모리에서만 관리 (조회 시 별도 로딩)
     private final List<DeliveryRoute> routes = new ArrayList<>();
+
+    // soft delete
     private boolean isDeleted = false;
     private LocalDateTime deletedAt;
     private String deletedBy;
+
+    // auditing
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -38,13 +41,18 @@ public class Delivery {
                      Long recipientUserId,
                      String recipientSlackId) {
 
-        if (orderId == null) throw new IllegalArgumentException("orderId는 필수입니다.");
-        if (departureHubId == null) throw new BusinessException(ErrorCode.DELIVERY_INVALID_HUB);
-        if (destinationHubId == null) throw new IllegalArgumentException("목적지 허브 ID는 필수입니다.");
-        if (address == null) throw new IllegalArgumentException("배송지 주소는 필수입니다.");
-        if (recipientUserId == null) throw new IllegalArgumentException("수령인 ID는 필수입니다.");
+        if (orderId == null)
+            throw new BusinessException(ErrorCode.DELIVERY_INVALID_ORDER_ID);
+        if (departureHubId == null)
+            throw new BusinessException(ErrorCode.DELIVERY_INVALID_HUB);
+        if (destinationHubId == null)
+            throw new BusinessException(ErrorCode.DELIVERY_INVALID_HUB);
+        if (address == null)
+            throw new BusinessException(ErrorCode.DELIVERY_REQUIRED_FIELDS_MISSING);
+        if (recipientUserId == null)
+            throw new BusinessException(ErrorCode.DELIVERY_REQUIRED_FIELDS_MISSING);
         if (recipientSlackId == null || recipientSlackId.isBlank())
-            throw new IllegalArgumentException("수령인 Slack ID는 필수입니다.");
+            throw new BusinessException(ErrorCode.DELIVERY_REQUIRED_FIELDS_MISSING);
 
         this.id = UUID.randomUUID();
         this.orderId = orderId;
@@ -67,6 +75,28 @@ public class Delivery {
         return new Delivery(orderId, departureHubId, destinationHubId, address, recipientUserId, recipientSlackId);
     }
 
+    private Delivery(
+            UUID id,
+            UUID orderId,
+            DeliveryStatus status,
+            UUID departureHubId,
+            UUID destinationHubId,
+            Address address,
+            Long recipientUserId,
+            String recipientSlackId,
+            Long vendorDeliveryPersonId
+    ) {
+        this.id = id;
+        this.orderId = orderId;
+        this.status = status;
+        this.departureHubId = departureHubId;
+        this.destinationHubId = destinationHubId;
+        this.address = address;
+        this.recipientUserId = recipientUserId;
+        this.recipientSlackId = recipientSlackId;
+        this.vendorDeliveryPersonId = vendorDeliveryPersonId;
+    }
+
     public static Delivery reconstruct(
             UUID id,
             UUID orderId,
@@ -77,22 +107,23 @@ public class Delivery {
             Long recipientUserId,
             String recipientSlackId,
             Long vendorDeliveryPersonId,
-            boolean isDeleted,
+            boolean deleted,
             LocalDateTime deletedAt,
             String deletedBy,
             LocalDateTime createdAt,
             LocalDateTime updatedAt
     ) {
-        return new Delivery(
-                orderId,
-                departureHubId,
-                destinationHubId,
-                address,
-                recipientUserId,
-                recipientSlackId
-        );
+        Delivery delivery = new Delivery(id, orderId, status, departureHubId, destinationHubId, address,
+                recipientUserId, recipientSlackId, vendorDeliveryPersonId);
+        delivery.isDeleted = deleted;
+        delivery.deletedAt = deletedAt;
+        delivery.deletedBy = deletedBy;
+        delivery.createdAt = createdAt;
+        delivery.updatedAt = updatedAt;
+        return delivery;
     }
 
+    // Getters
     public UUID getId() { return id; }
     public UUID getOrderId() { return orderId; }
     public DeliveryStatus getStatus() { return status; }
@@ -102,83 +133,80 @@ public class Delivery {
     public Long getRecipientUserId() { return recipientUserId; }
     public String getRecipientSlackId() { return recipientSlackId; }
     public Long getVendorDeliveryPersonId() { return vendorDeliveryPersonId; }
-    public List<DeliveryRoute> getRoutes() { return new ArrayList<>(routes); }  // 방어적 복사
+    public List<DeliveryRoute> getRoutes() { return new ArrayList<>(routes); }
     public boolean isDeleted() { return isDeleted; }
     public LocalDateTime getDeletedAt() { return deletedAt; }
-    public String getDeletedBy() {return deletedBy;}
+    public String getDeletedBy() { return deletedBy; }
     public LocalDateTime getCreatedAt() { return createdAt; }
     public LocalDateTime getUpdatedAt() { return updatedAt; }
 
-
-
-    // 경로 추가 (내부 리스트에만 추가, 실제 저장은 Service에서 처리)
+    // 경로 추가
     public void addRoute(DeliveryRoute route) {
         if (route == null) {
-            throw new IllegalArgumentException("경로 정보는 null일 수 없습니다");
+            throw new BusinessException(ErrorCode.DELIVERY_INVALID_ROUTE);
         }
         routes.add(route);
     }
 
-    // 경로 목록 로딩 (Repository에서 조회 후 설정)
+    // 경로 목록 로딩
     public void loadRoutes(List<DeliveryRoute> routes) {
         this.routes.clear();
         this.routes.addAll(routes);
     }
 
+    // 상태 전이 메서드들
     public void startFromHub() {
         if (status != DeliveryStatus.HUB_WAITING)
-            throw new IllegalStateException("HUB_WAITING 상태에서만 출발할 수 있습니다.");
+            throw new BusinessException(ErrorCode.DELIVERY_CAN_START_ONLY_FROM_HUB_WAITING);
         this.status = DeliveryStatus.HUB_IN_PROGRESS;
         this.updatedAt = LocalDateTime.now();
     }
 
     public void arriveAtDestHub() {
         if (status != DeliveryStatus.HUB_IN_PROGRESS)
-            throw new IllegalStateException("HUB_IN_PROGRESS 상태에서만 도착 허브에 도착할 수 있습니다.");
+            throw new BusinessException(ErrorCode.DELIVERY_CAN_ARRIVE_DEST_ONLY_FROM_HUB_IN_PROGRESS);
         this.status = DeliveryStatus.DEST_HUB_ARRIVED;
         this.updatedAt = LocalDateTime.now();
     }
 
     public void startVendorDelivery() {
         if (status != DeliveryStatus.DEST_HUB_ARRIVED)
-            throw new IllegalStateException("DEST_HUB_ARRIVED 상태에서만 가맹점 배송을 시작할 수 있습니다.");
+            throw new BusinessException(ErrorCode.DELIVERY_CAN_START_VENDOR_ONLY_FROM_DEST_HUB_ARRIVED);
         this.status = DeliveryStatus.VENDOR_IN_PROGRESS;
         this.updatedAt = LocalDateTime.now();
     }
 
     public void completeDelivery() {
         if (status != DeliveryStatus.VENDOR_IN_PROGRESS)
-            throw new IllegalStateException("VENDOR_IN_PROGRESS 상태에서만 배송을 완료할 수 있습니다.");
+            throw new BusinessException(ErrorCode.DELIVERY_CAN_COMPLETE_ONLY_FROM_VENDOR_IN_PROGRESS);
         this.status = DeliveryStatus.DELIVERED;
         this.updatedAt = LocalDateTime.now();
     }
 
     public void assignVendorDeliveryPerson(Long vendorDeliveryPersonId) {
         if (vendorDeliveryPersonId == null)
-            throw new IllegalArgumentException("업체 배송담당자 ID는 필수입니다.");
+            throw new BusinessException(ErrorCode.DELIVERY_PERSON_REQUIRED_DELIVERY_ID);
         if (this.status != DeliveryStatus.DEST_HUB_ARRIVED)
-            throw new IllegalStateException("목적지 허브 도착 후에만 업체 배송담당자를 배정할 수 있습니다.");
+            throw new BusinessException(ErrorCode.DELIVERY_PERSON_ASSIGN_ONLY_AFTER_DEST_ARRIVED);
         this.vendorDeliveryPersonId = vendorDeliveryPersonId;
         this.updatedAt = LocalDateTime.now();
     }
 
-    // 특정 경로 시작
     public void startRoute(int routeSeqValue) {
         DeliveryRoute route = routes.stream()
                 .filter(r -> r.getRouteSeq().value() == routeSeqValue)
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("해당 순서의 경로를 찾을 수 없습니다."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.DELIVERY_ROUTE_NOT_FOUND));
 
         route.startMoving();
         this.updatedAt = LocalDateTime.now();
     }
 
-    // 특정 경로 도착 처리
     public void completeRoute(int routeSeqValue, Distance actualDistance, Duration actualTime) {
         DeliveryRoute route = routes.stream()
                 .filter(r -> r.getRouteSeq().value() == routeSeqValue)
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("해당 순서의 경로를 찾을 수 없습니다."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.DELIVERY_ROUTE_NOT_FOUND));
 
         route.markArrived();
         route.recordActual(actualDistance, actualTime);
@@ -187,10 +215,10 @@ public class Delivery {
 
     public void markDeleted(String deletedBy) {
         if (this.isDeleted) {
-            throw new IllegalStateException("이미 삭제된 배송입니다.");
+            throw new BusinessException(ErrorCode.DELIVERY_ALREADY_DELETED);
         }
         if (this.status != DeliveryStatus.HUB_WAITING) {
-            throw new IllegalStateException("배송 시작 전에만 삭제할 수 있습니다.");
+            throw new BusinessException(ErrorCode.DELIVERY_DELETE_ONLY_BEFORE_START);
         }
         this.isDeleted = true;
         this.deletedAt = LocalDateTime.now();

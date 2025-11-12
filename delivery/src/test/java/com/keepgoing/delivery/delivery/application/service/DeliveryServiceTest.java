@@ -99,7 +99,7 @@ class DeliveryServiceTest {
                 orderId, UUID.randomUUID(), UUID.randomUUID(),
                 new Address("서울", "강남", "12345"), 1L, "@user"
         ))
-                .isInstanceOf(IllegalStateException.class)
+                .isInstanceOf(RuntimeException.class)
                 .hasMessage("이미 해당 주문에 대한 배송이 존재합니다.");
 
         verify(deliveryRepository, never()).save(any());
@@ -136,7 +136,7 @@ class DeliveryServiceTest {
 
         // When & Then
         assertThatThrownBy(() -> deliveryService.findDeliveryById(deliveryId))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(RuntimeException.class)
                 .hasMessage("배송 정보를 찾을 수 없습니다.");
     }
 

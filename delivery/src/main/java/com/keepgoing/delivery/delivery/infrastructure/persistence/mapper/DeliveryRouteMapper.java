@@ -42,11 +42,11 @@ public class DeliveryRouteMapper {
         return DeliveryRoute.reconstruct(
                 jpa.getId(),
                 jpa.getDeliveryId(),
-                new RouteSeq(jpa.getRouteSeq()),
                 jpa.getDepartureHubId(),
                 jpa.getArrivalHubId(),
                 new Distance(jpa.getExpectedDistanceKm()),
                 new Duration(jpa.getExpectedTimeMinutes()),
+                new RouteSeq(jpa.getRouteSeq()),
                 actualDistance,
                 actualTime,
                 jpa.getStatus(),

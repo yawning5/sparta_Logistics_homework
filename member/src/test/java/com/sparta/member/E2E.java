@@ -61,6 +61,7 @@ public class E2E {
     void createMemberReqAndFailLogin_E2E() {
         // given
         var memberReq = Instancio.of(SignUpRequestDto.class)
+            .set(field(SignUpRequestDto::role), Role.MASTER)
             .set(field(SignUpRequestDto::email), "test@test.com")
             .set(field(SignUpRequestDto::password), "123")
             .create();

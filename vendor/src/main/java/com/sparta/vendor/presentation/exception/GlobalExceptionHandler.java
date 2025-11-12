@@ -1,6 +1,7 @@
 package com.sparta.vendor.presentation.exception;
 
 import com.sparta.vendor.application.exception.BusinessException;
+import com.sparta.vendor.application.exception.ClientException;
 import com.sparta.vendor.application.exception.ErrorCode;
 import com.sparta.vendor.presentation.dto.BaseResponseDTO;
 import org.springframework.http.ResponseEntity;
@@ -26,5 +27,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity
             .status(ErrorCode.INVALID_JSON_FORMAT.getHttpStatus())
             .body(BaseResponseDTO.error(ErrorCode.INVALID_JSON_FORMAT, ex.getBindingResult()));
+    }
+
+    @ExceptionHandler(ClientException.class)
+    public ResponseEntity<BaseResponseDTO<?>> handleClientException(ClientException e) {
+        ErrorCode errorCode = e.getErrorCode();
+        return ResponseEntity
+            .status(errorCode.getHttpStatus()) // ErrorCode에 HttpStatus 있으면 사용
+            .body(BaseResponseDTO.error(errorCode));
     }
 }

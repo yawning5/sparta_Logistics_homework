@@ -20,7 +20,7 @@ public record UpdateOrderStateInfo(
     OrderState currentState,
 
     @JsonProperty("updated_at")
-    LocalDateTime updatedAt
+    String updatedAt
 ) {
 
     @Override
@@ -39,7 +39,7 @@ public record UpdateOrderStateInfo(
     }
 
     @Override
-    public LocalDateTime updatedAt() {
+    public String updatedAt() {
         return updatedAt;
     }
 
@@ -48,7 +48,7 @@ public record UpdateOrderStateInfo(
             .orderId(orderId)
             .previousState(previousState)
             .currentState(currentState)
-            .updatedAt(updatedAt)
+            .updatedAt(String.valueOf(updatedAt))
             .build();
     }
 }

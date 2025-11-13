@@ -21,8 +21,8 @@ public record CreateOrderPayloadForNotification(
     String receiverName,
     String productName,
     Integer quantity,
-    LocalDateTime orderedAt,
-    LocalDateTime deliveryDueAt,
+    String orderedAt,
+    String deliveryDueAt,
     String deliveryRequestNote
 ) {
 

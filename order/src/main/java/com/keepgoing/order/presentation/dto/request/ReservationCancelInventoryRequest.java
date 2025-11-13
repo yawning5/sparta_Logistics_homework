@@ -1,6 +1,7 @@
 package com.keepgoing.order.presentation.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,18 +9,26 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ReservationCancelInventoryRequest {
-    @JsonProperty("product_id")
-    private String productId;
+    @JsonProperty("productId")
+    private UUID productId;
 
-    @JsonProperty("hub_id")
-    private String hubId;
+    @JsonProperty("hubId")
+    private UUID hubId;
 
-    private ReservationCancelInventoryRequest(String productId, String hubId) {
+    @JsonProperty("quantity")
+    private int quantity;
+
+    @JsonProperty("action")
+    private String action;
+
+    private ReservationCancelInventoryRequest(UUID productId, UUID hubId, int quantity) {
         this.productId = productId;
         this.hubId = hubId;
+        this.quantity = quantity;
+        this.action = "CANCEL";
     }
 
-    public static ReservationCancelInventoryRequest create(String productId, String hubId) {
-        return new ReservationCancelInventoryRequest(productId, hubId);
+    public static ReservationCancelInventoryRequest create(UUID productId, UUID hubId, int quantity) {
+        return new ReservationCancelInventoryRequest(productId, hubId, quantity);
     }
 }

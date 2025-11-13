@@ -9,8 +9,10 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 import lombok.Builder;
+import lombok.Data;
 
 @Builder
 public record CreateOrderRequest(
@@ -49,9 +51,8 @@ public record CreateOrderRequest(
     Integer price,
 
     @NotNull(message = "납품 기한은 필수값입니다.")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty("delivery_due_at")
-    LocalDateTime deliveryDueAt,
+    String deliveryDueAt,
 
     // 유효성 검증 필요 없음 - 값이 없을 수도 있기 때문
     @JsonProperty("delivery_request_note")
@@ -99,7 +100,7 @@ public record CreateOrderRequest(
     }
 
     @Override
-    public LocalDateTime deliveryDueAt() {
+    public String deliveryDueAt() {
         return deliveryDueAt;
     }
 
@@ -109,10 +110,14 @@ public record CreateOrderRequest(
     }
 
     public CreateOrderCommand toCommand(Long memberId) {
+
+        LocalDateTime time = LocalDateTime.parse(
+            deliveryDueAt(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+        );
         return CreateOrderCommand.create(
             memberId,
             supplierId, supplierName, receiverId, receiverName, productId, productName,
-            quantity, price, deliveryDueAt, deliveryRequestNote
+            quantity, price, time, deliveryRequestNote
         );
     }
 }

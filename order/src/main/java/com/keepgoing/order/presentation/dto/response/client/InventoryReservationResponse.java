@@ -1,6 +1,6 @@
 package com.keepgoing.order.presentation.dto.response.client;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.UUID;
 import lombok.Data;
 import lombok.Getter;
 
@@ -8,11 +8,10 @@ import lombok.Getter;
 @Getter
 public class InventoryReservationResponse {
 
-    @JsonProperty("success")
-    private boolean success;
+    private UUID id;
 
     public boolean fail() {
-        return !success;
+        return id == null;
     }
 }
 

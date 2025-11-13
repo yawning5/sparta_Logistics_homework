@@ -344,8 +344,8 @@ public class OrderService {
             order.getReceiverName(),
             order.getProductName(),
             order.getQuantity(),
-            order.getOrderedAt(),
-            order.getDeliveryDueAt(),
+            String.valueOf(order.getOrderedAt()),
+            String.valueOf(order.getDeliveryDueAt()),
             order.getDeliveryRequestNote()
         );
 

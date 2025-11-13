@@ -13,10 +13,10 @@ public record DeleteOrderInfo (
     Long memberId,
 
     @JsonProperty("deleted_at")
-    LocalDateTime deletedAt
+    String deletedAt
 ) {
 
     public static DeleteOrderInfo create(UUID orderId, Long memberId, LocalDateTime deletedAt) {
-        return new DeleteOrderInfo(orderId, memberId, deletedAt);
+        return new DeleteOrderInfo(orderId, memberId, String.valueOf(deletedAt));
     }
 }

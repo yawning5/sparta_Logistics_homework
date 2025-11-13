@@ -10,26 +10,22 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ReservationInventoryRequest {
-    @JsonProperty("product_id")
+    @JsonProperty("productId")
     private String productId;
 
-    @JsonProperty("hub_id")
+    @JsonProperty("hubId")
     private String hubId;
 
-    @JsonProperty("quantity")
+    @JsonProperty("reservedQuantity")
     private Integer quantity;
 
-    @JsonProperty("idempotency_key")
-    private String idempotencyKey;
-
-    private ReservationInventoryRequest(String productId, String hubId, Integer quantity, String idempotencyKey) {
+    private ReservationInventoryRequest(String productId, String hubId, Integer quantity) {
         this.productId = productId;
         this.hubId = hubId;
         this.quantity = quantity;
-        this.idempotencyKey = idempotencyKey;
     }
 
-    public static ReservationInventoryRequest create(String productId, String hubId, Integer quantity, String idempotencyKey) {
-        return new ReservationInventoryRequest(productId, hubId, quantity, idempotencyKey);
+    public static ReservationInventoryRequest create(String productId, String hubId, Integer quantity) {
+        return new ReservationInventoryRequest(productId, hubId, quantity);
     }
 }

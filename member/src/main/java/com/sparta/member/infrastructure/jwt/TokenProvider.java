@@ -23,8 +23,8 @@ public class TokenProvider implements JwtProvider {
             .issuedAt(now)
             .expiresAt(now.plusSeconds(1800))
             .claim("role", user.getRole())
-            .claim("userId", user.getUserId())
-            .claim("affiliationId", user.getAffiliationId())
+            .claim("userId", user.getUserId().toString())
+            .claim("affiliationId", user.getAffiliationId().toString())
             .build();
 
         JwsHeader header = JwsHeader.with(() -> "HS256").build();

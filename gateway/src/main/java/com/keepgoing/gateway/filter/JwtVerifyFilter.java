@@ -31,7 +31,7 @@ public class JwtVerifyFilter implements Ordered, GlobalFilter {
 
     private static final List<String> WHITE_LIST = List.of(
         "/v*/member/login",
-        "/v*/member/signup",
+        "/v*/member/register",
         "/actuator/**"
     );
 

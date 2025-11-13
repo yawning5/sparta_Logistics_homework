@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 
-@FeignClient(name = "hub")
+@FeignClient(name = "hub-service")
 public interface HubClient {
 
     @GetMapping("/v1/hubs/{id}")

@@ -65,7 +65,7 @@ public class OrderOutbox {
 
     // Outbox의 생명주기를 정의
     @Enumerated(EnumType.STRING)
-    @Column(name = "state", nullable = false, length = 30)
+    @Column(name = "state", nullable = false, length = 100)
     private OutBoxState state;
 
     // 재시도 횟수를 기록

@@ -35,7 +35,7 @@ spring:
         - id: hub-service
           uri: lb://hub-service
           predicates:
-            - Path=/v*/hubs/**
+            - Path=/v*/hubs/**, /v*/hub-routes/**
 
         - id: member-service
           uri: lb://member-service

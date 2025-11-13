@@ -1,6 +1,8 @@
 package com.keepgoing.order.presentation.dto.response.client;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.math.BigInteger;
+import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,15 +12,21 @@ import lombok.NoArgsConstructor;
 public class ProductInfo {
 
     @JsonProperty("id")
-    private String productId;
+    private UUID productId;
 
     @JsonProperty("productName")
     private String productName;
 
-    @JsonProperty("hubId")
-    private String hubId;
+    @JsonProperty("productDescription")
+    private String productDescription;
 
     @JsonProperty("productPrice")
-    private String productPrice;
+    private BigInteger productPrice;
+
+    @JsonProperty("vendorId")
+    private UUID vendorId;
+
+    @JsonProperty("hubId")
+    private UUID hubId;
 
 }

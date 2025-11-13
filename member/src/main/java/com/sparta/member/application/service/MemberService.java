@@ -39,7 +39,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final ApplicationMapper mapper;
     private final PasswordEncoder passwordEncoder;
-    private final DeliveryClient deliveryClient;
+    private final DeliveryClientService deliveryClient;
     List<Integer> pagePolicy = new ArrayList<>(Arrays.asList(10, 30, 50));
 
     @Transactional
@@ -64,9 +64,10 @@ public class MemberService {
     }
 
     @Transactional
-    public StatusUpdateResponseDto updateStatus(StatusChangeRequestDto requestDto, Long id) {
+    public StatusUpdateResponseDto updateStatus(StatusChangeRequestDto requestDto, String token) {
         Member targetMember = memberRepository.findByEmail(requestDto.email());
-        if (targetMember.role() == Role.DELIVERY && targetMember.affiliation().isType(Type.COMPANY)) {
+        if (targetMember.role() == Role.DELIVERY && targetMember.affiliation()
+            .isType(Type.COMPANY)) {
             targetMember = spartaDeliveryMan(targetMember);
         }
         switch (requestDto.status()) {
@@ -77,7 +78,8 @@ public class MemberService {
                         targetMember.id(),
                         targetMember.accountInfo().slackId(),
                         targetMember.affiliation().type(),
-                        targetMember.affiliation().id()
+                        targetMember.affiliation().id(),
+                        token
                     );
                 }
             }
@@ -134,7 +136,6 @@ public class MemberService {
             requestDto.status()
         );
 
-
         memberRepository.save(changeMember);
     }
 
@@ -150,13 +151,16 @@ public class MemberService {
         return mapper.toMemberInfoInternalDto(memberRepository.findById(userId));
     }
 
-    private void createDeliveryMan(Long id, String slackId, Type type, UUID affiliationId) {
-        deliveryClient.register(new DeliveryManRequestDto(
-            id,
-            slackId,
-            DeliveryType.fromValue(type),
-            affiliationId
-        ));
+    private void createDeliveryMan(Long id, String slackId, Type type, UUID affiliationId,
+        String token) {
+        deliveryClient.registerDeliveryMan(
+            new DeliveryManRequestDto(
+                id,
+                slackId,
+                DeliveryType.fromValue(type),
+                affiliationId
+            ), token
+        );
     }
 
     private Member spartaDeliveryMan(Member member) {

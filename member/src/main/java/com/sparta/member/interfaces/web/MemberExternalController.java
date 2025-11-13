@@ -12,15 +12,20 @@ import com.sparta.member.interfaces.dto.request.SearchRequestDto;
 import com.sparta.member.interfaces.dto.request.SignUpRequestDto;
 import com.sparta.member.interfaces.dto.request.StatusChangeRequestDto;
 import com.sparta.member.interfaces.dto.response.StatusUpdateResponseDto;
+import jakarta.servlet.http.HttpServletRequest;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -36,6 +41,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/v1/member")
 @RequiredArgsConstructor
+@Slf4j
 public class MemberExternalController {
 
     private final MemberService memberService;
@@ -83,10 +89,15 @@ public class MemberExternalController {
     @PatchMapping("/{id}/status")
     public ResponseEntity<BaseResponseDto<?>> updateStatus(
         @PathVariable Long id,
-        @RequestBody StatusChangeRequestDto requestDto
+        @RequestBody StatusChangeRequestDto requestDto,
+        HttpServletRequest request
     ) {
 
-        StatusUpdateResponseDto res = memberService.updateStatus(requestDto, id);
+        String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+
+        log.info("\n\nupdateStatus, token: {}\n\n", token);
+
+        StatusUpdateResponseDto res = memberService.updateStatus(requestDto, token);
 
         return ResponseEntity.noContent()
             .build();

@@ -195,7 +195,6 @@ public class DeliveryService {
 
         List<DeliveryRoute> routes = deliveryRouteRepository
                 .findByDeliveryIdOrderByRouteSeq(deliveryId);
-        log.debug("asdfasdfasdfasfafs{}", routes.getFirst().getId());
         delivery.loadRoutes(routes);
 
         return delivery;

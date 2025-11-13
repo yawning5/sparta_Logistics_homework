@@ -88,7 +88,7 @@ public class OrderProcessor {
 
                     UUID hubId = null;
                     try {
-                        hubId = UUID.fromString(productInfo.getHubId());
+                        hubId = productInfo.getHubId();
                     } catch (IllegalArgumentException ex) {
                         log.error("[상품 검증 실패] 잘못된 hubId 포맷: {} orderId={}", productInfo.getHubId(), orderId);
                         orderService.toFail(orderId);

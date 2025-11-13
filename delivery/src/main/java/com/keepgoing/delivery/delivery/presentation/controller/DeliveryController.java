@@ -13,6 +13,7 @@ import com.keepgoing.delivery.global.RequireRole;
 import com.keepgoing.delivery.global.security.UserContextHolder;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,15 +34,19 @@ public class DeliveryController {
     @RequireRole({"MASTER"})
     @PostMapping
     public ResponseEntity<BaseResponseDto<DeliveryResponse>> createDelivery(
-            @RequestBody CreateDeliveryRequest request
+            @RequestBody CreateDeliveryRequest createDeliveryRequest,
+            HttpServletRequest request
     ) {
+        String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+
         Delivery delivery = deliveryService.createDelivery(
-                request.orderId(),
-                request.departureHubId(),
-                request.destinationHubId(),
-                request.toAddress(),
-                request.recipientUserId(),
-                request.recipientSlackId()
+                createDeliveryRequest.orderId(),
+                createDeliveryRequest.departureHubId(),
+                createDeliveryRequest.destinationHubId(),
+                createDeliveryRequest.toAddress(),
+                createDeliveryRequest.recipientUserId(),
+                createDeliveryRequest.recipientSlackId(),
+                token
         );
 
         DeliveryResponse response = DeliveryResponse.from(delivery);

@@ -60,6 +60,7 @@ class DeliveryServiceTest {
         Address address = new Address("서울시 강남구", "테헤란로", "06234");
         Long recipientUserId = 1L;
         String recipientSlackId = "@user123";
+        String token = "abcd";
 
         HubRouteResponse hubRoute = new HubRouteResponse(
                 UUID.fromString("1bc91c30-9afa-4b08-892c-4cbfc8fb938b"),
@@ -94,11 +95,11 @@ class DeliveryServiceTest {
         given(deliveryPersonFacade.getHubDeliveryPersons()).willReturn(List.of(hubPerson));
         given(deliveryDomainService.selectDeliveryPerson(anyList())).willReturn(hubPerson);
 
-        given(hubRouteService.getHubRoute(any(UUID.class))).willReturn(hubRoute);
+        given(hubRouteService.getHubRoute(any(UUID.class), any(String.class))).willReturn(hubRoute);
 
         // When
         Delivery result = deliveryService.createDelivery(
-                orderId, departureHubId, destinationHubId, address, recipientUserId, recipientSlackId
+                orderId, departureHubId, destinationHubId, address, recipientUserId, recipientSlackId, token
         );
 
         // Then
@@ -115,12 +116,13 @@ class DeliveryServiceTest {
     void createDelivery_DuplicateOrder_Fail() {
         // Given
         UUID orderId = UUID.randomUUID();
+        String token = "asdf";
         given(deliveryRepository.existsByOrderId(orderId)).willReturn(true);
 
         // When & Then
         assertThatThrownBy(() -> deliveryService.createDelivery(
                 orderId, UUID.randomUUID(), UUID.randomUUID(),
-                new Address("서울", "강남", "12345"), 1L, "@user"
+                new Address("서울", "강남", "12345"), 1L, "@user", token
         ))
                 .isInstanceOf(RuntimeException.class)
                 .hasMessage("이미 해당 주문에 대한 배송이 존재합니다.");

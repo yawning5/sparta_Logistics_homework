@@ -15,9 +15,9 @@ public class HubRouteService {
 
     private final HubRouteClient hubRouteClient;
 
-    public HubRouteResponse getHubRoute(UUID routeId) {
+    public HubRouteResponse getHubRoute(UUID routeId, String token) {
         try {
-            return hubRouteClient.getHubRoute(routeId);
+            return hubRouteClient.getHubRoute(routeId, token);
 
         } catch (FeignException.NotFound e) {
             throw new BusinessException(ErrorCode.HUB_ROUTE_NOT_FOUND);

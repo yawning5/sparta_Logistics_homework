@@ -15,5 +15,7 @@ public interface HubRouteClient {
 
     @GetMapping("/v1/hub-routes/{routeId}")
     HubRouteResponse getHubRoute(
-            @PathVariable("routeId") UUID routeId);
+            @PathVariable("routeId") UUID routeId,
+            @RequestHeader("Authorization") String token
+    );
 }

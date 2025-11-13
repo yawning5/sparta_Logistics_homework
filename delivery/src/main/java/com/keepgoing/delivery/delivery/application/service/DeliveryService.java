@@ -38,7 +38,8 @@ public class DeliveryService {
             UUID destinationHubId,
             Address address,
             Long recipientUserId,
-            String recipientSlackId
+            String recipientSlackId,
+            String token
     ) {
         // 중복 생성 방지
         if (deliveryRepository.existsByOrderId(orderId)) {
@@ -46,7 +47,7 @@ public class DeliveryService {
         }
 
         // 허브 컨텍스트에서 경로 정보 조회
-        HubRouteResponse hubRoute = hubRouteService.getHubRoute(UUID.fromString("1bc91c30-9afa-4b08-892c-4cbfc8fb938b"));
+        HubRouteResponse hubRoute = hubRouteService.getHubRoute(UUID.fromString("1bc91c30-9afa-4b08-892c-4cbfc8fb938b"), token);
 
         // 배송 생성
         Delivery delivery = Delivery.create(

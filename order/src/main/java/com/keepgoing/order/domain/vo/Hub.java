@@ -6,11 +6,6 @@ import java.util.UUID;
 public record Hub(
     UUID hubId
 ) {
-
-    public Hub {
-        if (hubId == null) throw new IllegalArgumentException("허브 아이디는 필수입니다.");
-    }
-
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) {

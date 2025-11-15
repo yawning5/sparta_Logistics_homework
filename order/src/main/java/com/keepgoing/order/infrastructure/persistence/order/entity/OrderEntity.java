@@ -35,7 +35,7 @@ import org.hibernate.annotations.FilterDef;
 )
 @Filter(name = "softDeleteFilter")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Order{
+public class OrderEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

@@ -1,4 +1,4 @@
-package com.keepgoing.order.infrastructure.persistence.entity.order;
+package com.keepgoing.order.infrastructure.persistence.order.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Product {
-    @Column(name = "product_id", nullable = false)
-    private UUID productId;
+public class Vendor {
+    @Column(name = "vendor_id", nullable = false)
+    private UUID vendorId;
 }

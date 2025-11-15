@@ -1,4 +1,4 @@
-package com.keepgoing.order.infrastructure.persistence.entity.order;
+package com.keepgoing.order.infrastructure.persistence.order.entity;
 
 import com.keepgoing.order.domain.state.CancelState;
 import com.keepgoing.order.domain.state.OrderState;

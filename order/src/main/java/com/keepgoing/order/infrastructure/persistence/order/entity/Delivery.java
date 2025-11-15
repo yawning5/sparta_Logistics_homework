@@ -1,4 +1,4 @@
-package com.keepgoing.order.infrastructure.persistence.entity.order;
+package com.keepgoing.order.infrastructure.persistence.order.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;

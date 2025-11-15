@@ -9,10 +9,14 @@ import com.keepgoing.order.domain.vo.Product;
 import com.keepgoing.order.domain.vo.Vendor;
 import java.time.LocalDateTime;
 import java.util.UUID;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
+@Builder
 @Getter
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class Order {
 
     private UUID id;
@@ -45,26 +49,6 @@ public class Order {
 
     private LocalDateTime cancelledAt;
 
-    @Builder
-    private Order(Member member, Vendor supplier, Vendor receiver, Product product,
-        Delivery delivery, Integer quantity, Integer totalPrice, OrderState orderState,
-        CancelState cancelState, UUID idempotencyKey, LocalDateTime orderedAt) {
-        this.member = member;
-        this.supplier = supplier;
-        this.receiver = receiver;
-        this.product = product;
-        this.hub = null;
-        this.delivery = delivery;
-        this.quantity = quantity;
-        this.totalPrice = totalPrice;
-        this.orderState = orderState;
-        this.cancelState = cancelState;
-        this.idempotencyKey = idempotencyKey;
-        this.orderedAt = orderedAt;
-        this.confirmedAt = null;
-        this.cancelledAt = null;
-    }
-
     public static Order create(Long memberId, UUID supplierId, UUID receiverId, UUID productId,
         LocalDateTime deliveryDueAt, String deliveryRequestNote, Integer quantity, Integer price, UUID idempotencyKey,
         LocalDateTime now) {
@@ -95,6 +79,39 @@ public class Order {
             .idempotencyKey(idempotencyKey)
             .orderedAt(now)
             .build();
+    }
+
+    public static Order of(UUID id, Long memberId, UUID supplierId, UUID receiverId, UUID productId,
+        UUID hubId, UUID deliveryId, LocalDateTime deliveryDueAt, String deliveryRequestNote,
+        Integer quantity, Integer totalPrice, OrderState orderState, CancelState cancelState,
+        UUID idempotencyKey, LocalDateTime orderedAt, LocalDateTime confirmedAt,
+        LocalDateTime cancelledAt) {
+
+        Member member = new Member(memberId);
+        Vendor supplier = new Vendor(supplierId);
+        Vendor receiver = new Vendor(receiverId);
+        Product product = new Product(productId);
+        Hub hub = new Hub(hubId);
+        Delivery delivery = new Delivery(deliveryId, deliveryDueAt, deliveryRequestNote);
+
+        return Order.builder()
+            .id(id)
+            .member(member)
+            .supplier(supplier)
+            .receiver(receiver)
+            .product(product)
+            .hub(hub)
+            .delivery(delivery)
+            .quantity(quantity)
+            .totalPrice(totalPrice)
+            .orderState(orderState)
+            .cancelState(cancelState)
+            .idempotencyKey(idempotencyKey)
+            .orderedAt(orderedAt)
+            .confirmedAt(confirmedAt)
+            .cancelledAt(cancelledAt)
+            .build();
+
     }
 
     private static int calculateTotalPrice(int price, int quantity) {

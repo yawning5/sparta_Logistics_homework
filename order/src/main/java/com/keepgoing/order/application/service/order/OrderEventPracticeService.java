@@ -8,6 +8,7 @@ import com.keepgoing.order.presentation.dto.response.api.CreateOrderResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -16,6 +17,7 @@ public class OrderEventPracticeService {
     private final OrderRepository orderRepository;
     private final ApplicationEventPublisher eventPublisher;
 
+    @Transactional
     public CreateOrderResponse createOrder(CreateOrderCommand createOrderCommand) {
         // 주문을 생성하는 핵심 비즈니스 로직
         Order order = createOrderCommand.toEntity();

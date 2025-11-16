@@ -15,7 +15,7 @@ public abstract class BaseEvent {
         this.triggeredBy = StackWalker
             .getInstance(Option.RETAIN_CLASS_REFERENCE)
             .walk(frames -> frames
-                .skip(1)// BaseEvent 생성자를 호출한 실제 메서드
+                .skip(3) // BaseEvent 생성자를 호출한 실제 메서드
                 .findFirst()
                 .map(frame -> frame.getClassName() + "#" + frame.getMethodName())
                 .orElse("unknown"));

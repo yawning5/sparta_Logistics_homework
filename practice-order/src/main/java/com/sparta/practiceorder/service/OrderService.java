@@ -20,6 +20,7 @@ public class OrderService {
     @Transactional
     public OrderResponse createOrder(OrderCreateRequest request) {
 
+
         Order order = Order.create(
             request.getProductId(),
             request.getSupplierId(),
@@ -29,6 +30,12 @@ public class OrderService {
         Order savedOrder = orderRepository.save(order);
 
         eventPublisher.publishEvent(OrderCreatedEvent.of(savedOrder));
+
+        // 예외 발생이 이벤트 퍼블리쉬 아래에 있다면 기본 리스너는 실행되고
+        // 트랜잭션 이벤트 리스너는 실행 안 됨
+        if (request.getProductId() == null) {
+            throw new IllegalArgumentException();
+        }
 
         return OrderResponse.from(savedOrder);
     }

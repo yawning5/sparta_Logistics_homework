@@ -11,7 +11,7 @@ public class OrderEventListener {
 
     @EventListener
     public void handleOrderCreated(OrderCreatedEvent event) {
-        log.info("주문 생성 이벤트 수신 - 주문 ID: {}, 상품 ID: {}, 수량: {}, 호출메서드: {}",
+        log.info("\n주문 생성 이벤트 수신 - 주문 ID: {},\n 상품 ID: {},\n 수량: {},\n 호출메서드: {}",
             event.getOrderId(),
             event.getProductId(),
             event.getQuantity(),

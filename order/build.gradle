@@ -40,6 +40,9 @@ dependencies {
 
     // 스웨거
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.14'
+
+    // awaitility
+    testImplementation 'org.awaitility:awaitility:4.2.0'
 }
 
 springBoot {

@@ -189,7 +189,7 @@ class PaymentEventListenerTest {
             .atMost(2, TimeUnit.SECONDS)
             .untilAsserted(() -> {
                 Mockito.verify(paymentEventListener, Mockito.times(1))
-                    .handleOrderCreatedAsync(Mockito.any(OrderCreatedEvent.class));
+                    .handleOrderCreated(Mockito.any(OrderCreatedEvent.class));
             });
     }
 
@@ -204,7 +204,7 @@ class PaymentEventListenerTest {
             return null;
         })
             .when(paymentService)
-            .processPaymentForAsync(Mockito.any(UUID.class), Mockito.any(UUID.class), Mockito.any(Integer.class), Mockito.any(Integer.class));
+            .processPayment(Mockito.any(UUID.class), Mockito.any(UUID.class), Mockito.any(Integer.class), Mockito.any(Integer.class));
 
         CreateOrderCommand command = CreateOrderCommand.builder()
             .memberId(1L)
@@ -234,7 +234,7 @@ class PaymentEventListenerTest {
             .atMost(1, TimeUnit.SECONDS)
             .untilAsserted(() -> {
                 Mockito.verify(paymentEventListener, Mockito.times(1))
-                    .handleOrderCreatedAsync(Mockito.any(OrderCreatedEvent.class));
+                    .handleOrderCreated(Mockito.any(OrderCreatedEvent.class));
             });
     }
 

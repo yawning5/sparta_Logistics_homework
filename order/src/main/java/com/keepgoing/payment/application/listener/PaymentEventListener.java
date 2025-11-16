@@ -17,20 +17,6 @@ public class PaymentEventListener {
 
     private final PaymentService paymentService;
 
-    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    public void handleOrderCreated(OrderCreatedEvent event) {
-        log.info("주문 생성 이벤트 수신 후, 결제 처리 실행 주문 ID : {}", event.getOrderId());
-
-        paymentService.processPayment(
-            event.getOrderId(),
-            event.getProductId(),
-            event.getTotalPrice(),
-            event.getQuantity()
-        );
-
-        log.info("결제 처리 완료 주문 ID : {}", event.getOrderId());
-    }
-
     @TransactionalEventListener(phase = TransactionPhase.AFTER_ROLLBACK)
     public void handleOrderCreatedFail(OrderCreatedEvent event) {
         log.error("주문 생성에 실패하여 이벤트가 발행되지 않았습니다.");
@@ -38,7 +24,7 @@ public class PaymentEventListener {
 
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    public void handleOrderCreatedAsync(OrderCreatedEvent event) {
+    public void handleOrderCreated(OrderCreatedEvent event) {
         log.info("주문 생성 이벤트 수신 후, 비동기 결제 처리 진행 주문 ID : {}, Thread : {}"
             , event.getOrderId(), Thread.currentThread().getName());
 

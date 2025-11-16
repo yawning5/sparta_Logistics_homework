@@ -1,14 +1,14 @@
 package com.keepgoing.order.application.service.payment;
 
+import com.keepgoing.order.application.event.EventPublisher;
 import com.keepgoing.order.domain.payment.Payment;
-import com.keepgoing.order.domain.payment.PaymentCompletedEvent;
+import com.keepgoing.order.domain.payment.event.PaymentCompletedEvent;
 import com.keepgoing.order.infrastructure.payment.PaymentRepository;
 import jakarta.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 public class PaymentService {
 
     private final PaymentRepository paymentRepository;
-    private final ApplicationEventPublisher eventPublisher;
+    private final EventPublisher eventPublisher;
 
     @Transactional
     public void processPayment(UUID orderId, UUID productId, int quantity) {
@@ -38,7 +38,7 @@ public class PaymentService {
         paymentRepository.save(payment);
 
         // 결제 완료 이벤트 발행
-        eventPublisher.publishEvent(PaymentCompletedEvent.of(payment, productId, quantity));
+        eventPublisher.publish(PaymentCompletedEvent.of(payment, productId, quantity));
         log.info("결제 프로세스 끝");
     }
 

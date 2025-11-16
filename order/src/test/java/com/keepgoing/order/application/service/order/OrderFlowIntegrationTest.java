@@ -28,7 +28,9 @@ import org.springframework.boot.test.context.SpringBootTest;
     "spring.jpa.database-platform=org.hibernate.dialect.H2Dialect",
     "spring.jpa.hibernate.ddl-auto=create-drop",
     "spring.cloud.config.enabled=false",
-    "eureka.client.enabled=false"
+    "eureka.client.enabled=false",
+    "logging.level.root=DEBUG",
+    "logging.level.com.keepgoing.order=DEBUG"
 })
 class OrderFlowIntegrationTest {
 

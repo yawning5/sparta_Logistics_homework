@@ -1,5 +1,6 @@
 package com.keepgoing.order.domain.order.event;
 
+import com.keepgoing.order.domain.commons.DomainEvent;
 import com.keepgoing.order.domain.order.Order;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -11,7 +12,7 @@ import lombok.Getter;
 // 과거형 네이밍(OrderCreated)을 사용하여 이미 발생한 사실임을 명확히 합니다.
 @Getter
 @AllArgsConstructor
-public class OrderCreatedEvent {
+public class OrderCreatedEvent implements DomainEvent {
     private final UUID orderId;
     private final UUID productId;
     private final int quantity;
@@ -24,5 +25,10 @@ public class OrderCreatedEvent {
             order.getQuantity(),
             LocalDateTime.now()
         );
+    }
+
+    @Override
+    public UUID getAggregateId() {
+        return orderId;
     }
 }

@@ -9,4 +9,5 @@ public interface OrderRepository {
 
     Order save(Order order);
 
+    void throwException();
 }

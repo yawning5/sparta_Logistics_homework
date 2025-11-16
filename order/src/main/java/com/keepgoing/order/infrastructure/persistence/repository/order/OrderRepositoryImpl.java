@@ -34,4 +34,9 @@ public class OrderRepositoryImpl implements OrderRepository {
 
         return OrderMapper.toDomain(orderEntity);
     }
+
+    @Override
+    public void throwException() {
+
+    }
 }

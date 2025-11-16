@@ -41,6 +41,8 @@ public class OrderService {
 
         eventPublisher.publishEvent(OrderCreatedEvent.of(order, LocalDateTime.now(clock)));
 
+        orderRepository.throwException();
+
         return CreateOrderResponse.from(order);
     }
 }

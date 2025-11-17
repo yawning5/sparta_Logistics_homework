@@ -1,6 +1,6 @@
-package com.sparta.hub.routes.application.event;
+package com.sparta.hub.application.event;
 
-import com.sparta.hub.routes.domain.events.DomainEvent;
+import com.sparta.hub.domain.events.DomainEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.transaction.event.TransactionPhase;

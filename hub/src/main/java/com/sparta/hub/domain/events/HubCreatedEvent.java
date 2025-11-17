@@ -1,4 +1,4 @@
-package com.sparta.hub.routes.domain.events;
+package com.sparta.hub.domain.events;
 
 import java.util.UUID;
 import com.sparta.hub.domain.entity.Hub;

@@ -7,22 +7,23 @@ import com.sparta.hub.domain.repository.HubRepository;
 import com.sparta.hub.routes.application.command.CreateHubRouteCommand;
 import com.sparta.hub.routes.application.command.UpdateHubRouteCommand;
 import com.sparta.hub.routes.application.dto.HubRouteResponse;
-import com.sparta.hub.routes.application.event.EventPublisher;
+import com.sparta.hub.application.event.EventPublisher;
 import com.sparta.hub.routes.application.query.HubRouteSearchQuery;
 import com.sparta.hub.routes.domain.entity.HubRoute;
-import com.sparta.hub.routes.domain.events.HubCreatedEvent;
+import com.sparta.hub.domain.events.HubCreatedEvent;
 import com.sparta.hub.routes.domain.repository.HubRouteRepository;
 import com.sparta.hub.routes.infrastructure.repository.JpaHubRouteRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
 import java.math.BigDecimal;
 import java.util.UUID;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -115,6 +116,13 @@ public class HubRouteService {
         eventPublisher.publish(HubCreatedEvent.of(hub));
 
         return HubResponse.from(hub);
+    }
+
+    public void createDefaultRoutes(UUID hubId) {
+        // TODO: 허브 생성 시 기본 라우팅 자동 생성 로직
+        log.info("허브 기본 라우트 생성 - 허브 ID: {}", hubId);
+
+        // 이 아래에 실제 라우트 생성 코드 추가하면 됨
     }
 
     // ==================== Specification ====================

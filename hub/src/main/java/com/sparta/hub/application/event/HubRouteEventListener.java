@@ -1,7 +1,7 @@
-package com.sparta.hub.routes.application.event;
+package com.sparta.hub.application.event;
 
 import com.sparta.hub.routes.application.service.HubRouteService;
-import com.sparta.hub.routes.domain.events.HubCreatedEvent;
+import com.sparta.hub.domain.events.HubCreatedEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

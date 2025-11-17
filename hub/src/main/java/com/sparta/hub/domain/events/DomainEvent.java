@@ -1,4 +1,4 @@
-package com.sparta.hub.routes.domain.events;
+package com.sparta.hub.domain.events;
 
 import lombok.Getter;
 import java.util.UUID;

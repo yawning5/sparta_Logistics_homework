@@ -4,9 +4,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-import com.sparta.practiceorder.dto.OrderCreateRequest;
-import com.sparta.practiceorder.events.OrderCreatedEvent;
-import com.sparta.practiceorder.listener.OrderEventListener;
+import com.sparta.practiceorder.order.dto.OrderCreateRequest;
+import com.sparta.practiceorder.order.event.OrderCreatedEvent;
+import com.sparta.practiceorder.order.event.OrderEventListener;
+import com.sparta.practiceorder.order.service.OrderService;
 import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -7,13 +7,12 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-import com.sparta.practiceorder.dto.OrderCreateRequest;
-import com.sparta.practiceorder.events.OrderCreatedEvent;
-import com.sparta.practiceorder.listener.PaymentEventListener;
-import com.sparta.practiceorder.repository.OrderRepository;
-import com.sparta.practiceorder.service.OrderService;
+import com.sparta.practiceorder.order.dto.OrderCreateRequest;
+import com.sparta.practiceorder.order.event.OrderCreatedEvent;
+import com.sparta.practiceorder.payment.event.PaymentEventListener;
+import com.sparta.practiceorder.order.repository.OrderRepository;
+import com.sparta.practiceorder.order.service.OrderService;
 import java.util.UUID;
-import org.aspectj.lang.annotation.After;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -22,7 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
-import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 public class TransactionalEventTest {

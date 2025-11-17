@@ -3,17 +3,17 @@ package com.sparta.practiceorder;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.sparta.practiceorder.dto.OrderCreateRequest;
-import com.sparta.practiceorder.dto.OrderResponse;
-import com.sparta.practiceorder.entity.Order;
-import com.sparta.practiceorder.entity.Payment;
-import com.sparta.practiceorder.entity.Product;
-import com.sparta.practiceorder.entity.enums.PaymentStatus;
-import com.sparta.practiceorder.enums.OrderStatus;
-import com.sparta.practiceorder.repository.OrderRepository;
-import com.sparta.practiceorder.repository.PaymentRepository;
-import com.sparta.practiceorder.repository.ProductRepository;
-import com.sparta.practiceorder.service.OrderService;
+import com.sparta.practiceorder.order.dto.OrderCreateRequest;
+import com.sparta.practiceorder.order.dto.OrderResponse;
+import com.sparta.practiceorder.order.domain.Order;
+import com.sparta.practiceorder.payment.domain.Payment;
+import com.sparta.practiceorder.stock.domain.Product;
+import com.sparta.practiceorder.payment.domain.enums.PaymentStatus;
+import com.sparta.practiceorder.order.domain.enums.OrderStatus;
+import com.sparta.practiceorder.order.repository.OrderRepository;
+import com.sparta.practiceorder.payment.repository.PaymentRepository;
+import com.sparta.practiceorder.stock.repository.ProductRepository;
+import com.sparta.practiceorder.order.service.OrderService;
 import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;

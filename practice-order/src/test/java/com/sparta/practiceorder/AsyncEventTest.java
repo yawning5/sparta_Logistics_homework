@@ -6,10 +6,10 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-import com.sparta.practiceorder.dto.OrderCreateRequest;
-import com.sparta.practiceorder.events.OrderCreatedEvent;
-import com.sparta.practiceorder.listener.PaymentEventListener;
-import com.sparta.practiceorder.service.OrderService;
+import com.sparta.practiceorder.order.dto.OrderCreateRequest;
+import com.sparta.practiceorder.order.event.OrderCreatedEvent;
+import com.sparta.practiceorder.payment.event.PaymentEventListener;
+import com.sparta.practiceorder.order.service.OrderService;
 import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;

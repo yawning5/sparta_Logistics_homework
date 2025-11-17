@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.keepgoing.order.application.dto.CreateOrderCommand;
 import com.keepgoing.order.application.dto.CreateOrderPayloadForDelivery;
 import com.keepgoing.order.application.dto.CreateOrderPayloadForNotification;
+import com.keepgoing.order.application.event.order.OrderCreatedEvent;
 import com.keepgoing.order.application.exception.DeleteOrderFailException;
 import com.keepgoing.order.application.exception.InvalidOrderStateException;
 import com.keepgoing.order.application.exception.NotFoundOrderException;
@@ -31,6 +32,7 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -46,14 +48,18 @@ public class OrderService {
     private final OrderOutboxRepository orderOutboxRepository;
     private final ObjectMapper objectMapper;
     private final Clock clock;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
 
     @Transactional
     public CreateOrderResponse create(CreateOrderCommand createOrderCommand) {
 
         Order order = createOrderCommand.toEntity();
-        orderRepository.save(order);
+        Order savedOrder = orderRepository.save(order);
 
+        applicationEventPublisher.publishEvent(OrderCreatedEvent.from(savedOrder));
+
+        log.info("주문 생성 완료");
         return CreateOrderResponse.create(
             order.getId(),
             order.getMemberId(),

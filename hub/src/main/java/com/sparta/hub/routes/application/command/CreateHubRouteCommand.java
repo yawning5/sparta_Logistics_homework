@@ -18,4 +18,6 @@ public record CreateHubRouteCommand(
             throw new IllegalArgumentException("출발 허브와 도착 허브가 같을 수 없습니다.");
         }
     }
+
+
 }

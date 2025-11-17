@@ -74,7 +74,7 @@ public class Order {
             .delivery(delivery)
             .quantity(quantity)
             .totalPrice(totalPrice)
-            .orderState(OrderState.PENDING_VALIDATION)
+            .orderState(OrderState.PENDING)
             .cancelState(CancelState.NONE)
             .idempotencyKey(idempotencyKey)
             .orderedAt(now)

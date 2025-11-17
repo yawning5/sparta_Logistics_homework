@@ -89,7 +89,7 @@ class OrderRepositoryImplTest {
         Assertions.assertThat(result.getProduct().productId())
             .isEqualTo(UUID.fromString("d5bb2f27-e9f9-4d22-af91-0f1a0b8c9ad5"));
         Assertions.assertThat(result.getTotalPrice()).isEqualTo(50000000);
-        Assertions.assertThat(result.getOrderState()).isEqualTo(OrderState.PENDING_VALIDATION);
+        Assertions.assertThat(result.getOrderState()).isEqualTo(OrderState.PENDING);
         Assertions.assertThat(result.getCancelState()).isEqualTo(CancelState.NONE);
     }
 }
